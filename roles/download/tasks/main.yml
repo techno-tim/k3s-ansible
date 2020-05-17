@@ -11,7 +11,7 @@
     dest: /usr/local/bin/k3s
     owner: root
     group: root
-    mode: 755
+    mode: 0755
   when: ansible_facts.architecture == "x86_64"
 
 - name: Download k3s binary arm64
@@ -20,7 +20,7 @@
     dest: /usr/local/bin/k3s
     owner: root
     group: root
-    mode: 755
+    mode: 0755
   when:
     - ansible_facts.architecture is search("arm")
     - ansible_facts.userspace_bits == "64"
@@ -31,7 +31,7 @@
     dest: /usr/local/bin/k3s
     owner: root
     group: root
-    mode: 755
+    mode: 0755
   when:
     - ansible_facts.architecture is search("arm")
     - ansible_facts.userspace_bits == "32"
