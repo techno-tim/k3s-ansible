@@ -19,5 +19,5 @@
 - name: Rebooting on Raspbian
   reboot:
   when:
-    - boot_cmdline | changed
+    - boot_cmdline is changed
     - ansible_facts.architecture is search("arm")
