@@ -20,7 +20,7 @@
   iptables:
     flush: true
   when:
-    - ansible_facts.distribution_release is search("buster")
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
 
 - name: Changing to iptables-legacy for Raspbian Buster
   alternatives:
@@ -28,7 +28,7 @@
     name: iptables
   register: ip6_legacy
   when:
-    - ansible_facts.distribution_release is search("buster")
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
 
 - name: Changing to ip6tables-legacy for Raspbian Buster
   alternatives:
@@ -36,7 +36,7 @@
     name: ip6tables
   register: ip4_legacy
   when:
-    - ansible_facts.distribution_release is search("buster")
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
 
 - name: Rebooting on Raspbian
   reboot:
