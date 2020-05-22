@@ -1,5 +1,4 @@
 ---
-
 - name: Check if cgroups enabled
   shell: cat /boot/firmware/cmdline.txt | grep cgroup
   register: cgroup_enabled
@@ -32,4 +31,3 @@
   when:
     - ansible_distribution == 'Ubuntu'
     - cgroup_running.stdout == ""
-
