@@ -7,7 +7,7 @@
     - role: prereq
     - role: download
     - role: raspbian
-
+    - role: ubuntu
 
 - hosts: master
   become: yes

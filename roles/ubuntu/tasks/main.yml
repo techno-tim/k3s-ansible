@@ -1,0 +1,37 @@
+---
+
+- name: Check if cgroups enabled in /boot/firmware/cmdline.txt
+  shell: cat /boot/firmware/cmdline.txt | grep cgroup
+  register: cgroup_enabled
+  when: ansible_distribution == 'Ubuntu'
+  # grep will exit with 1 when no results found.
+  # ignore_errors causes the task not to halt play.
+  ignore_errors: true
+
+- name: Enable cgroup via boot commandline if not already present
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    backrefs: yes
+    regexp: "(.*)$"
+    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+  when:
+    ( ansible_distribution == 'Ubuntu' )
+      and
+    ( cgroup_enabled.stdout == "" )
+
+- name: Check if cgroups already running
+  shell: cat /proc/cmdline | grep cgroup
+  register: cgroup_running
+  when:
+    ansible_distribution == 'Ubuntu'
+  # grep will exit with 1 when no results found.
+  # ignore_errors causes the task not to halt play.
+  ignore_errors: true
+
+- name: Rebooting to enable cgroups if not already running
+  reboot:
+  when:
+    ( ansible_distribution == 'Ubuntu' )
+      and
+    ( cgroup_running.stdout == "" )
+
