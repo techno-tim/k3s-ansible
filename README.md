@@ -23,7 +23,7 @@ Master and nodes must have passwordless SSH access
 
 ## Usage
 
-Add the system information gathered above into a file called hosts.ini. For example:
+Add the system information gathered above into a file called `hosts.ini` in the same directory as this README file. There is a template in the `inventory` directory. For example:
 
 ```bash
 [master]
@@ -35,13 +35,12 @@ Add the system information gathered above into a file called hosts.ini. For exam
 [k3s_cluster:children]
 master
 node
-
 ```
 
 Start provisioning of the cluster using the following command:
 
 ```bash
-ansible-playbook site.yml -i inventory/hosts.ini
+ansible-playbook site.yml
 ```
 
 ## Kubeconfig
@@ -51,4 +50,3 @@ To get access to your **Kubernetes** cluster just
 ```bash
 scp debian@master_ip:~/.kube/config ~/.kube/config
 ```
-

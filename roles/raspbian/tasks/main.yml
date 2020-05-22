@@ -16,8 +16,32 @@
     - ansible_facts.architecture is search("arm")
   register: boot_cmdline
 
+- name: Flush iptables before changing iptables-legacy
+  iptables:
+    flush: true
+  when:
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+
+- name: Changing to iptables-legacy for Raspbian Buster
+  alternatives:
+    path: /usr/sbin/iptables-legacy
+    name: iptables
+  register: ip6_legacy
+  when:
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+
+- name: Changing to ip6tables-legacy for Raspbian Buster
+  alternatives:
+    path: /usr/sbin/ip6tables-legacy
+    name: ip6tables
+  register: ip4_legacy
+  when:
+    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+
 - name: Rebooting on Raspbian
   reboot:
   when:
     - boot_cmdline is changed
     - ansible_facts.architecture is search("arm")
+    - ip6_legacy is changed
+    - ip4_legacy is changed
