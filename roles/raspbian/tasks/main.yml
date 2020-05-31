@@ -1,47 +1,44 @@
 ---
-
 - name: Test for Raspbian
-  stat:
-    path: /boot/cmdline.txt
-  register: cmdline
+  set_fact:
+    raspbian: '{% if
+      ( ansible_facts.architecture is search("arm") and
+        ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster") ) or
+      ( ansible_facts.architecture is search("aarch64") and
+        ansible_facts.lsb.description is match("Debian.*buster") ) %}true{% else %}false{% endif %}'
 
-- name: Activating cgroup on Raspbian
+- name: Activating cgroup support
   lineinfile:
     path: /boot/cmdline.txt
-    regexp: '^(.*rootwait)$'
+    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
   when:
-    - cmdline.stat.path is defined
-    - ansible_facts.architecture is search("arm")
-  register: boot_cmdline
+    - raspbian is true
 
-- name: Flush iptables before changing iptables-legacy
+- name: Flush iptables before changing to iptables-legacy
   iptables:
     flush: true
   when:
-    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+    - raspbian is true
 
-- name: Changing to iptables-legacy for Raspbian Buster
+- name: Changing to iptables-legacy
   alternatives:
     path: /usr/sbin/iptables-legacy
     name: iptables
-  register: ip6_legacy
+  register: ip4_legacy
   when:
-    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+    - raspbian is true
 
-- name: Changing to ip6tables-legacy for Raspbian Buster
+- name: Changing to ip6tables-legacy
   alternatives:
     path: /usr/sbin/ip6tables-legacy
     name: ip6tables
-  register: ip4_legacy
+  register: ip6_legacy
   when:
-    - ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster")
+    - raspbian is true
 
-- name: Rebooting on Raspbian
+- name: Rebooting
   reboot:
   when:
-    - boot_cmdline is changed
-    - ansible_facts.architecture is search("arm")
-    - ip6_legacy is changed
-    - ip4_legacy is changed
+    - raspbian is true
