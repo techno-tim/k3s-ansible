@@ -9,13 +9,20 @@
     - ansible_distribution == 'Ubuntu'
 
 - name: Read /proc/cmdline to check for cgroups already running
-  shell: cat /proc/cmdline
-  register: cmdline
+  slurp:
+    src: /proc/cmdline
+  register: slurped_cmdline
   when:
     - ansible_distribution == 'Ubuntu'
 
-- name: Reboot to enable cgroups if not already running
+- name: Decode slurped command line
+  set_fact:
+    cmdline: "{{ slurped_cmdline.content | b64decode }}"
+  when:
+    - ansible_distribution == 'Ubuntu'
+
+- name: Reboot to enable cgroups if not already enabled
   reboot:
   when:
     - ansible_distribution == 'Ubuntu'
-    - '"cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" not in cmdline.stdout'
+    - '"cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory" not in cmdline'
