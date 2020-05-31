@@ -50,9 +50,3 @@
     path: /etc/sudoers
     validate: 'visudo -cf %s'
   when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
-
-- name: "set timezone to {{ timezone }}"
-  timezone:
-    name: "{{ timezone }}"
-  notify: restart cron
-  when: timezone is defined
