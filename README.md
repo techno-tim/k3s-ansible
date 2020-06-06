@@ -23,7 +23,13 @@ Master and nodes must have passwordless SSH access
 
 ## Usage
 
-Add the system information gathered above into a file called `hosts.ini` in the same directory as this README file. There is a template in the `inventory` directory. For example:
+First create a new dirctory based on the `sample` directory within the `inventory` directory:
+
+```bash
+cp -R inventory/sample inventory/my-cluster
+```
+
+Second, edit `inventory/my-cluster/hosts.ini` to mactch the system information gathered above. For example:
 
 ```bash
 [master]
@@ -37,10 +43,12 @@ master
 node
 ```
 
+If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
+
 Start provisioning of the cluster using the following command:
 
 ```bash
-ansible-playbook site.yml
+ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
 ```
 
 ## Kubeconfig
