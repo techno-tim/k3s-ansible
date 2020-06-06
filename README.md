@@ -23,13 +23,13 @@ Master and nodes must have passwordless SSH access
 
 ## Usage
 
-First create a new dirctory based on the `sample` directory within the `inventory` directory:
+First create a new directory based on the `sample` directory within the `inventory` directory:
 
 ```bash
 cp -R inventory/sample inventory/my-cluster
 ```
 
-Second, edit `inventory/my-cluster/hosts.ini` to mactch the system information gathered above. For example:
+Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. For example:
 
 ```bash
 [master]
