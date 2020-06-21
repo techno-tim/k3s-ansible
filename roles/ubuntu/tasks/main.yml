@@ -1,5 +1,5 @@
 ---
-- name: Enable cgroup via boot commandline if not already enabled
+- name: Enable cgroup via boot commandline if not already enabled for Ubuntu on ARM
   lineinfile:
     path: /boot/firmware/cmdline.txt
     backrefs: yes
@@ -7,8 +7,12 @@
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
   when:
     - ansible_distribution == 'Ubuntu'
+    - ( ansible_facts.architecture is search("arm") or
+        ansible_facts.architecture is search("aarch64") )
 
-- name: Reboot to enable cgroups
+- name: Reboot to enable cgroups for Ubuntu on ARM
   reboot:
   when:
     - ansible_distribution == 'Ubuntu'
+    - ( ansible_facts.architecture is search("arm") or
+        ansible_facts.architecture is search("aarch64") )
