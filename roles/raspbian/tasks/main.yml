@@ -5,7 +5,8 @@
       ( ansible_facts.architecture is search("arm") and
         ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster") ) or
       ( ansible_facts.architecture is search("aarch64") and
-        ansible_facts.lsb.description is match("Debian.*buster") ) %}True{% else %}False{% endif %}'
+        ansible_facts.lsb.description is match("Debian.*buster") or
+        ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster") ) %}true{% else %}false{% endif %}'
 
 - name: Activating cgroup support
   lineinfile:
@@ -13,7 +14,9 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
-  when: raspbian
+  register: cgroup
+  when:
+    - raspbian is true
 
 - name: Flush iptables before changing to iptables-legacy
   iptables:
@@ -36,4 +39,7 @@
 
 - name: Rebooting
   reboot:
-  when: raspbian
+  when:
+    - cgroup.changed
+  tags:
+    - skip_ansible_lint
