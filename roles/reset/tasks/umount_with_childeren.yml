@@ -1,0 +1,13 @@
+---
+- name: Get the list of mounted filesystems
+  shell: cat /proc/mounts | awk '{ print $2}' | grep -E "^{{ mounted_fs }}"
+  register: get_mounted_filesystems
+  failed_when: False
+  changed_when: get_mounted_filesystems.stdout | length > 0
+
+- name: Umount filesystem
+  mount:
+    path: "{{ item }}"
+    state: unmounted
+  with_items:
+    "{{ get_mounted_filesystems.stdout_lines }}"

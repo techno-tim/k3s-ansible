@@ -4,10 +4,25 @@
     name: "{{ item }}"
     state: stopped
     enabled: no
-  failed_when: false
+  failed_when: False
   with_items:
     - k3s
     - k3s-node
+
+- name: Killall containerd-shim-runc-v2
+  command: killall -9 containerd-shim-runc-v2
+  failed_when: False
+  changed_when: False
+
+- name: Umount k3s filesystems
+  include_tasks: umount_with_childeren.yml
+  with_items:
+    - /run/k3s
+    - /var/lib/kubelet
+    - /run/netns
+    - /var/lib/rancher/k3s
+  loop_control:
+    loop_var: mounted_fs
 
 - name: Remove service files, binaries and data
   file:
