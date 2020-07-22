@@ -1,7 +1,9 @@
 ---
 - name: Get the list of mounted filesystems
-  shell: cat /proc/mounts | awk '{ print $2}' | grep -E "^{{ mounted_fs }}"
+  shell: set -o pipefail && cat /proc/mounts | awk '{ print $2}' | grep -E "^{{ mounted_fs }}"
   register: get_mounted_filesystems
+  args:
+    executable: /bin/bash
   failed_when: False
   changed_when: get_mounted_filesystems.stdout | length > 0
 
