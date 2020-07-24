@@ -9,10 +9,10 @@
     - k3s
     - k3s-node
 
-- name: Killall containerd-shim-runc-v2
-  register: killall_containerd_shim_runc_v2
-  command: killall -9 containerd-shim-runc-v2
-  changed_when: "killall_containerd_shim_runc_v2.rc == 0"
+:- name: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+  register: pkill_containerd_shim_runc
+  command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+  changed_when: "pkill_containerd_shim_runc.rc == 0"
   failed_when: false
 
 - name: Umount k3s filesystems
