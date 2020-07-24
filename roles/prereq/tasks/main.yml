@@ -32,7 +32,7 @@
 
 - name: Set bridge-nf-call-iptables (just to be sure)
   sysctl:
-    name: "{{ items }}"
+    name: "{{ item }}"
     value: "1"
     state: present
     reload: yes
