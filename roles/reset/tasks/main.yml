@@ -4,15 +4,15 @@
     name: "{{ item }}"
     state: stopped
     enabled: no
-  failed_when: False
+  failed_when: false
   with_items:
     - k3s
     - k3s-node
 
 - name: Killall containerd-shim-runc-v2
   command: killall -9 containerd-shim-runc-v2
-  failed_when: False
-  changed_when: False
+  failed_when: false
+  changed_when: false
 
 - name: Umount k3s filesystems
   include_tasks: umount_with_childeren.yml

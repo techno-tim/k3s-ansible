@@ -4,7 +4,7 @@
   register: get_mounted_filesystems
   args:
     executable: /bin/bash
-  failed_when: False
+  failed_when: false
   changed_when: get_mounted_filesystems.stdout | length > 0
 
 - name: Umount filesystem
