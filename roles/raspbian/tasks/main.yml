@@ -14,7 +14,7 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
-  register: cgroup
+  notify: reboot
   when:
     - raspbian is true
 
@@ -22,6 +22,7 @@
   iptables:
     flush: true
   when: raspbian
+  changed_when: false   # iptables flush always returns changed
 
 - name: Changing to iptables-legacy
   alternatives:
@@ -36,10 +37,3 @@
     name: ip6tables
   register: ip6_legacy
   when: raspbian
-
-- name: Rebooting
-  reboot:
-  when:
-    - cgroup.changed
-  tags:
-    - skip_ansible_lint
