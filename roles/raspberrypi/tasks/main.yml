@@ -21,7 +21,7 @@
   set_fact:
     detected_distribution: Raspbian
   when: >
-    raspberry_pi|default(false) and 
+    raspberry_pi|default(false) and
     ( ansible_facts.lsb.id|default("") == "Raspbian" or
       ansible_facts.lsb.description|default("") is match("[Rr]aspbian.*") )
 
