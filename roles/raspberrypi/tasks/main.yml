@@ -20,9 +20,10 @@
 - name: Set detected_distribution to Raspbian
   set_fact:
     detected_distribution: Raspbian
-  when:
-   - raspberry_pi|default(false)
-   - ansible_facts.lsb.id|default("") == "Raspbian" or ansible_facts.lsb.description|default("") is match("[Rr]aspbian.*")
+  when: >
+    raspberry_pi|default(false) and 
+    ( ansible_facts.lsb.id|default("") == "Raspbian" or
+      ansible_facts.lsb.description|default("") is match("[Rr]aspbian.*") )
 
 - name: Set detected_distribution to Raspbian (ARM64 on Debian Buster)
   set_fact:
