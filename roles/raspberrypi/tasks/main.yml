@@ -46,3 +46,5 @@
     - "prereq/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
     - "prereq/{{ ansible_distribution }}.yml"
     - "prereq/default.yml"
+  when:
+    - raspberry_pi|default(false)
