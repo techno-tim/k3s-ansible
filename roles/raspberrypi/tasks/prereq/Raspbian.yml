@@ -1,13 +1,4 @@
 ---
-- name: Test for Raspbian
-  set_fact:
-    raspbian: '{% if
-      ( ansible_facts.architecture is search("arm") and
-        ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster") ) or
-      ( ansible_facts.architecture is search("aarch64") and
-        ansible_facts.lsb.description is match("Debian.*buster") or
-        ansible_facts.lsb.description is match("[Rr]aspbian.*[Bb]uster") ) %}true{% else %}false{% endif %}'
-
 - name: Activating cgroup support
   lineinfile:
     path: /boot/cmdline.txt
@@ -15,13 +6,10 @@
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
   notify: reboot
-  when:
-    - raspbian is true
 
 - name: Flush iptables before changing to iptables-legacy
   iptables:
     flush: true
-  when: raspbian
   changed_when: false   # iptables flush always returns changed
 
 - name: Changing to iptables-legacy
@@ -29,11 +17,9 @@
     path: /usr/sbin/iptables-legacy
     name: iptables
   register: ip4_legacy
-  when: raspbian
 
 - name: Changing to ip6tables-legacy
   alternatives:
     path: /usr/sbin/ip6tables-legacy
     name: ip6tables
   register: ip6_legacy
-  when: raspbian
