@@ -7,7 +7,7 @@
     dest: "{{ systemd_dir }}/k3s.service"
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
 
 - name: Enable and check K3s service
   systemd:
