@@ -1,0 +1,11 @@
+---
+ansible_user: root
+server_init_args: >-
+  {% if groups['master'] | length > 1 %}
+    {% if ansible_host == groups['master'][0] %}
+      --cluster-init
+    {% else %}
+      --server https://{{ groups['master'][0] }}:6443
+    {% endif %}
+  {% endif %}
+  {{ extra_server_args | default('') }}
