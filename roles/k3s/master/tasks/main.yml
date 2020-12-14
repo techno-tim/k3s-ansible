@@ -1,20 +1,10 @@
 ---
 
-- name: Copy K3s service file
-  register: k3s_service
-  template:
-    src: "k3s.service.j2"
-    dest: "{{ systemd_dir }}/k3s.service"
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Enable and check K3s service
-  systemd:
-    name: k3s
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
+- name: Create and enable K3s service
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "prereq/{{ ansible_distribution }}.yml"
+    - "prereq/default.yml"
 
 - name: Wait for node-token
   wait_for:
@@ -61,7 +51,7 @@
 
 - name: Replace https://localhost:6443 by https://master-ip:6443
   command: >-
-    k3s kubectl config set-cluster default
+    /usr/local/bin/k3s kubectl config set-cluster default
       --server=https://{{ master_ip }}:6443
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
