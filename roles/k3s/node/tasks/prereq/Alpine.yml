@@ -28,3 +28,7 @@
     name: k3s
     state: restarted
     enabled: yes
+
+- name: lbu
+  debug:
+    msg: Remember to commit changes with 'lbu ci -d' to store the k3s passwords
