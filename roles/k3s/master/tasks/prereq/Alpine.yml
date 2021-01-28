@@ -1,0 +1,30 @@
+---
+- name: Copy K3s service file
+  register: k3s_service
+  copy:
+    content: |
+      #!/sbin/openrc-run
+
+      name="k3s server"
+      command="/usr/local/bin/k3s"
+      command_args="server {{ extra_server_args | default("") }}"
+      command_background=true
+      pidfile="/run/${RC_SVCNAME}.pid"
+      output_log="/var/log/k3s.log"
+      error_log="/var/log/k3s.err"
+    dest: /etc/init.d/k3s
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create K3s service symlink
+  file:
+    src: /etc/init.d/k3s
+    dest: /etc/runlevels/default/k3s
+    state: link
+
+- name: Enable and check K3s service
+  service:
+    name: k3s
+    state: restarted
+    enabled: yes
