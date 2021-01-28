@@ -1,7 +1,3 @@
 ---
 - name: reboot
   reboot:
-
-- name: lbu
-  debug:
-    msg: If you are diskless on Alpine you should commit changes with 'lbu -u' now and reboot.
