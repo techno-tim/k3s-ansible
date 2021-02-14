@@ -14,9 +14,9 @@
 
 - name: Init cluster inside the transient k3s-init service
   command:
-    cmd: "systemd-run -p RestartSec=2i \
+    cmd: "systemd-run -p RestartSec=2 \
                       -p Restart=on-failure \
-                      -E K3S_TOKEN={{ hostvars[groups['master'][0]]['token'] }} \
+                      -E K3S_TOKEN={{ k3s_token }} \
                       --unit=k3s-init \
                       k3s server {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
@@ -105,7 +105,7 @@
 - name: Replace https://localhost:6443 by https://master-ip:6443
   command: >-
     k3s kubectl config set-cluster default
-      --server=https://{{ master_ip }}:6443
+      --server=https://{{ apiserver_endpoint }}:6443
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
 
