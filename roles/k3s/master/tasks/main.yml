@@ -1,5 +1,18 @@
 ---
 
+- name: Create manifests directory
+  file:
+    path: /var/lib/rancher/k3s/server/manifests
+    state: directory  
+
+- name: Copy vip manifest
+  template:
+    src: "vip.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip.yaml"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Copy cluster-init K3s service file
   register: k3s_service
   template:
