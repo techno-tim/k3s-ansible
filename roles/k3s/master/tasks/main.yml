@@ -27,12 +27,9 @@
   block:
     - name: Verify that all nodes actually joined
       command:
-        cmd: k3s kubectl get --raw /api/v1/nodes/
-        creates: "{{ systemd_dir }}/k3s.service"
+        cmd: k3s kubectl get nodes -l "node-role.kubernetes.io/master=true" -o=jsonpath="{.items[*].metadata.name}"
       register: nodes
-      until: nodes.rc == 0 and
-        ((nodes.stdout | from_json)['items'] |
-        json_query('[*].metadata.labels."node-role.kubernetes.io/master"') | count) == (groups['master'] | length)
+      until: nodes.rc == 0 and (nodes.stdout.split() | length) == (groups['master'] | length)
       retries: 20
       delay: 10
       changed_when: false

@@ -26,7 +26,6 @@ Master and nodes must have passwordless SSH access
 First create a new directory based on the `sample` directory within the `inventory` directory:
 
 ```bash
-pip install -r requirements.txt
 cp -R inventory/sample inventory/my-cluster
 ```
 
