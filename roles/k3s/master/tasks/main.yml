@@ -25,7 +25,7 @@
 
 - name: Verification
   block:
-    - name: Verify that all nodes actually joined
+    - name: Verify that all nodes actually joined (check k3s-init.service if this fails)
       command:
         cmd: k3s kubectl get nodes -l "node-role.kubernetes.io/master=true" -o=jsonpath="{.items[*].metadata.name}"
       register: nodes
