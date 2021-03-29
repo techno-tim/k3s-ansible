@@ -7,9 +7,10 @@ systemd_dir: /etc/systemd/system
 # apiserver endpoint to all masters here. This default value is only suitable
 # for a non-HA setup, if used in a HA setup, it will not protect you if the
 # first node fails.
+# Also you should define k3s_token so that masters can talk together securely
 
 apiserver_endpoint: "{{ hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0]) }}"
+# k3s_token: "mysupersecuretoken"
 
 extra_server_args: ""
 extra_agent_args: ""
-k3s_token: ""
