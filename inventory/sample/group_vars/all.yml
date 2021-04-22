@@ -1,8 +1,7 @@
 ---
-k3s_version: v1.19.8+k3s1
-ansible_user: vagrant
+k3s_version: v1.17.5+k3s1
+ansible_user: debian
 systemd_dir: /etc/systemd/system
-master_ip: "192.168.1.30"
-flannel_iface: "eth1"
-extra_server_args: "--node-ip={{ ansible_eth1.ipv4.address }} --tls-san={{ master_ip }} --flannel-iface={{ flannel_iface }} --no-deploy servicelb --no-deploy traefik"
-extra_agent_args: "--flannel-iface={{ flannel_iface }}"
+master_ip: "{{ hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0]) }}"
+extra_server_args: ""
+extra_agent_args: ""
