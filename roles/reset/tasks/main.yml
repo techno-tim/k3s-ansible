@@ -8,6 +8,7 @@
   with_items:
     - k3s
     - k3s-node
+    - k3s-init
 
 - name: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   register: pkill_containerd_shim_runc
