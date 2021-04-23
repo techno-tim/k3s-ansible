@@ -1,6 +1,8 @@
-# Build a Kubernetes cluster using k3s via Ansible
+# Build a Kubernetes HA-cluster using k3s & kube-vip via Ansible
 
-Author: <https://github.com/itwars>
+Based on <https://github.com/k3s-io/k3s-ansible/tree/k3s-ha>
+
+Kube-vip Control Plane is described -> <https://kube-vip.io/control-plane/>
 
 ## K3s Ansible Playbook
 
@@ -29,7 +31,7 @@ First create a new directory based on the `sample` directory within the `invento
 cp -R inventory/sample inventory/my-cluster
 ```
 
-Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. For example:
+Second, edit `inventory/hosts.ini` to match the system information gathered above. For example:
 
 ```bash
 [master]
@@ -47,12 +49,19 @@ If multiple hosts are in the master group, the playbook will automatically setup
 https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/
 This requires at least k3s version 1.19.1
 
-If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
+If needed, you can also edit `inventory/group_vars/all.yml` to match your environment.
 
 Start provisioning of the cluster using the following command:
 
 ```bash
-ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
+ansible-playbook site.yml -i inventory/hosts.ini
+```
+
+After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as apiserver_endpoint
+
+Remove k3s cluster
+```bash
+ansible-playbook reset.yml -i inventory/hosts.ini
 ```
 
 ## Kubeconfig
