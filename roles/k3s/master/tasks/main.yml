@@ -16,6 +16,9 @@
   file:
     path: /var/lib/rancher/k3s/server/manifests
     state: directory
+    owner: root
+    group: root
+    mode: 0644
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Copy vip rbac manifest to first master
