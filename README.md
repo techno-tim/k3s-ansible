@@ -1,10 +1,14 @@
-# Build a Kubernetes HA-cluster using k3s & kube-vip via Ansible
+# Build a Kubernetes HA-cluster using k3s & kube-vip & metal-lb via Ansible
 
-Based on <https://github.com/k3s-io/k3s-ansible/tree/k3s-ha>
+Based on <https://github.com/k3s-io/k3s-ansible>
 
 Forked from <https://github.com/212850a/k3s-ansible>
 
 Kube-vip Control Plane is described -> <https://kube-vip.io/control-plane/>
+
+Video here <https://www.youtube.com/watch?v=CbkEWcUZ7zM>
+
+More docs here <https://docs.technotim.live/posts/cloud-init-cloud-image/>
 
 ## K3s Ansible Playbook
 
@@ -76,7 +80,7 @@ scp debian@master_ip:~/.kube/config ~/.kube/config
 
 ## kube-vip
 
-See <https://kube-vip.chipzoller.dev/docs/>
+See <https://kube-vip.io/control-plane/>
 
 ## MetalLB
 
