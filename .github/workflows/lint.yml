@@ -29,4 +29,3 @@ jobs:
 
       - name: Run ansible-lint.
         run: ansible-lint
-        
