@@ -37,7 +37,7 @@ First create a new directory based on the `sample` directory within the `invento
 cp -R inventory/sample inventory/my-cluster
 ```
 
-Second, edit `inventory/hosts.ini` to match the system information gathered above. For example:
+Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. For example:
 
 ```bash
 [master]
@@ -52,23 +52,26 @@ node
 ```
 
 If multiple hosts are in the master group, the playbook will automatically setup k3s in HA mode with etcd.
-https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/
+<https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/>
 This requires at least k3s version 1.19.1
 
-If needed, you can also edit `inventory/group_vars/all.yml` to match your environment.
+If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
 Start provisioning of the cluster using the following command:
 
 ```bash
-ansible-playbook site.yml -i inventory/hosts.ini
+ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
 ```
 
 After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as apiserver_endpoint
 
 Remove k3s cluster
+
 ```bash
-ansible-playbook reset.yml -i inventory/hosts.ini
+ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
 ```
+
+**Note: add --ask-pass --ask-become-pass if you are using password logins over ssh**
 
 ## Kubeconfig
 
