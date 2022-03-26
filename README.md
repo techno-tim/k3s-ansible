@@ -8,7 +8,7 @@ Kube-vip Control Plane is described -> <https://kube-vip.io/control-plane/>
 
 Video here <https://www.youtube.com/watch?v=CbkEWcUZ7zM>
 
-More docs here <https://docs.technotim.live/posts/cloud-init-cloud-image/>
+More docs here <https://docs.technotim.live/posts/k3s-etcd-ansible/>
 
 ## K3s Ansible Playbook
 
