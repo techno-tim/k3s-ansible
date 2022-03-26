@@ -2,6 +2,8 @@
 
 Based on <https://github.com/k3s-io/k3s-ansible/tree/k3s-ha>
 
+Forked from <https://github.com/212850a/k3s-ansible>
+
 Kube-vip Control Plane is described -> <https://kube-vip.io/control-plane/>
 
 ## K3s Ansible Playbook
