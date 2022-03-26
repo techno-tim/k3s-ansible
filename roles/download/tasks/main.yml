@@ -34,4 +34,3 @@
   when:
     - ansible_facts.architecture is search("arm")
     - ansible_facts.userspace_bits == "32"
-    
