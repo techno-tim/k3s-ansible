@@ -1,0 +1,2 @@
+skip_list:
+  - 'fqcn-builtins'
