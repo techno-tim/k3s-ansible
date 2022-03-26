@@ -10,6 +10,7 @@ flannel_iface: "eth0"
 apiserver_endpoint: "192.168.30.222"
 
 # k3s_token is required  masters can talk together securely
+# this token should be alpha numeric only
 k3s_token: "some-SUPER-DEDEUPER-secret-password"
 
 # change these to your liking, the only required one is--no-deploy servicelb
