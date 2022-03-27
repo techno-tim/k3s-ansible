@@ -29,7 +29,7 @@ on processor architecture:
 ## ✅ System requirements
 
 * Deployment environment must have Ansible 2.4.0+
-* `server` and `agent` nodes should have passwordless SSH access, tf not you can supply arguments to provide credentials `-ask-pass --ask-become-pass` to ach command.
+* `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `-ask-pass --ask-become-pass` to ach command.
 
 ## 🚀 Getting Started
 
