@@ -58,7 +58,7 @@ node
 
 If multiple hosts are in the master group, the playbook will automatically setup k3s in [HA mode with etcd](https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/).
 
-This requires at least k3s version 1.19.1
+This requires at least k3s version `1.19.1` however the version in configurable in `inventory/my-cluster/group_vars/all.yml`: `k3s_version`
 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
