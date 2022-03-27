@@ -33,13 +33,17 @@ on processor architecture:
 
 ## 🚀 Getting Started
 
+### Preparation
+
 First create a new directory based on the `sample` directory within the `inventory` directory:
 
 ```bash
 cp -R inventory/sample inventory/my-cluster
 ```
 
-Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. For example:
+Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. 
+
+For example:
 
 ```ini
 [master]
@@ -58,10 +62,11 @@ node
 
 If multiple hosts are in the master group, the playbook will automatically set up k3s in [HA mode with etcd](https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/).
 
-This requires at least k3s version `1.19.1` however the version in configurable by using the `k3s_version` variable.
+This requires at least k3s version `1.19.1` however the version is configurable by using the `k3s_version` variable.
 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
+### Create Cluster
 Start provisioning of the cluster using the following command:
 
 ```bash
@@ -70,7 +75,7 @@ ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
 
 After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as `apiserver_endpoint`
 
-Remove k3s cluster
+### Remove k3s cluster
 
 ```bash
 ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
@@ -83,7 +88,6 @@ To copy your `kube config` locally so that you can access your **Kubernetes** cl
 ```bash
 scp debian@master_ip:~/.kube/config ~/.kube/config
 ```
-
 
 ## Thanks 🤝
 This repo is really standing on the shoulders of giants.  Thank you!
