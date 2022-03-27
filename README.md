@@ -83,3 +83,13 @@ To copy your `kube config` locally so that you can access your **Kubernetes** cl
 ```bash
 scp debian@master_ip:~/.kube/config ~/.kube/config
 ```
+
+
+## Thanks 🤝
+This repo is really standing on the shoulders of giants.  Thank you!
+
+Thanks to these repos for code and ideas:
+
+* [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible)
+* [geerlingguy/turing-pi-cluster](https://github.com/geerlingguy/turing-pi-cluster)
+* [212850a/k3s-ansible](https://github.com/212850a/k3s-ansible) 
