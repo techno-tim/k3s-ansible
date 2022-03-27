@@ -1,18 +1,20 @@
-# Build a Kubernetes HA-cluster using k3s & kube-vip & metal-lb via Ansible
+# Automated build of HA k3s Cluster
 
-Based on <https://github.com/k3s-io/k3s-ansible>
+![Fully Automated K3S etcd High Availability Install](https://img.youtube.com/vi/CbkEWcUZ7zM/0.jpg)
 
-Forked from <https://github.com/212850a/k3s-ansible>
+This playbook will build an HA Kubernetes cluster with `k3s`, `kube-vip` and MetalLB via `ansible`.
 
-Kube-vip Control Plane is described -> <https://kube-vip.io/control-plane/>
+It is based on the work from [this fork](https://github.com/212850a/k3s-ansible) which is based on the work from [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible). It uses [kube-vip](https://kube-vip.chipzoller.dev/) to create a load balancer for control plane, and [metal-lb](https://metallb.universe.tf/installation/) for its service `LoadBalancer`.
 
-Video here <https://www.youtube.com/watch?v=CbkEWcUZ7zM>
+If you want more context on how this works, see:
 
-More docs here <https://docs.technotim.live/posts/k3s-etcd-ansible/>
+📄 [Documentation](https://docs.technotim.live/posts/k3s-etcd-ansible/)
 
-## K3s Ansible Playbook
+📺 [Video](https://www.youtube.com/watch?v=CbkEWcUZ7zM)
 
-Build a Kubernetes cluster using Ansible with k3s. The goal is easily install a Kubernetes cluster on machines running:
+## 📖 k3s Ansible Playbook
+
+Build a Kubernetes cluster using Ansible with k3s. The goal is easily install a HA Kubernetes cluster on machines running:
 
 - [X] Debian
 - [X] Ubuntu
@@ -24,12 +26,12 @@ on processor architecture:
 - [X] arm64
 - [X] armhf
 
-## System requirements
+## ✅ System requirements
 
-Deployment environment must have Ansible 2.4.0+
-Master and nodes must have passwordless SSH access
+* Deployment environment must have Ansible 2.4.0+
+* `server` and `agent` nodes should have passwordless SSH access, tf not you can supply arguments to provide credentials `-ask-pass --ask-become-pass` to ach command.
 
-## Usage
+## 🚀 Getting Started
 
 First create a new directory based on the `sample` directory within the `inventory` directory:
 
@@ -66,7 +68,7 @@ Start provisioning of the cluster using the following command:
 ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
 ```
 
-After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as apiserver_endpoint
+After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as `apiserver_endpoint`
 
 Remove k3s cluster
 
@@ -74,20 +76,10 @@ Remove k3s cluster
 ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
 ```
 
-**Note: add --ask-pass --ask-become-pass if you are using password logins over ssh**
+## ⚙️ Kube Config
 
-## Kubeconfig
-
-To get access to your **Kubernetes** cluster just
+To copy your `kube config` locally so that you can access your **Kubernetes** cluster run:
 
 ```bash
 scp debian@master_ip:~/.kube/config ~/.kube/config
 ```
-
-## kube-vip
-
-See <https://kube-vip.chipzoller.dev/>
-
-## MetalLB
-
-see <https://metallb.universe.tf/installation/>
