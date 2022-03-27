@@ -1,0 +1,36 @@
+---
+k3s_version: v1.23.4+k3s1
+ansible_user: ansibleuser
+systemd_dir: /etc/systemd/system
+
+# interface which will be used for flannel
+flannel_iface: "eth0"
+
+# apiserver_endpoint is virtual ip-address which will be configured on each master
+apiserver_endpoint: "192.168.30.222"
+
+# k3s_token is required  masters can talk together securely
+# this token should be alpha numeric only
+k3s_token: "some-SUPER-DEDEUPER-secret-password"
+
+# change these to your liking, the only required one is--no-deploy servicelb
+# yamllint disable-line rule:line-length
+extra_server_args: "--no-deploy servicelb --no-deploy traefik --write-kubeconfig-mode 644 --kube-apiserver-arg default-not-ready-toleration-seconds=10 --kube-apiserver-arg default-unreachable-toleration-seconds=10 --kube-controller-arg node-monitor-period=10s --kube-controller-arg node-monitor-grace-period=10s --kubelet-arg node-status-update-frequency=5s"
+extra_agent_args: "--kubelet-arg node-status-update-frequency=5s"
+
+# image tag for kube-vip
+kube_vip_tag_version: "v0.4.2"
+
+# image tag for metal lb
+metal_lb_speaker_tag_version: "v0.12.1"
+metal_lb_controller_tag_version: "v0.12.1"
+
+# metallb ip range for load balancer
+metal_lb_ip_range: "192.168.30.80-192.168.30.90"
+
+# If Vagrant is used
+# ansible_user: vagrant
+# flannel_iface: "eth1"
+# yamllint disable-line rule:line-length
+# extra_server_args: "--node-ip={{ ansible_eth1.ipv4.address }} --flannel-iface={{ flannel_iface }} --no-deploy servicelb --no-deploy traefik"
+# extra_agent_args: "--flannel-iface={{ flannel_iface }}"
