@@ -7,7 +7,7 @@ After=network-online.target
 Type=notify
 ExecStartPre=-/sbin/modprobe br_netfilter
 ExecStartPre=-/sbin/modprobe overlay
-ExecStart=/usr/local/bin/k3s server --data-dir {{ k3s_server_location }} {{ extra_server_args | default("") }}
+ExecStart=/usr/local/bin/k3s server {{ extra_server_args | default("") }}
 KillMode=process
 Delegate=yes
 # Having non-zero Limit*s causes performance problems due to accounting overhead
