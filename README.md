@@ -28,7 +28,7 @@ on processor architecture:
 
 ## ✅ System requirements
 
-* Deployment environment must have Ansible 2.4.0+
+* Deployment environment must have Ansible 2.4.0+.  If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
 * `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `-ask-pass --ask-become-pass` to ach command.
 
 ## 🚀 Getting Started
@@ -66,7 +66,7 @@ This requires at least k3s version `1.19.1` however the version is configurable 
 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
-### Create Cluster
+### 🆕 Create Cluster
 Start provisioning of the cluster using the following command:
 
 ```bash
@@ -75,7 +75,7 @@ ansible-playbook site.yml -i inventory/my-cluster/hosts.ini
 
 After deployment control plane will be accessible via virtual ip-address which is defined in inventory/group_vars/all.yml as `apiserver_endpoint`
 
-### Remove k3s cluster
+### 🔥 Remove k3s cluster
 
 ```bash
 ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
@@ -89,8 +89,12 @@ To copy your `kube config` locally so that you can access your **Kubernetes** cl
 scp debian@master_ip:~/.kube/config ~/.kube/config
 ```
 
+### 🔨 Testing your cluster
+
+See the commands [here](https://docs.technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
+
 ## Thanks 🤝
-This repo is really standing on the shoulders of giants.  Thank you!
+This repo is really standing on the shoulders of giants.  To all those who have contributed.
 
 Thanks to these repos for code and ideas:
 
