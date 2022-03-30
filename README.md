@@ -33,7 +33,7 @@ on processor architecture:
 
 ## 🚀 Getting Started
 
-### Preparation
+### 🍴 Preparation
 
 First create a new directory based on the `sample` directory within the `inventory` directory:
 
@@ -66,7 +66,7 @@ This requires at least k3s version `1.19.1` however the version is configurable 
 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
-### 🆕 Create Cluster
+### ☸️ Create Cluster
 Start provisioning of the cluster using the following command:
 
 ```bash
