@@ -7,6 +7,9 @@
     backrefs: true
   notify: reboot
 
+- name: Install iptables
+  apt: name=iptables state=present
+
 - name: Flush iptables before changing to iptables-legacy
   iptables:
     flush: true

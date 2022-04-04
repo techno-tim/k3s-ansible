@@ -39,6 +39,14 @@
   when:
     - detected_distribution | default("") == "Raspbian"
 
+- name: Set detected_distribution to Raspbian (ARM64 on Debian Bullseye)
+  set_fact:
+    detected_distribution: Raspbian
+  when:
+    - ansible_facts.architecture is search("aarch64")
+    - raspberry_pi|default(false)
+    - ansible_facts.lsb.description|default("") is match("Debian.*bullseye")
+
 - name: execute OS related tasks on the Raspberry Pi
   include_tasks: "{{ item }}"
   with_first_found:
