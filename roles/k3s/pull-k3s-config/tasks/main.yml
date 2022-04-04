@@ -1,0 +1,6 @@
+---
+- name: Pull kube config for securely connecting to cluster
+  fetch:
+    src: ~{{ ansible_user }}/.kube/config
+    dest: ~/.kube/{{ local_k3s_config_filename }}
+    flat: true

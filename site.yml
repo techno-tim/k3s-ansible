@@ -1,5 +1,4 @@
 ---
-
 - hosts: k3s_cluster
   gather_facts: yes
   become: yes
@@ -17,3 +16,8 @@
   become: yes
   roles:
     - role: k3s/node
+
+- hosts: kubeconfig
+  become: yes
+  roles:
+    - role: pull-kube
