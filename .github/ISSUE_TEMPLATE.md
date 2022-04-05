@@ -1,4 +1,6 @@
 
+<!-- It's a good idea to check this post first for general troubleshooting https://github.com/techno-tim/k3s-ansible/discussions/19   -->
+
 <!--- Provide a general summary of the issue in the Title above -->
 
 ## Expected Behavior
@@ -19,13 +21,16 @@
 
 Operating system:
 
+Hardware:
 
 ### Variables Used:
+
+`all.yml`
 
 ```yml
 k3s_version: ""
 ansible_user: NA
-systemd_dir: "
+systemd_dir: ""
 
 flannel_iface: ""
 
@@ -42,7 +47,25 @@ metal_lb_speaker_tag_version: ""
 metal_lb_controller_tag_version: ""
 
 metal_lb_ip_range: ""
+```
 
+### Hosts 
+
+`host.ini`
+
+```ini
+[master]
+IP.ADDRESS.ONE
+IP.ADDRESS.TWO
+IP.ADDRESS.THREE
+
+[node]
+IP.ADDRESS.FOUR
+IP.ADDRESS.FIVE
+
+[k3s_cluster:children]
+master
+node
 ```
 
 ## Possible Solution
