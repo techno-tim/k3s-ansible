@@ -28,5 +28,12 @@ metal_lb_controller_tag_version: "v0.12.1"
 # metallb ip range for load balancer
 metal_lb_ip_range: "192.168.30.80-192.168.30.90"
 
-# local location for .kube/config change "config" to change the name of the local .kube/config | useful if managing a number of kubernetes clusters and configs.
-local_k3s_config_filename: "config"
+# If managing more then one config file / enviornment
+# pull file to custom local location and change
+# change default to a custom option
+# Example:
+# local_k3s_config_filename: "homelab"
+# local_k3s_cluster_context: "homelab"
+
+local_k3s_config_filename: "homelab"
+local_k3s_cluster_context: "homelab"

@@ -17,7 +17,9 @@
   roles:
     - role: k3s/node
 
-- hosts: kubeconfig
-  become: yes
+- hosts: pull_config
+  become: true
   roles:
-    - role: pull-kube
+    - role: k3s/pull-config
+  tags:
+    - pull-config
