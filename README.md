@@ -82,6 +82,8 @@ After deployment control plane will be accessible via virtual ip-address which i
 ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
 ```
 
+>You should also reboot these nodes due to the VIP not being destroyed
+
 ## ⚙️ Kube Config
 
 To copy your `kube config` locally so that you can access your **Kubernetes** cluster run:
