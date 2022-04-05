@@ -67,6 +67,7 @@ This requires at least k3s version `1.19.1` however the version is configurable 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
 ### ☸️ Create Cluster
+
 Start provisioning of the cluster using the following command:
 
 ```bash
@@ -93,7 +94,7 @@ scp debian@master_ip:~/.kube/config ~/.kube/config
 
 See the commands [here](https://docs.technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
 
-### Vagrant
+### 🔷 Vagrant
 
 You may want to kickstart your k3s cluster by using Vagrant to quickly build you all needed VMs with one command.
 Head to the `vagrant` subfolder and type `vagrant up` to get your environment setup.
@@ -101,6 +102,7 @@ After the VMs have got build, deploy k3s using the Ansible playbook `site.yml` b
 `vagrant provision --provision-with ansible` command.
 
 ## Thanks 🤝
+
 This repo is really standing on the shoulders of giants.  To all those who have contributed.
 
 Thanks to these repos for code and ideas:
