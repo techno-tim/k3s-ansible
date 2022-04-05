@@ -35,5 +35,5 @@ metal_lb_ip_range: "192.168.30.80-192.168.30.90"
 # local_k3s_config_filename: "homelab"
 # local_k3s_cluster_context: "homelab"
 
-local_k3s_config_filename: "homelab"
-local_k3s_cluster_context: "homelab"
+local_k3s_config_filename: "config.k3s.downloaded"
+local_k3s_cluster_context: "downloaded"

@@ -1,0 +1,23 @@
+---
+- name: Copy kube config for adjustments
+  copy:
+    src: ~{{ ansible_user }}/.kube/config
+    dest: /tmp/config
+    remote_src: yes
+
+- name: Change default in config to homelab
+  replace:
+    path: /tmp/config
+    regexp: ": default"
+    replace: ": {{ local_k3s_cluster_context }}"
+
+- name: Download kube config file to local location
+  fetch:
+    src: /tmp/config
+    dest: ~/.kube/{{ local_k3s_config_filename }}
+    flat: true
+
+- name: Delete Temp Config
+  file:
+    path: /tmp/config
+    state: absent
