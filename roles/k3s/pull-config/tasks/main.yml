@@ -4,6 +4,7 @@
     src: ~{{ ansible_user }}/.kube/config
     dest: /tmp/config
     remote_src: yes
+    mode: preserve
 
 - name: Change default in config to homelab
   replace:
