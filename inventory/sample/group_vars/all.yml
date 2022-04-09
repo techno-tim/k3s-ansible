@@ -4,6 +4,9 @@ k3s_version: v1.23.4+k3s1
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
 
+# Set your timezone
+system_timezone: "Your/Timezone"
+
 # interface which will be used for flannel
 flannel_iface: "eth0"
 

@@ -1,8 +1,13 @@
 ---
+- name: Set same timezone on every Server
+  timezone:
+    name: "{{ system_timezone }}"
+  when: (system_timezone is defined) and (system_timezone != "Your/Timezone")
+
 - name: Set SELinux to disabled state
   selinux:
     state: disabled
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+  when: ansible_os_family == "RedHat"
 
 - name: Enable IPv4 forwarding
   sysctl:
@@ -23,13 +28,13 @@
     content: "br_netfilter"
     dest: /etc/modules-load.d/br_netfilter.conf
     mode: "u=rw,g=,o="
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+  when: ansible_os_family == "RedHat"
 
 - name: Load br_netfilter
   modprobe:
     name: br_netfilter
     state: present
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+  when: ansible_os_family == "RedHat"
 
 - name: Set bridge-nf-call-iptables (just to be sure)
   sysctl:
@@ -37,7 +42,7 @@
     value: "1"
     state: present
     reload: yes
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+  when: ansible_os_family == "RedHat"
   loop:
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
@@ -50,4 +55,4 @@
     insertafter: EOF
     path: /etc/sudoers
     validate: 'visudo -cf %s'
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+  when: ansible_os_family == "RedHat"
