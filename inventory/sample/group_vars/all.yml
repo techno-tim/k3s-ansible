@@ -22,7 +22,7 @@ extra_server_args: "--no-deploy servicelb --no-deploy traefik"
 extra_agent_args: ""
 
 # image tag for kube-vip
-kube_vip_tag_version: "v0.4.3"
+kube_vip_tag_version: "v0.4.4"
 
 # image tag for metal lb
 metal_lb_speaker_tag_version: "v0.12.1"

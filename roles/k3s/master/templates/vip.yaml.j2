@@ -43,15 +43,15 @@ spec:
         - name: vip_ddns
           value: "false"
         - name: svc_enable
-          value: "true"
+          value: "false"
         - name: vip_leaderelection
           value: "true"
         - name: vip_leaseduration
-          value: "5"
+          value: "15"
         - name: vip_renewdeadline
-          value: "3"
+          value: "10"
         - name: vip_retryperiod
-          value: "1"
+          value: "2"
         - name: address
           value: {{ apiserver_endpoint }}
         image: ghcr.io/kube-vip/kube-vip:{{ kube_vip_tag_version }}
