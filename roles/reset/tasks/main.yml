@@ -54,3 +54,4 @@
 - name: Reboot and wait for node to come back up
   reboot:
     reboot_timeout: 3600
+    
