@@ -96,6 +96,10 @@ scp debian@master_ip:~/.kube/config ~/.kube/config
 
 See the commands [here](https://docs.technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
 
+### Troubleshooting
+
+Be sure to see [this post](https://github.com/techno-tim/k3s-ansible/discussions/20) on how to troubleshoot common problems
+
 ### 🔷 Vagrant
 
 You may want to kickstart your k3s cluster by using Vagrant to quickly build you all needed VMs with one command.
@@ -109,6 +113,6 @@ This repo is really standing on the shoulders of giants.  To all those who have 
 
 Thanks to these repos for code and ideas:
 
-* [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible)
-* [geerlingguy/turing-pi-cluster](https://github.com/geerlingguy/turing-pi-cluster)
-* [212850a/k3s-ansible](https://github.com/212850a/k3s-ansible) 
+- [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible)
+- [geerlingguy/turing-pi-cluster](https://github.com/geerlingguy/turing-pi-cluster)
+- [212850a/k3s-ansible](https://github.com/212850a/k3s-ansible) 
