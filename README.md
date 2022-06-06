@@ -29,7 +29,7 @@ on processor architecture:
 ## ✅ System requirements
 
 * Deployment environment must have Ansible 2.4.0+.  If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
-* `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `-ask-pass --ask-become-pass` to each command.
+* `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `--ask-pass --ask-become-pass` to each command.
 
 ## 🚀 Getting Started
 
