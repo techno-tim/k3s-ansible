@@ -41,7 +41,7 @@ First create a new directory based on the `sample` directory within the `invento
 cp -R inventory/sample inventory/my-cluster
 ```
 
-Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above. 
+Second, edit `inventory/my-cluster/hosts.ini` to match the system information gathered above
 
 For example:
 
