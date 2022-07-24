@@ -1,5 +1,14 @@
 ---
 
+- name: Delegate Master0 node-token to other nodes
+  set_fact:
+    token: "{{ hostvars[groups['master'][0]]['token'] }}"
+  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- debug:
+    msg: "Token delegated to other nodes is {{ token  | regex_search('^.*:(.*$)', '\\1') }} full token is {{ token }} "
+  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
 - name: Copy K3s service file
   template:
     src: "k3s.service.j2"
