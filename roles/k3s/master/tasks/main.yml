@@ -13,33 +13,60 @@
   args:
     warn: false  # The ansible systemd module does not support reset-failed
 
-#- name: Create manifests directory on first master
-#  file:
-#    path: /var/lib/rancher/k3s/server/manifests
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
-#- name: Copy vip rbac manifest to first master
-#  template:
-#    src: "vip.rbac.yaml.j2"
-#    dest: "/var/lib/rancher/k3s/server/manifests/vip.rbac.yaml"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
-#- name: Copy vip manifest to first master
-#  template:
-#    src: "vip.yaml.j2"
-#    dest: "/var/lib/rancher/k3s/server/manifests/vip.yaml"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
+- name: Create manifests directory on first master
+  file:
+    path: /var/lib/rancher/k3s/server/manifests
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy vip rbac manifest to first master
+  template:
+    src: "vip.rbac.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip-rbac.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy vip manifest to first master
+  template:
+    src: "vip.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb namespace manifest to first master
+  template:
+    src: "metallb.namespace.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb ConfigMap manifest to first master
+  template:
+    src: "metallb.configmap.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-configmap.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb main manifest to first master
+  template:
+    src: "metallb.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
 
 - name: Init cluster inside the transient k3s-init service
   command:
@@ -177,49 +204,23 @@
     owner: "{{ ansible_user }}"
     mode: "u=rw,g=,o="
 
-#- name: Configure kubectl cluster to https://{{ apiserver_endpoint }}:6443
-#  command: >-
-#    k3s kubectl config set-cluster default
-#      --server=https://{{ apiserver_endpoint }}:6443
-#      --kubeconfig ~{{ ansible_user }}/.kube/config
-#  changed_when: true
-#
-#- name: Create kubectl symlink
-#  file:
-#    src: /usr/local/bin/k3s
-#    dest: /usr/local/bin/kubectl
-#    state: link
-#
-#- name: Create crictl symlink
-#  file:
-#    src: /usr/local/bin/k3s
-#    dest: /usr/local/bin/crictl
-#    state: link
-#
-#- name: Copy metallb namespace manifest to first master
-#  template:
-#    src: "metallb.namespace.j2"
-#    dest: "/var/lib/rancher/k3s/server/manifests/metallb.namespace.yaml"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
-#- name: Copy metallb ConfigMap manifest to first master
-#  template:
-#    src: "metallb.configmap.j2"
-#    dest: "/var/lib/rancher/k3s/server/manifests/metallb.configmap.yaml"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
-#- name: Copy metallb main manifest to first master
-#  template:
-#    src: "metallb.yaml.j2"
-#    dest: "/var/lib/rancher/k3s/server/manifests/metallb.yaml"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-#
+- name: Configure kubectl cluster to https://{{ apiserver_endpoint }}:6443
+  command: >-
+    k3s kubectl config set-cluster default
+      --server=https://{{ apiserver_endpoint }}:6443
+      --kubeconfig ~{{ ansible_user }}/.kube/config
+  changed_when: true
+
+- name: Create kubectl symlink
+  file:
+    src: /usr/local/bin/k3s
+    dest: /usr/local/bin/kubectl
+    state: link
+
+- name: Create crictl symlink
+  file:
+    src: /usr/local/bin/k3s
+    dest: /usr/local/bin/crictl
+    state: link
+
+
