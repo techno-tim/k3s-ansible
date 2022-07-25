@@ -109,31 +109,10 @@
     token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
-#- name: Delegate Master0 node-token to other nodes
-#  set_fact:
-#    token: "{{ hostvars[groups['master'][0]]['token'] | regex_search('^.*:(.*$)', '\\1') }}"
-#  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-
 - name: Delegate Master0 node-token to other nodes
   set_fact:
     token: "{{ hostvars[groups['master'][0]]['token'] }}"
   when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-
-
-- debug:
-    msg: "Token from master0 is {{ token  | regex_search('^.*:(.*$)', '\\1') }}, token is {{ token }} and encoded is {{ token | b64encode }}"
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-
-- debug:
-    msg: "Token delegated to other nodes is {{ token  | regex_search('^.*:(.*$)', '\\1') }} full token is {{ token }} "
-  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-
-
-# Pause to get some sensitive input.
-- pause:
-    prompt: "Intentional pause. Enter a secret"
-    echo: yes
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Restore node-token file access
   file:
@@ -222,5 +201,3 @@
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/crictl
     state: link
-
-
