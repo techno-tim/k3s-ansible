@@ -25,7 +25,7 @@
 - name: Copy vip rbac manifest to first master
   template:
     src: "vip.rbac.yaml.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/vip.rbac.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip-rbac.yaml"
     owner: root
     group: root
     mode: 0644
@@ -43,7 +43,7 @@
 - name: Copy metallb namespace manifest to first master
   template:
     src: "metallb.namespace.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb.namespace.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
     owner: root
     group: root
     mode: 0644
@@ -52,7 +52,7 @@
 - name: Copy metallb ConfigMap manifest to first master
   template:
     src: "metallb.configmap.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb.configmap.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-configmap.yaml"
     owner: root
     group: root
     mode: 0644
@@ -67,15 +67,73 @@
     mode: 0644
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
+
 - name: Init cluster inside the transient k3s-init service
   command:
     cmd: "systemd-run -p RestartSec=2 \
                       -p Restart=on-failure \
                       --unit=k3s-init \
-                      k3s server {{ server_init_args }}"
+                      k3s server --cluster-init \
+                      {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
   args:
     warn: false  # The ansible systemd module does not support transient units
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+
+- name: Wait for node-token
+  wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Register node-token file access mode
+  stat:
+    path: /var/lib/rancher/k3s/server
+  register: p
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Change file access node-token
+  file:
+    path: /var/lib/rancher/k3s/server
+    mode: "g+rx,o+rx"
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Read node-token from master
+  slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: node_token
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Store Master0 node-token
+  set_fact:
+    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Delegate Master0 node-token to other nodes
+  set_fact:
+    token: "{{ hostvars[groups['master'][0]]['token'] }}"
+  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Restore node-token file access
+  file:
+    path: /var/lib/rancher/k3s/server
+    mode: "{{ p.stat.mode }}"
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+
+- name: Init other nodes after first master token
+  command:
+    cmd: "systemd-run -p RestartSec=2 \
+                      -p Restart=on-failure \
+                      --unit=k3s-init \
+                      k3s server \
+                      --server https://{{ hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0]) }}:6443 \
+                      --token {{ token }} \
+                      {{ server_init_args }}"
+    creates: "{{ systemd_dir }}/k3s.service"
+  args:
+    warn: false  # The ansible systemd module does not support transient units
+  when: ansible_host != hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Verification
   block:
@@ -109,34 +167,6 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
-
-- name: Wait for node-token
-  wait_for:
-    path: /var/lib/rancher/k3s/server/node-token
-
-- name: Register node-token file access mode
-  stat:
-    path: /var/lib/rancher/k3s/server
-  register: p
-
-- name: Change file access node-token
-  file:
-    path: /var/lib/rancher/k3s/server
-    mode: "g+rx,o+rx"
-
-- name: Read node-token from master
-  slurp:
-    src: /var/lib/rancher/k3s/server/node-token
-  register: node_token
-
-- name: Store Master node-token
-  set_fact:
-    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
-
-- name: Restore node-token file access
-  file:
-    path: /var/lib/rancher/k3s/server
-    mode: "{{ p.stat.mode }}"
 
 - name: Create directory .kube
   file:
