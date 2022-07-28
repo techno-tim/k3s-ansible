@@ -25,7 +25,7 @@
 - name: Copy vip rbac manifest to first master
   template:
     src: "vip.rbac.yaml.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/vip.rbac.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip-rbac.yaml"
     owner: root
     group: root
     mode: 0644
@@ -43,7 +43,7 @@
 - name: Copy metallb namespace manifest to first master
   template:
     src: "metallb.namespace.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb.namespace.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
     owner: root
     group: root
     mode: 0644
@@ -52,7 +52,7 @@
 - name: Copy metallb ConfigMap manifest to first master
   template:
     src: "metallb.configmap.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb.configmap.yaml"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-configmap.yaml"
     owner: root
     group: root
     mode: 0644
