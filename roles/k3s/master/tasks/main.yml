@@ -51,7 +51,7 @@
 
 - name: Copy metallb ConfigMap manifest to first master
   template:
-    src: "metallb.configmap.j2"
+    src: "metallb.ipaddresspool.j2"
     dest: "/var/lib/rancher/k3s/server/manifests/metallb-configmap.yaml"
     owner: root
     group: root
