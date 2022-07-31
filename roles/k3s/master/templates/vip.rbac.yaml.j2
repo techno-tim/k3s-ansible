@@ -12,7 +12,7 @@ metadata:
   name: system:kube-vip-role
 rules:
   - apiGroups: [""]
-    resources: ["services", "services/status", "nodes"]
+    resources: ["services", "services/status", "nodes", "endpoints"]
     verbs: ["list","get","watch", "update"]
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]

@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  creationTimestamp: null
   name: kube-vip-ds
   namespace: kube-system
 spec:
@@ -10,7 +9,6 @@ spec:
       name: kube-vip-ds
   template:
     metadata:
-      creationTimestamp: null
       labels:
         name: kube-vip-ds
     spec:
