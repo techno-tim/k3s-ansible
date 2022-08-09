@@ -51,6 +51,9 @@
   systemd:
     daemon_reload: yes
 
+- name: Remove linux-modules-extra-raspi
+  apt: name=linux-modules-extra-raspi state=absent
+
 - name: Reboot and wait for node to come back up
   reboot:
     reboot_timeout: 3600
