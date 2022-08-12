@@ -17,8 +17,8 @@ apiserver_endpoint: "192.168.30.222"
 # this token should be alpha numeric only
 k3s_token: "some-SUPER-DEDEUPER-secret-password"
 
-# change these to your liking, the only required one is--no-deploy servicelb
-extra_server_args: "--no-deploy servicelb --no-deploy traefik"
+# change these to your liking, the only required one is--disable servicelb
+extra_server_args: "--disable servicelb --disable traefik"
 extra_agent_args: ""
 
 # image tag for kube-vip
