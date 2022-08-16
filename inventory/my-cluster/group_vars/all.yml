@@ -1,0 +1,32 @@
+---
+k3s_version: v1.24.3+k3s1
+# this is the user that has ssh access to these machines
+ansible_user: devantler
+systemd_dir: /etc/systemd/system
+
+# Set your timezone
+system_timezone: "Europe/Copenhagen"
+
+# interface which will be used for flannel
+flannel_iface: "eth0"
+
+# apiserver_endpoint is virtual ip-address which will be configured on each master
+apiserver_endpoint: "10.10.10.0"
+
+# k3s_token is required  masters can talk together securely
+# this token should be alpha numeric only
+k3s_token: "n9N981rmnzRb8mq75Loa33of"
+
+# change these to your liking, the only required one is--disable servicelb
+extra_server_args: "--disable servicelb --disable traefik"
+extra_agent_args: ""
+
+# image tag for kube-vip
+kube_vip_tag_version: "v0.5.0"
+
+# image tag for metal lb
+metal_lb_speaker_tag_version: "v0.13.4"
+metal_lb_controller_tag_version: "v0.13.4"
+
+# metallb ip range for load balancer
+metal_lb_ip_range: "10.10.10.10-10.10.10.20"
