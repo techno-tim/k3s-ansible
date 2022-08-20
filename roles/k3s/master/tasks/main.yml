@@ -189,6 +189,6 @@
   file:
     path: "{{ item.path }}"
     state: absent
-  with_items: 
+  with_items:
     - "{{ k3s_server_manifests.files }}"
     - "{{ k3s_server_manifests_directories.files }}"
