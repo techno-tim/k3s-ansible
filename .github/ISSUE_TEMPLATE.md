@@ -26,7 +26,7 @@ Operating system:
 
 Hardware:
 
-### Variables Used:
+### Variables Used
 
 `all.yml`
 
@@ -52,7 +52,7 @@ metal_lb_controller_tag_version: ""
 metal_lb_ip_range: ""
 ```
 
-### Hosts 
+### Hosts
 
 `host.ini`
 
@@ -73,3 +73,5 @@ node
 
 ## Possible Solution
 <!--- Not obligatory, but suggest a fix/reason for the bug, -->
+
+- [ ] I've checked the [General Troubleshooting Guide](https://github.com/techno-tim/k3s-ansible/discussions/20)
