@@ -172,13 +172,13 @@
     dest: /usr/local/bin/crictl
     state: link
 
-- name: get contents of manifests folder
+- name: Get contents of manifests folder
   find:
     paths: /var/lib/rancher/k3s/server/manifests
     file_type: file
   register: k3s_server_manifests
 
-- name: get sub dirs of manifests folder
+- name: Get sub dirs of manifests folder
   find:
     paths: /var/lib/rancher/k3s/server/manifests
     file_type: directory
