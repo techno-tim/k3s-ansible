@@ -18,7 +18,7 @@ apiserver_endpoint: "10.10.10.0"
 k3s_token: "n9N981rmnzRb8mq75Loa33of"
 
 # change these to your liking, the only required one is--disable servicelb
-extra_server_args: "--disable servicelb --disable traefik"
+extra_server_args: "--disable servicelb --disable traefik --write-kubeconfig-mode 644"
 extra_agent_args: ""
 
 # image tag for kube-vip
