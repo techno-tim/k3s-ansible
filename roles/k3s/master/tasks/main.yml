@@ -192,3 +192,5 @@
   with_items:
     - "{{ k3s_server_manifests.files }}"
     - "{{ k3s_server_manifests_directories.files }}"
+  loop_control:
+    label: "{{ item.path }}"
