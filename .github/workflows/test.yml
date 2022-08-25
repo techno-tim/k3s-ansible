@@ -60,6 +60,10 @@ jobs:
       - name: Show cluster pods
         run: kubectl describe -A pods
 
+      - name: Test cluster
+        run: $VAGRANT_CWD/test_cluster.py --verbose --locals
+        timeout-minutes: 5
+
       - name: Destroy virtual machines
         if: always() # do this even if a step before has failed
         run: vagrant destroy --force
