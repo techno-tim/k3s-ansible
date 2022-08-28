@@ -75,11 +75,6 @@
   with_items: "{{ groups['master'] }}"
   run_once: true
 
-# TODO:// if there is a race condition, we'll have to manually wait here
-# - name: Wait for all metallb services to come up
-#   wait_for:
-#     timeout: 30
-
 - name: Wait for metallb pods in replicasets
   command: >-
     kubectl wait pods -n metallb-system --for condition=Ready \
@@ -111,6 +106,11 @@
   changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
+
+# TODO:// if there is a race condition, we'll have to manually wait here
+- name: Wait for all metallb services to come up
+  wait_for:
+    timeout: 30
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
