@@ -3,11 +3,13 @@
   command: grep -E "Raspberry Pi|BCM2708|BCM2709|BCM2835|BCM2836" /proc/cpuinfo
   register: grep_cpuinfo_raspberrypi
   failed_when: false
+  changed_when: false
 
 - name: Test for raspberry pi /proc/device-tree/model
   command: grep -E "Raspberry Pi" /proc/device-tree/model
   register: grep_device_tree_model_raspberrypi
   failed_when: false
+  changed_when: false
 
 - name: Set raspberry_pi fact to true
   set_fact:

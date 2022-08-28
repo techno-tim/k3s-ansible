@@ -42,24 +42,28 @@
 - name: Apply metallb-system namespace
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-namespace.yaml
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system namespace
   command: >-
     k3s kubectl -n metallb-system
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Apply metallb crds and service
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb.yaml
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Wait for metallb controller to be running
   command: >-
     kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -67,6 +71,7 @@
   command: >-
     kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
     --selector component=controller --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -79,6 +84,7 @@
   command: >-
     kubectl wait pods -n metallb-system --for condition=Ready \
     --selector component=controller,app=metallb --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -86,6 +92,7 @@
   command: >-
     kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -93,6 +100,7 @@
   command: >-
     kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -100,30 +108,35 @@
   command: >-
     kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
     k3s kubectl -n metallb-system get endpoints webhook-service
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Apply metallb CRs
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system IPAddressPool
   command: >-
     k3s kubectl -n metallb-system get IPAddressPool
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system L2Advertisement
   command: >-
     k3s kubectl -n metallb-system get L2Advertisement
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
