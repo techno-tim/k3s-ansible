@@ -9,7 +9,6 @@
 - name: Clean previous runs of k3s-init
   command: systemctl reset-failed k3s-init
   failed_when: false
-  changed_when: false
   args:
     warn: false  # The ansible systemd module does not support reset-failed
 
@@ -59,7 +58,6 @@
       until: nodes.rc == 0 and (nodes.stdout.split() | length) == (groups['master'] | length)
       retries: "{{ retry_count | default(20) }}"
       delay: 10
-      changed_when: false
   always:
     - name: Kill the temporary service used for initialization
       systemd:
