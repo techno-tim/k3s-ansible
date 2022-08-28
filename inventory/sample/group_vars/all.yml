@@ -17,9 +17,18 @@ apiserver_endpoint: "192.168.30.222"
 # this token should be alpha numeric only
 k3s_token: "some-SUPER-DEDEUPER-secret-password"
 
-# change these to your liking, the only required one is--disable servicelb
-extra_server_args: "--disable servicelb --disable traefik"
-extra_agent_args: ""
+# these arguments are recommended for servers as well as agents:
+extra_args: >-
+  --flannel-iface={{ flannel_iface }}
+  --node-ip={{ ansible_facts[flannel_iface]["ipv4"]["address"] }}
+
+# change these to your liking, the only required one is --disable servicelb
+extra_server_args: >-
+  {{ extra_args }}
+  --disable servicelb
+  --disable traefik
+extra_agent_args: >-
+  {{ extra_args }}
 
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.0"
