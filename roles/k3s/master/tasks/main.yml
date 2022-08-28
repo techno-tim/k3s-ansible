@@ -66,6 +66,7 @@
         name: k3s-init
         state: stopped
       failed_when: false
+  when: not ansible_check_mode
 
 - name: Copy K3s service file
   register: k3s_service
