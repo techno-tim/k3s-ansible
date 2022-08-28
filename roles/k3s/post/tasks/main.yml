@@ -54,13 +54,15 @@
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Wait for metallb controller to be running
-  shell: kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
-  register: webhook_metal_lb_deployment
+  command: >-
+    kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Wait for metallb webhook service to be running
-  shell: kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
     --selector component=controller --timeout=60s
-  register: webhook_metal_lb_pods
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 # TODO:// if there is a race condition, we'll have to manually wait here
 # - name: Wait for all metallb services to come up
@@ -68,24 +70,28 @@
 #     timeout: 30
 
 - name: Wait for metallb pods in replicasets
-  shell: kubectl wait pods -n metallb-system --for condition=Ready \
+  command: >-
+    kubectl wait pods -n metallb-system --for condition=Ready \
     --selector component=controller,app=metallb --timeout=60s
-  register: webhook_metal_lb_pods
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Wait for the metallb controller readyReplicas
-  shell: kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
-    --selector component=controller,app=metallb --timeout=60s
-  register: webhook_metal_lb_replicas_ready_replicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Wait for the metallb controller fullyLabeledReplicas
-  shell: kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
-    --selector component=controller,app=metallb --timeout=60s
-  register: webhook_metal_lb_replicas_fully_labeled_replicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Wait for the metallb  controller availableReplicas
-  shell: kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
-    --selector component=controller,app=metallb --timeout=60s
-  register: webhook_metal_lb_replicas_available_replicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
