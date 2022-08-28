@@ -49,6 +49,10 @@ jobs:
         run: vagrant provision control1 --provision-with ansible
         timeout-minutes: 25
 
+      - name: Show logs for k3s-init.service
+        run: vagrant ssh control1 --command "sudo journalctl -au k3s-init.service"
+        if: ${{ failure() }}
+
       - name: Set up kubectl on the host
         run: brew install kubectl &&
           mkdir -p ~/.kube &&
