@@ -1,0 +1,123 @@
+---
+- name: Create manifests directory
+  file:
+    path: /tmp/k3s
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb namespace manifest to first master
+  template:
+    src: "metallb.namespace.j2"
+    dest: "/tmp/k3s/metallb-namespace.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb CRs manifest to first master
+  template:
+    src: "metallb.crs.j2"
+    dest: "/tmp/k3s/metallb-crs.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb main manifest to first master
+  template:
+    src: "metallb.yaml.j2"
+    dest: "/tmp/k3s/metallb.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Apply metallb-system namespace
+  command: >-
+    k3s kubectl apply -f /tmp/k3s/metallb-namespace.yaml
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Test metallb-system namespace
+  command: >-
+    k3s kubectl -n metallb-system
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Apply metallb crds and service
+  command: >-
+    k3s kubectl apply -f /tmp/k3s/metallb.yaml
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Wait for metallb controller to be running
+  command: >-
+    kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Wait for metallb webhook service to be running
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
+    --selector component=controller --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+# TODO:// if there is a race condition, we'll have to manually wait here
+# - name: Wait for all metallb services to come up
+#   wait_for:
+#     timeout: 30
+
+- name: Wait for metallb pods in replicasets
+  command: >-
+    kubectl wait pods -n metallb-system --for condition=Ready \
+    --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Wait for the metallb controller readyReplicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Wait for the metallb controller fullyLabeledReplicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Wait for the metallb  controller availableReplicas
+  command: >-
+    kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
+      --selector component=controller,app=metallb --timeout=60s
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Test metallb-system webhook-service endpoint
+  command: >-
+    k3s kubectl -n metallb-system get endpoints webhook-service
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Apply metallb CRs
+  command: >-
+    k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Test metallb-system IPAddressPool
+  command: >-
+    k3s kubectl -n metallb-system get IPAddressPool
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Test metallb-system L2Advertisement
+  command: >-
+    k3s kubectl -n metallb-system get L2Advertisement
+  changed_when: true
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Remove tmp director used for manifests
+  file:
+    path: /tmp/k3s
+    state: absent
