@@ -42,21 +42,21 @@
 - name: Apply metallb-system namespace
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-namespace.yaml
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system namespace
   command: >-
     k3s kubectl -n metallb-system
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Apply metallb crds and service
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb.yaml
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -109,28 +109,28 @@
 - name: Test metallb-system webhook-service endpoint
   command: >-
     k3s kubectl -n metallb-system get endpoints webhook-service
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Apply metallb CRs
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system IPAddressPool
   command: >-
     k3s kubectl -n metallb-system get IPAddressPool
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Test metallb-system L2Advertisement
   command: >-
     k3s kubectl -n metallb-system get L2Advertisement
-  changed_when: true
+  changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
