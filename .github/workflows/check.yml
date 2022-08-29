@@ -32,7 +32,6 @@ jobs:
   run-playbook:
     name: Ansible Check
     runs-on: ubuntu-latest
-    needs: [ ansible-lint ]
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v3
