@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Check out the codebase.
       - uses: actions/checkout@v3
-        with:
-          python-version: '3.x'
 
       - name: Set up Python 3.x
       - uses: actions/setup-python@v4
@@ -22,11 +20,7 @@ jobs:
           python-version: '3.x'
       
       - name: Install dependencies
-        with:
-          python-version: '3.x'
         run: pip3 install yamllint ansible
 
       - name: run ansible check
-        with:
-          python-version: '3.x'
         run: ansible-playbook ./site.yml -i ./inventory/my-cluster/hosts.ini --check
