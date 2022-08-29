@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the codebase.
+      - name: Check out the codebase
         uses: actions/checkout@v3
 
       - name: Set up Python 3.x
@@ -22,6 +22,9 @@ jobs:
       
       - name: Install dependencies
         run: pip3 install yamllint ansible
+
+      - name: Create playbook
+        run: cp -R inventory/sample inventory/my-cluster
 
       - name: run ansible check
         run: ansible-playbook ./site.yml -i ./inventory/my-cluster/hosts.ini --check

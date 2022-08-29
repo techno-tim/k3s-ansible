@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the codebase.
+      - name: Check out the codebase
         uses: actions/checkout@v3
 
       - name: Set up Python 3.x
@@ -20,11 +20,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install test dependencies.
+      - name: Install test dependencies
         run: pip3 install yamllint ansible-lint ansible
 
-      - name: Run yamllint.
+      - name: Run yamllint
         run: yamllint .
 
-      - name: Run ansible-lint.
+      - name: Run ansible-lint
         run: ansible-lint
