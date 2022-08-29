@@ -18,11 +18,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install test dependencies.
+      - name: Install test dependencies
         run: pip3 install yamllint ansible-lint ansible
 
-      - name: Run yamllint.
+      - name: Run yamllint
         run: yamllint .
 
-      - name: Run ansible-lint.
+      - name: Run ansible-lint
         run: ansible-lint
