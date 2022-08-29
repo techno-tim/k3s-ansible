@@ -1,6 +1,6 @@
 ---
 name: ansible-check
-'on':
+on:
   pull_request:
   push:
     branches:
@@ -20,7 +20,7 @@ jobs:
           python-version: '3.x'
       
       - name: Install dependencies
-        run: pip3 install yamllint ansible-lint ansible
+        run: pip3 install yamllint ansible
 
       - name: run ansible check
         run: ansible-playbook ./site.yml -i ./inventory/my-cluster/hosts.ini --check
