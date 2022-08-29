@@ -17,18 +17,18 @@ jobs:
           python-version: '3.x'
 
       - name: Set up Python 3.x
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       
       - name: Install dependencies
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
         run: pip3 install yamllint ansible
 
       - name: run ansible check
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
         run: ansible-playbook ./site.yml -i ./inventory/my-cluster/hosts.ini --check
