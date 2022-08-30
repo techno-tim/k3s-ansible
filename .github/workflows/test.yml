@@ -1,0 +1,69 @@
+---
+name: Test
+"on":
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  vagrant:
+    name: Vagrant
+    runs-on: macos-12
+
+    env:
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+      VAGRANT_CWD: ${{ github.workspace }}/vagrant
+
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v2
+
+      - name: Install Ansible
+        run: brew install ansible
+
+      - name: Install role dependencies
+        run: ansible-galaxy install -r collections/requirements.yml
+
+      - name: Configure VirtualBox
+        run: >-
+          sudo mkdir -p /etc/vbox &&
+          echo "* 192.168.30.0/24" | sudo tee -a /etc/vbox/networks.conf > /dev/null
+
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.vagrant.d/boxes
+          key: vagrant-boxes-${{ hashFiles('**/Vagrantfile') }}
+          restore-keys: |
+            vagrant-boxes
+
+      - name: Create virtual machines
+        run: vagrant up
+        timeout-minutes: 10
+
+      - name: Provision cluster using Ansible
+        # Since Ansible sets up _all_ machines, it is sufficient to run it only
+        # once (i.e, for a single node - we are choosing control1 here)
+        run: vagrant provision control1 --provision-with ansible
+        timeout-minutes: 25
+
+      - name: Set up kubectl on the host
+        run: brew install kubectl &&
+          mkdir -p ~/.kube &&
+          vagrant ssh control1 --command "cat ~/.kube/config" > ~/.kube/config
+
+      - name: Show cluster nodes
+        run: kubectl describe -A nodes
+
+      - name: Show cluster pods
+        run: kubectl describe -A pods
+
+      - name: Test cluster
+        run: $VAGRANT_CWD/test_cluster.py --verbose --locals
+        timeout-minutes: 5
+
+      - name: Destroy virtual machines
+        if: always() # do this even if a step before has failed
+        run: vagrant destroy --force
