@@ -1,6 +1,6 @@
 ---
 name: Test
-"on":
+on:
   pull_request:
   push:
     branches:
@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Ansible
         run: brew install ansible
