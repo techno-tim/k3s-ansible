@@ -7,6 +7,11 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.ssh.insert_key = false
 
+    # We currently can not use public-key based authentication on Ubuntu 22.04,
+    # see: https://github.com/chef/bento/issues/1405
+    config.ssh.username = "vagrant"
+    config.ssh.password = "vagrant"
+
     config.vm.provider :virtualbox do |v|
         v.memory = 2048
         v.cpus = 2
