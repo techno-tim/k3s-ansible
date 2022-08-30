@@ -110,7 +110,7 @@
 # TODO:// if there is a race condition, we'll have to manually wait here
 - name: Wait for all metallb services to come up
   wait_for:
-    timeout: 30
+    timeout: 60
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
