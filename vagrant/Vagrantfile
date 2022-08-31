@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
                                  "metal_lb_speaker_tag_version" => "v0.13.4",
                                  "metal_lb_controller_tag_version" => "v0.13.4",
                                  "metal_lb_ip_range" => "192.168.30.80-192.168.30.90",
-                                 "retry_count" => "30"}
+                                 "retry_count" => "60"}
         }
         ansible.host_vars = {
           "control1" => {
