@@ -40,6 +40,25 @@
     mode: 0644
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
+# these will be copied and installed now, then tested later and apply config
+- name: Copy metallb namespace to first master
+  template:
+    src: "metallb.namespace.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
+- name: Copy metallb namespace to first master
+  template:
+    src: "metallb.crds.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+
 - name: Init cluster inside the transient k3s-init service
   command:
     cmd: "systemd-run -p RestartSec=2 \
