@@ -1,18 +1,8 @@
 ---
-- name: Create manifests directory
+- name: Create manifests directory for temp configuration
   file:
     path: /tmp/k3s
     state: directory
-    owner: root
-    group: root
-    mode: 0644
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Copy metallb namespace manifest to first master
-  template:
-    src: "metallb.namespace.j2"
-    dest: "/tmp/k3s/metallb-namespace.yaml"
     owner: root
     group: root
     mode: 0644
@@ -29,33 +19,9 @@
   with_items: "{{ groups['master'] }}"
   run_once: true
 
-- name: Copy metallb main manifest to first master
-  template:
-    src: "metallb.yaml.j2"
-    dest: "/tmp/k3s/metallb.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Apply metallb-system namespace
-  command: >-
-    k3s kubectl apply -f /tmp/k3s/metallb-namespace.yaml
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
 - name: Test metallb-system namespace
   command: >-
     k3s kubectl -n metallb-system
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Apply metallb crds and service
-  command: >-
-    k3s kubectl apply -f /tmp/k3s/metallb.yaml
   changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
@@ -106,11 +72,6 @@
   changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
-
-# TODO:// if there is a race condition, we'll have to manually wait here
-- name: Wait for all metallb services to come up
-  wait_for:
-    timeout: 60
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
