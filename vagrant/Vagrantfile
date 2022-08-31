@@ -52,12 +52,14 @@ Vagrant.configure("2") do |config|
         ansible.playbook = "../site.yml"
         ansible.inventory_path = "../inventory/sample/hosts.ini"
         ansible.limit = "all"
-
         ansible.extra_vars = {
             ansible_user: "vagrant",
 
             # See: https://github.com/flannel-io/flannel/blob/67d603aaf45ef80f5dd39f43714fc5e6f8a637eb/Documentation/troubleshooting.md#Vagrant
             flannel_iface: "eth1",
+
+            # Reduce flakyness in CI with bigger timeouts
+            "retry_count" => "60",
         }
     end
 end
