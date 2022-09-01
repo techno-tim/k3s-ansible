@@ -40,7 +40,8 @@
     mode: 0644
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
-- name: Copy metallb namespace manifest to first master
+# these will be copied and installed now, then tested later and apply config
+- name: Copy metallb namespace to first master
   template:
     src: "metallb.namespace.j2"
     dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
@@ -49,19 +50,10 @@
     mode: 0644
   when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
 
-- name: Copy metallb ConfigMap manifest to first master
+- name: Copy metallb namespace to first master
   template:
-    src: "metallb.ipaddresspool.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb-configmap.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
-
-- name: Copy metallb main manifest to first master
-  template:
-    src: "metallb.yaml.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb.yaml"
+    src: "metallb.crds.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
     owner: root
     group: root
     mode: 0644
@@ -93,6 +85,7 @@
         name: k3s-init
         state: stopped
       failed_when: false
+  when: not ansible_check_mode
 
 - name: Copy K3s service file
   register: k3s_service
@@ -184,7 +177,6 @@
     file_type: directory
   register: k3s_server_manifests_directories
 
-
 - name: Remove manifests and folders that are only needed for bootstrapping cluster so k3s doesn't auto apply on start
   file:
     path: "{{ item.path }}"
@@ -192,3 +184,5 @@
   with_items:
     - "{{ k3s_server_manifests.files }}"
     - "{{ k3s_server_manifests_directories.files }}"
+  loop_control:
+    label: "{{ item.path }}"

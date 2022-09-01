@@ -10,7 +10,7 @@
     - k3s-node
     - k3s-init
 
-- name: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+- name: RUN pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   register: pkill_containerd_shim_runc
   command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   changed_when: "pkill_containerd_shim_runc.rc == 0"
@@ -47,12 +47,17 @@
     - /usr/local/bin/k3s
     - /var/lib/cni/
 
-- name: daemon_reload
+- name: Reload daemon_reload
   systemd:
     daemon_reload: yes
 
 - name: Remove linux-modules-extra-raspi
   apt: name=linux-modules-extra-raspi state=absent
+
+- name: Remove tmp director used for manifests
+  file:
+    path: /tmp/k3s
+    state: absent
 
 - name: Reboot and wait for node to come back up
   reboot:
