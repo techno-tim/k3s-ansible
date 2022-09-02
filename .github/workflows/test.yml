@@ -48,6 +48,16 @@ jobs:
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
+        env:
+          ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
+
+      - name: Upload log files
+        if: always() # do this even if a step before has failed
+        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # 3.1.0
+        with:
+          name: logs
+          path: |
+            ${{ runner.temp }}/logs
 
       - name: Delete old box versions
         if: always() # do this even if a step before has failed

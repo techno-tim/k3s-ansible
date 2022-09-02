@@ -80,6 +80,12 @@
       delay: 10
       changed_when: false
   always:
+    - name: Save logs of k3s-init.service
+      include_tasks: fetch_k3s_init_logs.yml
+      when: log_destination
+      vars:
+        log_destination: >-
+          {{ lookup('ansible.builtin.env', 'ANSIBLE_K3S_LOG_DIR', default=False) }}
     - name: Kill the temporary service used for initialization
       systemd:
         name: k3s-init
