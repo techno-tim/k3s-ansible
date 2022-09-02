@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
           "master" => ["control1", "control2", "control3"],
           "node" => ["node1", "node2"],
           "k3s_cluster:children" => ["master", "node"],
-          "k3s_cluster:vars" => {"k3s_version" => "v1.24.3+k3s1",
+          "k3s_cluster:vars" => {"k3s_version" => "v1.24.4+k3s1",
                                  "ansible_user" => "vagrant",
                                  "systemd_dir" => "/etc/systemd/system",
                                  "flannel_iface" => "eth1",
