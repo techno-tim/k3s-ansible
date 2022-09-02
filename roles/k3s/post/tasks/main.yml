@@ -28,14 +28,14 @@
 
 - name: Wait for metallb controller to be running
   command: >-
-    kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
+    k3s kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
   run_once: true
 
 - name: Wait for metallb webhook service to be running
   command: >-
-    kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
+    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
     --selector component=controller --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
@@ -43,7 +43,7 @@
 
 - name: Wait for metallb pods in replicasets
   command: >-
-    kubectl wait pods -n metallb-system --for condition=Ready \
+    k3s kubectl wait pods -n metallb-system --for condition=Ready \
     --selector component=controller,app=metallb --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
@@ -51,7 +51,7 @@
 
 - name: Wait for the metallb controller readyReplicas
   command: >-
-    kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
+    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
@@ -59,7 +59,7 @@
 
 - name: Wait for the metallb controller fullyLabeledReplicas
   command: >-
-    kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
+    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
@@ -67,7 +67,7 @@
 
 - name: Wait for the metallb  controller availableReplicas
   command: >-
-    kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
+    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
       --selector component=controller,app=metallb --timeout=60s
   changed_when: false
   with_items: "{{ groups['master'] }}"
