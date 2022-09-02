@@ -1,0 +1,7 @@
+ansible-core>=2.13.2
+jmespath
+jsonpatch
+kubernetes>=12.0.0
+molecule-vagrant>=1.0.0
+molecule>=4.0.1
+pyyaml>=3.11

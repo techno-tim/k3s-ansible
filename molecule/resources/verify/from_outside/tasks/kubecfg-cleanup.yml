@@ -1,0 +1,5 @@
+---
+- name: Clean up kubecfg
+  ansible.builtin.file:
+    path: "{{ kubecfg.path }}"
+    state: absent

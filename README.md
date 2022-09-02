@@ -100,12 +100,12 @@ See the commands [here](https://docs.technotim.live/posts/k3s-etcd-ansible/#test
 
 Be sure to see [this post](https://github.com/techno-tim/k3s-ansible/discussions/20) on how to troubleshoot common problems
 
-### 🔷 Vagrant
+### Testing the playbook using molecule
 
-You may want to kickstart your k3s cluster by using Vagrant to quickly build you all needed VMs with one command.
-Head to the `vagrant` subfolder and type `vagrant up` to get your environment setup.
-After the VMs have got build, deploy k3s using the Ansible playbook `site.yml` by the
-`vagrant provision --provision-with ansible` command.
+This playbook includes a [molecule](https://molecule.rtfd.io/)-based test setup.
+It is run automatically in CI, but you can also run the tests locally.
+This might be helpful for quick feedback in a few cases.
+You can find more information about it [here](molecule/README.md).
 
 ## Thanks 🤝
 

@@ -1,0 +1,7 @@
+---
+- name: Apply overrides
+  ansible.builtin.import_playbook: >-
+    {{ lookup("ansible.builtin.env", "OVERRIDES_FILE") }}
+
+- name: Converge
+  ansible.builtin.import_playbook: ../../site.yml
