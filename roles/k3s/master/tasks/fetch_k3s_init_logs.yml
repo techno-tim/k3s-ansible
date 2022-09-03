@@ -1,0 +1,28 @@
+---
+# Download logs of k3s-init.service from the nodes to localhost.
+# Note that log_destination must be set.
+
+- name: Fetch k3s-init.service logs
+  ansible.builtin.command:
+    cmd: journalctl --all --unit=k3s-init.service
+  changed_when: false
+  register: k3s_init_log
+
+- name: Create {{ log_destination }}
+  delegate_to: localhost
+  run_once: true
+  become: false
+  ansible.builtin.file:
+    path: "{{ log_destination }}"
+    state: directory
+    mode: "0755"
+
+- name: Store logs to {{ log_destination }}
+  delegate_to: localhost
+  become: false
+  ansible.builtin.template:
+    src: content.j2
+    dest: "{{ log_destination }}/k3s-init@{{ ansible_hostname }}.log"
+    mode: 0644
+  vars:
+    content: "{{ k3s_init_log.stdout }}"
