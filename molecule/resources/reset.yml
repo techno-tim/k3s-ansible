@@ -1,0 +1,7 @@
+---
+- name: Apply overrides
+  ansible.builtin.import_playbook: >-
+    {{ lookup("ansible.builtin.env", "OVERRIDES_FILE") }}
+
+- name: Reset
+  ansible.builtin.import_playbook: ../../reset.yml

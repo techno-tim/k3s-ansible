@@ -1,0 +1,54 @@
+---
+- name: Deploy example
+  block:
+    - name: "Create namespace: {{ testing_namespace }}"
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ testing_namespace }}"
+        state: present
+        wait: true
+        kubeconfig: "{{ kubecfg_path }}"
+
+    - name: Apply example manifests
+      kubernetes.core.k8s:
+        src: "{{ example_manifests_path }}/{{ item }}"
+        namespace: "{{ testing_namespace }}"
+        state: present
+        wait: true
+        kubeconfig: "{{ kubecfg_path }}"
+      with_items:
+        - deployment.yml
+        - service.yml
+
+    - name: Get info about nginx service
+      kubernetes.core.k8s_info:
+        kind: service
+        name: nginx
+        namespace: "{{ testing_namespace }}"
+        kubeconfig: "{{ kubecfg_path }}"
+      vars: &load_balancer_metadata
+        metallb_ip: status.loadBalancer.ingress[0].ip
+        metallb_port: spec.ports[0].port
+      register: nginx_services
+
+    - name: Assert that the nginx welcome page is available
+      ansible.builtin.uri:
+        url: http://{{ ip }}:{{ port }}/
+        return_content: yes
+      register: result
+      failed_when: "'Welcome to nginx!' not in result.content"
+      vars:
+        ip: >-
+          {{ nginx_services.resources[0].status.loadBalancer.ingress[0].ip }}
+        port: >-
+          {{ nginx_services.resources[0].spec.ports[0].port }}
+
+  always:
+    - name: "Remove namespace: {{ testing_namespace }}"
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: "{{ testing_namespace }}"
+        state: absent
+        kubeconfig: "{{ kubecfg_path }}"

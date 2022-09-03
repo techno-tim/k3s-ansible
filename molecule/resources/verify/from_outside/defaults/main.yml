@@ -1,0 +1,9 @@
+---
+# A host outside of the cluster from which the checks shall be performed
+outside_host: localhost
+
+# This kubernetes namespace will be used for testing
+testing_namespace: molecule-verify-from-outside
+
+# The directory in which the example manifests reside
+example_manifests_path: ../../../../example

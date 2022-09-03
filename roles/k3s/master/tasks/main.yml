@@ -20,7 +20,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 - name: Copy vip rbac manifest to first master
   template:
@@ -29,7 +29,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 - name: Copy vip manifest to first master
   template:
@@ -38,7 +38,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 # these will be copied and installed now, then tested later and apply config
 - name: Copy metallb namespace to first master
@@ -48,7 +48,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 - name: Copy metallb namespace to first master
   template:
@@ -57,7 +57,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host == hostvars[groups['master'][0]]['ansible_host'] | default(groups['master'][0])
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 - name: Init cluster inside the transient k3s-init service
   command:
@@ -80,6 +80,12 @@
       delay: 10
       changed_when: false
   always:
+    - name: Save logs of k3s-init.service
+      include_tasks: fetch_k3s_init_logs.yml
+      when: log_destination
+      vars:
+        log_destination: >-
+          {{ lookup('ansible.builtin.env', 'ANSIBLE_K3S_LOG_DIR', default=False) }}
     - name: Kill the temporary service used for initialization
       systemd:
         name: k3s-init
