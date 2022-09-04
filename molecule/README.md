@@ -8,6 +8,9 @@ We have these scenarios:
 
 - **default**:
   A 3 control + 2 worker node cluster based very closely on the [sample inventory](../inventory/sample/).
+- **ipv6**:
+  A cluster that is externally accessible via IPv6 ([more information](ipv6/README.md))
+  To save a bit of test time, this cluster is _not_ highly available, it consists of only one control and one worker node.
 
 ## How to execute
 
@@ -29,7 +32,8 @@ Furthermore, the test cluster uses the `192.168.30.0/24` subnet which is [not se
 To set the subnet up for use with VirtualBox, please make sure that `/etc/vbox/networks.conf` exists and that it contains this line:
 
 ```
-* 192.168.30.0/24`
+* 192.168.30.0/24
+* fdad:bad:ba55::/64
 ```
 
 ### Install Python dependencies

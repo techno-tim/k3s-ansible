@@ -5,7 +5,14 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - {{ metal_lb_ip_range }}
+{% if metal_lb_ip_range is string %}
+{# metal_lb_ip_range was used in the legacy way: single string instead of a list #}
+{#   => transform to list with single element #}
+{% set metal_lb_ip_range = [metal_lb_ip_range] %}
+{% endif %}
+{% for range in metal_lb_ip_range %}
+  - {{ range }}
+{% endfor %}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement

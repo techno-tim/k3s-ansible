@@ -1,0 +1,8 @@
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ flannel_iface }}:
+      addresses:
+      - {{ node_ipv4 }}/24

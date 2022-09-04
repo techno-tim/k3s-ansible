@@ -23,6 +23,13 @@
     state: present
     reload: yes
 
+- name: Enable IPv6 router advertisements
+  sysctl:
+    name: net.ipv6.conf.all.accept_ra
+    value: "2"
+    state: present
+    reload: yes
+
 - name: Add br_netfilter to /etc/modules-load.d/
   copy:
     content: "br_netfilter"

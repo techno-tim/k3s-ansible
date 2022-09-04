@@ -12,6 +12,6 @@
     fail_msg: "Expected nodes {{ expected_nodes }}, but found nodes {{ found_nodes }}"
   vars:
     found_nodes: >-
-      {{ cluster_nodes | json_query('resources[*].metadata.name') | unique }}
+      {{ cluster_nodes | json_query('resources[*].metadata.name') | unique | sort }}
     expected_nodes: >-
-      {{ (groups['master'] + groups['node']) | unique }}
+      {{ (groups['master'] + groups['node']) | unique | sort }}
