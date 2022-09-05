@@ -37,8 +37,6 @@ provisioner:
   inventory:
     links:
       group_vars: ../../inventory/sample/group_vars
-  env:
-    OVERRIDES_FILE: ../ipv6/overrides.yml
 scenario:
   test_sequence:
     - dependency
