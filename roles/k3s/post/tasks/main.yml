@@ -84,16 +84,11 @@
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
     --timeout='{{ metal_lb_available_timeout }}'
+  register: this
   changed_when: false
-  with_items: "{{ groups['master'] }}"
   run_once: true
-
-- name: Test metallb-system IPAddressPool
-  command: >-
-    k3s kubectl -n metallb-system get IPAddressPool
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
+  until: this.rc == 0
+  retries: 5
 
 - name: Test metallb-system L2Advertisement
   command: >-
