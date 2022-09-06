@@ -50,6 +50,8 @@ jobs:
         run: molecule test --scenario-name ${{ matrix.scenario }}
         env:
           ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
+          ANSIBLE_SSH_RETRIES: 4
+          ANSIBLE_TIMEOUT: 60
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
