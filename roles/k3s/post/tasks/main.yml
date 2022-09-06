@@ -90,7 +90,7 @@
     - IPAddressPool
     - L2Advertisement
 
-- name: Remove tmp director used for manifests
+- name: Remove tmp directory used for manifests
   file:
     path: /tmp/k3s
     state: absent
