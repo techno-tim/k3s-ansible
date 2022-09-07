@@ -26,52 +26,43 @@
   with_items: "{{ groups['master'] }}"
   run_once: true
 
-- name: Wait for metallb controller to be running
+- name: Wait for MetalLB resources
   command: >-
-    k3s kubectl wait deployment -n metallb-system controller --for condition=Available=True --timeout=60s
+    k3s kubectl wait {{ item.resource }}
+    --namespace='metallb-system'
+    {% if item.name | default(False) -%} {{ item.name }} {%- endif %}
+    {% if item.selector | default(False) -%} --selector='{{ item.selector }}' {%- endif %}
+    {% if item.condition | default(False) -%} {{ item.condition }} {%- endif %}
+    --timeout='{{ metal_lb_available_timeout }}'
   changed_when: false
-  with_items: "{{ groups['master'] }}"
   run_once: true
-
-- name: Wait for metallb webhook service to be running
-  command: >-
-    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.phase}'=Running pods \
-    --selector component=controller --timeout=60s
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Wait for metallb pods in replicasets
-  command: >-
-    k3s kubectl wait pods -n metallb-system --for condition=Ready \
-    --selector component=controller,app=metallb --timeout=60s
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Wait for the metallb controller readyReplicas
-  command: >-
-    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.readyReplicas}'=1 replicasets \
-      --selector component=controller,app=metallb --timeout=60s
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Wait for the metallb controller fullyLabeledReplicas
-  command: >-
-    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.fullyLabeledReplicas}'=1 replicasets \
-      --selector component=controller,app=metallb --timeout=60s
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Wait for the metallb  controller availableReplicas
-  command: >-
-    k3s kubectl wait -n metallb-system --for=jsonpath='{.status.availableReplicas}'=1 replicasets \
-      --selector component=controller,app=metallb --timeout=60s
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
+  with_items:
+    - description: controller
+      resource: deployment
+      name: controller
+      condition: --for condition=Available=True
+    - description: webhook service
+      resource: pod
+      selector: component=controller
+      condition: --for=jsonpath='{.status.phase}'=Running
+    - description: pods in replica sets
+      resource: pod
+      selector: component=controller,app=metallb
+      condition: --for condition=Ready
+    - description: ready replicas of controller
+      resource: replicaset
+      selector: component=controller,app=metallb
+      condition: --for=jsonpath='{.status.readyReplicas}'=1
+    - description: fully labeled replicas of controller
+      resource: replicaset
+      selector: component=controller,app=metallb
+      condition: --for=jsonpath='{.status.fullyLabeledReplicas}'=1
+    - description: available replicas of controller
+      resource: replicaset
+      selector: component=controller,app=metallb
+      condition: --for=jsonpath='{.status.availableReplicas}'=1
+  loop_control:
+    label: "{{ item.description }}"
 
 - name: Test metallb-system webhook-service endpoint
   command: >-
@@ -83,25 +74,23 @@
 - name: Apply metallb CRs
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
+    --timeout='{{ metal_lb_available_timeout }}'
+  register: this
   changed_when: false
-  with_items: "{{ groups['master'] }}"
   run_once: true
+  until: this.rc == 0
+  retries: 5
 
-- name: Test metallb-system IPAddressPool
+- name: Test metallb-system resources
   command: >-
-    k3s kubectl -n metallb-system get IPAddressPool
+    k3s kubectl -n metallb-system get {{ item }}
   changed_when: false
-  with_items: "{{ groups['master'] }}"
   run_once: true
+  with_items:
+    - IPAddressPool
+    - L2Advertisement
 
-- name: Test metallb-system L2Advertisement
-  command: >-
-    k3s kubectl -n metallb-system get L2Advertisement
-  changed_when: false
-  with_items: "{{ groups['master'] }}"
-  run_once: true
-
-- name: Remove tmp director used for manifests
+- name: Remove tmp directory used for manifests
   file:
     path: /tmp/k3s
     state: absent
