@@ -3,9 +3,9 @@
   file:
     path: /tmp/k3s
     state: directory
-    owner: root
-    group: root
-    mode: 0644
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
   with_items: "{{ groups['master'] }}"
   run_once: true
 
@@ -13,9 +13,9 @@
   template:
     src: "metallb.crs.j2"
     dest: "/tmp/k3s/metallb-crs.yaml"
-    owner: root
-    group: root
-    mode: 0644
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
   with_items: "{{ groups['master'] }}"
   run_once: true
 
