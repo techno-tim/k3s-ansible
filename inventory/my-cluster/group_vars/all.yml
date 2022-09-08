@@ -17,9 +17,23 @@ apiserver_endpoint: "10.10.10.0"
 # this token should be alpha numeric only
 k3s_token: "n9N981rmnzRb8mq75Loa33of"
 
-# change these to your liking, the only required one is--disable servicelb
-extra_server_args: "--disable servicelb --disable traefik --write-kubeconfig-mode 644"
-extra_agent_args: ""
+# The IP on which the node is reachable in the cluster.
+# Here, a sensible default is provided, you can still override
+# it for each of your hosts, though.
+k3s_node_ip: '{{ ansible_facts[flannel_iface]["ipv4"]["address"] }}'
+
+# these arguments are recommended for servers as well as agents:
+extra_args: >-
+  --flannel-iface={{ flannel_iface }}
+  --node-ip={{ k3s_node_ip }}
+
+# change these to your liking, the only required one is --disable servicelb
+extra_server_args: >-
+  {{ extra_args }}
+  --disable servicelb
+  --disable traefik
+extra_agent_args: >-
+  {{ extra_args }}
 
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.0"
