@@ -6,9 +6,31 @@ metadata:
 spec:
   addresses:
   - {{ metal_lb_ip_range }}
+{% if 'BGP' == metal_lb_type %}
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: example
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - first-pool
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: sample
+  namespace: metallb-system
+spec:
+  myASN: {{ metal_lb_myASN }}
+  peerASN: {{ metal_lb_peerASN }}
+  peerAddress: {{ metal_lb_peerAddress }}
+{% elif 'L2' == metal_lb_type %}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: default
   namespace: metallb-system
+{% endif %}

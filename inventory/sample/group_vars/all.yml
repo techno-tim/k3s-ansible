@@ -42,5 +42,13 @@ kube_vip_tag_version: "v0.5.0"
 metal_lb_speaker_tag_version: "v0.13.5"
 metal_lb_controller_tag_version: "v0.13.5"
 
+# metallb type, L2 or BGP
+metal_lb_type: BGP
+
 # metallb ip range for load balancer
 metal_lb_ip_range: "192.168.30.80-192.168.30.90"
+
+# metallb bgp settings (settings only used if metal_lb_type=BGP)
+metal_lb_myASN: "64501"
+metal_lb_peerASN: "64500"
+metal_lb_peerAddress: "192.168.30.1"
