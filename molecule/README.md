@@ -8,6 +8,8 @@ We have these scenarios:
 
 - **default**:
   A 3 control + 2 worker node cluster based very closely on the [sample inventory](../inventory/sample/).
+- **single_node**:
+  Very similar to the default scenario, but uses only a single node for all cluster functionality.
 
 ## How to execute
 
@@ -29,7 +31,7 @@ Furthermore, the test cluster uses the `192.168.30.0/24` subnet which is [not se
 To set the subnet up for use with VirtualBox, please make sure that `/etc/vbox/networks.conf` exists and that it contains this line:
 
 ```
-* 192.168.30.0/24`
+* 192.168.30.0/24
 ```
 
 ### Install Python dependencies
