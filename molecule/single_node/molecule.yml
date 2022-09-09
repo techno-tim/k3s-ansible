@@ -4,11 +4,10 @@ dependency:
 driver:
   name: vagrant
 platforms:
-  - &control
-    name: control1
+  - name: control1
     box: generic/ubuntu2204
-    memory: 2048
-    cpus: 2
+    memory: 4096
+    cpus: 4
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
@@ -19,31 +18,7 @@ platforms:
       - master
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.38
-  - <<: *control
-    name: control2
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.39
-  - <<: *control
-    name: control3
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.40
-  - &node
-    <<: *control
-    name: node1
-    groups:
-      - k3s_cluster
-      - node
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.41
-  - <<: *node
-    name: node2
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.42
+        ip: 192.168.30.50
 provisioner:
   name: ansible
   playbooks:
