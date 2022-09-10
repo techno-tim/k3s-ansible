@@ -1,0 +1,8 @@
+---
+- name: Restart MetalLB daemonset
+  shell: kubectl rollout restart $(kubectl get daemonset -n metallb-system -l app=metallb -o name) -n metallb-system
+  listen: restart-metallb-resources
+
+- name: Restart MetalLB deployment
+  shell: kubectl rollout restart $(kubectl get deployments -n metallb-system -l app=metallb -o name) -n metallb-system
+  listen: restart-metallb-resources
