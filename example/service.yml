@@ -4,6 +4,7 @@ kind: Service
 metadata:
   name: nginx
 spec:
+  ipFamilyPolicy: PreferDualStack
   selector:
     app: nginx
   ports:

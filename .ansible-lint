@@ -9,8 +9,9 @@ exclude_paths:
   # The "converge" and "reset" playbooks use import_playbook in
   # conjunction with the "env" lookup plugin, which lets the
   # syntax check of ansible-lint fail.
-  - '**/converge.yml'
-  - '**/reset.yml'
+  - 'molecule/**/converge.yml'
+  - 'molecule/**/prepare.yml'
+  - 'molecule/**/reset.yml'
 
 skip_list:
   - 'fqcn-builtins'

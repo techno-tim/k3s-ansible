@@ -33,7 +33,7 @@ spec:
         - name: vip_interface
           value: {{ flannel_iface }}
         - name: vip_cidr
-          value: "32"
+          value: "{{ apiserver_endpoint | ansible.utils.ipsubnet | ansible.utils.ipaddr('prefix') }}"
         - name: cp_enable
           value: "true"
         - name: cp_namespace
