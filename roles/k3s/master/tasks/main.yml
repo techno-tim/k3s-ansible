@@ -59,15 +59,23 @@
     mode: 0644
   when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
-- name: Init cluster inside the transient k3s-init service
-  command:
-    cmd: "systemd-run -p RestartSec=2 \
-                      -p Restart=on-failure \
-                      --unit=k3s-init \
-                      k3s server {{ server_init_args }}"
-    creates: "{{ systemd_dir }}/k3s.service"
-  args:
-    warn: false  # The ansible systemd module does not support transient units
+- block:
+    - name: Init cluster inside the transient k3s-init service
+      command:
+        cmd: "systemd-run -p RestartSec=2 \
+                          -p Restart=on-failure \
+                          --unit=k3s-init \
+                          k3s server {{ server_init_args }}"
+        creates: "{{ systemd_dir }}/k3s.service"
+      args:
+        warn: false  # The ansible systemd module does not support transient units
+  rescue:
+    - name: Attempting to rerun transient unit without p flags
+      command:
+        cmd: "systemd-run --unit=k3s-init k3s server {{ server_init_args }}"
+        creates: "{{ systemd_dir }}/k3s.service"
+      args:
+        warn: false  # The ansible systemd module does not support transient units
 
 - name: Verification
   block:
