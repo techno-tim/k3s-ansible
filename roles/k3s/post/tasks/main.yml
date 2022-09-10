@@ -16,6 +16,8 @@
     mode: 0755
   with_items: "{{ groups['master'] }}"
   run_once: true
+  notify: 
+    - restart-metallb-resources
 
 - name: Test metallb-system namespace
   command: >-
@@ -25,7 +27,7 @@
   run_once: true
 
 - name: Wait for MetalLB resources
-  command: >-
+  shell: >-
     k3s kubectl wait {{ item.resource }}
     --namespace='metallb-system'
     {% if item.name | default(False) -%} {{ item.name }} {%- endif %}
@@ -49,15 +51,15 @@
       condition: --for condition=Ready
     - description: ready replicas of controller
       resource: replicaset
-      selector: component=controller,app=metallb
+      name: '$(kubectl get replicaset -n metallb-system --selector=component=controller,app=metallb --sort-by=.metadata.creationTimestamp -o=jsonpath={.items[-1].metadata.name})'
       condition: --for=jsonpath='{.status.readyReplicas}'=1
     - description: fully labeled replicas of controller
       resource: replicaset
-      selector: component=controller,app=metallb
+      name: '$(kubectl get replicaset -n metallb-system --selector=component=controller,app=metallb --sort-by=.metadata.creationTimestamp -o=jsonpath={.items[-1].metadata.name})'
       condition: --for=jsonpath='{.status.fullyLabeledReplicas}'=1
     - description: available replicas of controller
       resource: replicaset
-      selector: component=controller,app=metallb
+      name: '$(kubectl get replicaset -n metallb-system --selector=component=controller,app=metallb --sort-by=.metadata.creationTimestamp -o=jsonpath={.items[-1].metadata.name})'
       condition: --for=jsonpath='{.status.availableReplicas}'=1
   loop_control:
     label: "{{ item.description }}"
