@@ -52,7 +52,7 @@
     daemon_reload: yes
 
 - name: Remove linux-modules-extra-raspi
-  apt: name=linux-modules-extra-raspi state=absent
+  package: name=linux-modules-extra-raspi state=absent
 
 - name: Remove tmp director used for manifests
   file:
