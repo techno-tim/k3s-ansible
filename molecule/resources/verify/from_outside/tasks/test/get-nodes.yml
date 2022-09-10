@@ -13,5 +13,12 @@
   vars:
     found_nodes: >-
       {{ cluster_nodes | json_query('resources[*].metadata.name') | unique | sort }}
-    expected_nodes: >-
-      {{ (groups['master'] + groups['node']) | unique | sort }}
+    expected_nodes: |-
+      {{
+        (
+          ( groups['master'] | default([]) ) +
+          ( groups['node'] | default([]) )
+        )
+        | unique
+        | sort
+      }}

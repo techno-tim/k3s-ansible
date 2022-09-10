@@ -1,0 +1,48 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+platforms:
+  - name: control1
+    box: generic/ubuntu2204
+    memory: 4096
+    cpus: 4
+    config_options:
+      # We currently can not use public-key based authentication on Ubuntu 22.04,
+      # see: https://github.com/chef/bento/issues/1405
+      ssh.username: "vagrant"
+      ssh.password: "vagrant"
+    groups:
+      - k3s_cluster
+      - master
+    interfaces:
+      - network_name: private_network
+        ip: 192.168.30.50
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ../resources/converge.yml
+    side_effect: ../resources/reset.yml
+    verify: ../resources/verify.yml
+  inventory:
+    links:
+      group_vars: ../../inventory/sample/group_vars
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # idempotence is not possible with the playbook in its current form.
+    - verify
+    # We are repurposing side_effect here to test the reset playbook.
+    # This is why we do not run it before verify (which tests the cluster),
+    # but after the verify step.
+    - side_effect
+    - cleanup
+    - destroy

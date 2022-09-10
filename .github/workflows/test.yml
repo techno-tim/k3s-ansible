@@ -16,6 +16,7 @@ jobs:
         scenario:
           - default
           - ipv6
+          - single_node
       fail-fast: false
     env:
       PYTHON_VERSION: "3.10"

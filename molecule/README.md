@@ -11,6 +11,8 @@ We have these scenarios:
 - **ipv6**:
   A cluster that is externally accessible via IPv6 ([more information](ipv6/README.md))
   To save a bit of test time, this cluster is _not_ highly available, it consists of only one control and one worker node.
+- **single_node**:
+  Very similar to the default scenario, but uses only a single node for all cluster functionality.
 
 ## How to execute
 
