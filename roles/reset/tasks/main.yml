@@ -44,7 +44,6 @@
     - /var/lib/kubelet
     - /var/lib/rancher/k3s
     - /var/lib/rancher/
-    - /usr/local/bin/k3s
     - /var/lib/cni/
 
 - name: Reload daemon_reload

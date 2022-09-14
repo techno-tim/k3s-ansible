@@ -1,0 +1,51 @@
+---
+- name: Apply overrides
+  ansible.builtin.import_playbook: >-
+    {{ lookup("ansible.builtin.env", "MOLECULE_SCENARIO_DIRECTORY") }}/overrides.yml
+
+- name: Configure dual-stack networking
+  hosts: all
+  become: true
+
+  # Unfortunately, as of 2022-09, Vagrant does not support the configuration
+  # of both IPv4 and IPv6 addresses for a single network adapter. So we have
+  # to configure that ourselves.
+  # Moreover, we have to explicitly enable IPv6 for the loopback interface.
+
+  tasks:
+    - name: Enable IPv6 for network interfaces
+      ansible.posix.sysctl:
+        name: net.ipv6.conf.{{ item }}.disable_ipv6
+        value: "0"
+      with_items:
+        - all
+        - default
+        - lo
+
+    - name: Disable duplicate address detection
+      # Duplicate address detection did repeatedly fail within the virtual
+      # network. But since this setup does not use SLAAC anyway, we can safely
+      # disable it.
+      ansible.posix.sysctl:
+        name: net.ipv6.conf.{{ item }}.accept_dad
+        value: "0"
+      with_items:
+        - "{{ flannel_iface }}"
+
+    - name: Write IPv4 configuration
+      ansible.builtin.template:
+        src: 55-flannel-ipv4.yaml.j2
+        dest: /etc/netplan/55-flannel-ipv4.yaml
+        owner: root
+        group: root
+        mode: 0644
+      register: netplan_template
+
+    - name: Apply netplan configuration
+      # Conceptually, this should be a handler rather than a task.
+      # However, we are currently not in a role context - creating
+      # one just for this seemed overkill.
+      when: netplan_template.changed
+      ansible.builtin.command:
+        cmd: netplan apply
+      changed_when: true

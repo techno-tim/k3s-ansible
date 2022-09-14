@@ -15,6 +15,7 @@ jobs:
       matrix:
         scenario:
           - default
+          - ipv6
           - single_node
       fail-fast: false
     env:
@@ -25,16 +26,19 @@ jobs:
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
 
       - name: Configure VirtualBox
-        run: >-
-          sudo mkdir -p /etc/vbox &&
-          echo "* 192.168.30.0/24" | sudo tee -a /etc/vbox/networks.conf > /dev/null
+        run: |-
+          sudo mkdir -p /etc/vbox
+          cat <<EOF | sudo tee -a /etc/vbox/networks.conf > /dev/null
+          * 192.168.30.0/24
+          * fdad:bad:ba55::/64
+          EOF
 
       - name: Cache Vagrant boxes
         uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77 # 3.0.8
         with:
           path: |
             ~/.vagrant.d/boxes
-          key: vagrant-boxes-${{ hashFiles('**/Vagrantfile') }}
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
           restore-keys: |
             vagrant-boxes
 

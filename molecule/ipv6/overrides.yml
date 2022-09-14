@@ -1,0 +1,43 @@
+---
+- name: Apply overrides
+  hosts: all
+  tasks:
+    - name: Override host variables (1/2)
+      ansible.builtin.set_fact:
+        # See: https://github.com/flannel-io/flannel/blob/67d603aaf45ef80f5dd39f43714fc5e6f8a637eb/Documentation/troubleshooting.md#Vagrant  # noqa yaml[line-length]
+        flannel_iface: eth1
+
+        # The test VMs might be a bit slow, so we give them more time to join the cluster:
+        retry_count: 45
+
+        # IPv6 configuration
+        # ######################################################################
+
+        # The API server will be reachable on IPv6 only
+        apiserver_endpoint: fdad:bad:ba55::333
+
+        # We give MetalLB address space for both IPv4 and IPv6
+        metal_lb_ip_range:
+          - fdad:bad:ba55::1b:0/112
+          - 192.168.123.80-192.168.123.90
+
+        # k3s_node_ip is by default set to the IPv4 address of flannel_iface.
+        # We want IPv6 addresses here of course, so we just specify them
+        # manually below.
+        k3s_node_ip: "{{ node_ipv4 }},{{ node_ipv6 }}"
+
+    - name: Override host variables (2/2)
+      # Since "extra_args" depends on "k3s_node_ip" and "flannel_iface" we have
+      # to set this AFTER overriding the both of them.
+      ansible.builtin.set_fact:
+        # A few extra server args are necessary:
+        #  - the network policy needs to be disabled.
+        #  - we need to manually specify the subnets for services and pods, as
+        #    the default has IPv4 ranges only.
+        extra_server_args: >-
+          {{ extra_args }}
+          --disable servicelb
+          --disable traefik
+          --disable-network-policy
+          --cluster-cidr=10.42.0.0/16,fdad:bad:ba55:4200::/56
+          --service-cidr=10.43.0.0/16,fdad:bad:ba55:4300::/108
