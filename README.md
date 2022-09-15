@@ -30,7 +30,10 @@ on processor architecture:
 
 - Deployment environment must have Ansible 2.4.0+.  If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
   Furthermore, the [`netaddr` package](https://pypi.org/project/netaddr/) must be available to Ansible. If you have installed Ansible via apt, this is already taken care of. If you have installed Ansible via `pip`, make sure to install `netaddr` into the respective virtual environment.
+
 - `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `--ask-pass --ask-become-pass` to each command.
+
+- You will also need to install [ansible.utils](https://galaxy.ansible.com/ansible/utils) by `running ansible-galaxy collection install ansible.utils`
 
 ## 🚀 Getting Started
 
