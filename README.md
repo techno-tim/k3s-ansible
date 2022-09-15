@@ -34,7 +34,7 @@ on processor architecture:
 
 - `server` and `agent` nodes should have passwordless SSH access, if not you can supply arguments to provide credentials `--ask-pass --ask-become-pass` to each command.
 
-- You will also need to install [ansible.utils](https://galaxy.ansible.com/ansible/utils) by `running ansible-galaxy collection install ansible.utils`
+- You will also need to install collections that this playbook uses by running `ansible-galaxy install -r ./collections/requirements.yml`
 
 ## 🚀 Getting Started
 
