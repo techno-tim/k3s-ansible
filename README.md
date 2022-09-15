@@ -114,9 +114,7 @@ You can find more information about it [here](molecule/README.md).
 
 ## Thanks 🤝
 
-This repo is really standing on the shoulders of giants.  To all those who have contributed.
-
-Thanks to these repos for code and ideas:
+This repo is really standing on the shoulders of giants. Thank you to all those who have contributed and tanks to these repos for code and ideas:
 
 - [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible)
 - [geerlingguy/turing-pi-cluster](https://github.com/geerlingguy/turing-pi-cluster)
