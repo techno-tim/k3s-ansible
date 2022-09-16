@@ -64,7 +64,8 @@
     cmd: "systemd-run -p RestartSec=2 \
                       -p Restart=on-failure \
                       --unit=k3s-init \
-                      k3s server {{ server_init_args }}"
+                      k3s server {{ server_init_args }} \
+                      {{ '--node-taint CriticalAddonsOnly=true:NoExecute' if k3s_single_node|bool == false else ''}}"
     creates: "{{ systemd_dir }}/k3s.service"
   args:
     warn: false  # The ansible systemd module does not support transient units
