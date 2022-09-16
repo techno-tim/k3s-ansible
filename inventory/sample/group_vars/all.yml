@@ -22,6 +22,11 @@ k3s_token: "some-SUPER-DEDEUPER-secret-password"
 # it for each of your hosts, though.
 k3s_node_ip: '{{ ansible_facts[flannel_iface]["ipv4"]["address"] }}'
 
+# Boolean if install is single or multi node
+# When the playbook is ran it should automatically fill the variable.
+# If you do want to manually set it though, either set it 'true' or 'false'.
+k3s_single_node: "{{ 'true' if groups['k3s_cluster'] | length == 1 else 'false' }}"
+
 # these arguments are recommended for servers as well as agents:
 extra_args: >-
   --flannel-iface={{ flannel_iface }}
