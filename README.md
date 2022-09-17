@@ -16,9 +16,9 @@ If you want more context on how this works, see:
 
 Build a Kubernetes cluster using Ansible with k3s. The goal is easily install a HA Kubernetes cluster on machines running:
 
-- [X] Debian
-- [X] Ubuntu
-- [X] CentOS
+- [x] Debian (tested on version 11)
+- [x] Ubuntu (tested on version 22.04)
+- [x] Rocky (tested on version 9)
 
 on processor architecture:
 

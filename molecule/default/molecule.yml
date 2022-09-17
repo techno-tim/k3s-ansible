@@ -16,6 +16,10 @@ driver:
     groups:
       - k3s_cluster
       - node
+  - &debian
+    box: generic/debian11
+  - &rocky
+    box: generic/rocky9
   - &ubuntu
     box: generic/ubuntu2204
     config_options:
@@ -23,20 +27,18 @@ driver:
       # see: https://github.com/chef/bento/issues/1405
       ssh.username: "vagrant"
       ssh.password: "vagrant"
-  - &centos
-    box: generic/centos7
 platforms:
   - <<: [*control, *ubuntu]
     name: control1
     interfaces:
       - network_name: private_network
         ip: 192.168.30.38
-  - <<: [*control, *ubuntu]
+  - <<: [*control, *debian]
     name: control2
     interfaces:
       - network_name: private_network
         ip: 192.168.30.39
-  - <<: [*control, *centos]
+  - <<: [*control, *rocky]
     name: control3
     interfaces:
       - network_name: private_network
@@ -46,7 +48,7 @@ platforms:
     interfaces:
       - network_name: private_network
         ip: 192.168.30.41
-  - <<: [*node, *centos]
+  - <<: [*node, *rocky]
     name: node2
     interfaces:
       - network_name: private_network
