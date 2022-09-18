@@ -69,6 +69,8 @@ spec:
         operator: Exists
       - effect: NoExecute
         operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
   updateStrategy: {}
 status:
   currentNumberScheduled: 0
