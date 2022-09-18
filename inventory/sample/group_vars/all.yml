@@ -32,6 +32,7 @@ extra_args: >-
 # change these to your liking, the only required one is --disable servicelb
 extra_server_args: >-
   {{ extra_args }}
+  --tls-san {{ apiserver_endpoint }}
   --disable servicelb
   --disable traefik
 extra_agent_args: >-
