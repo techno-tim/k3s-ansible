@@ -22,3 +22,7 @@
         | unique
         | sort
       }}
+  # Deactivated linter rules:
+  #   - jinja[invalid]: As of version 6.6.0, ansible-lint complains that the input to ipwrap
+  #                     would be undefined. This will not be the case during playbook execution.
+  # noqa jinja[invalid]

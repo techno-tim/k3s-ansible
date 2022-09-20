@@ -43,6 +43,10 @@
           {{ nginx_services.resources[0].status.loadBalancer.ingress[0].ip }}
         port: >-
           {{ nginx_services.resources[0].spec.ports[0].port }}
+      # Deactivated linter rules:
+      #   - jinja[invalid]: As of version 6.6.0, ansible-lint complains that the input to ipwrap
+      #                     would be undefined. This will not be the case during playbook execution.
+      # noqa jinja[invalid]
 
   always:
     - name: "Remove namespace: {{ testing_namespace }}"
