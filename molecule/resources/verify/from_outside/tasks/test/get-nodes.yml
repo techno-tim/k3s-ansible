@@ -11,8 +11,10 @@
     success_msg: "Found nodes as expected: {{ found_nodes }}"
     fail_msg: "Expected nodes {{ expected_nodes }}, but found nodes {{ found_nodes }}"
   vars:
+    # The check if variable is 'defined' fixes linting error:
+    # jinja: Error in jmespath.search in json_query filter plugin: 'cluster_nodes' is undefined
     found_nodes: >-
-      {{ cluster_nodes | json_query('resources[*].metadata.name') | unique | sort }}
+      {{ cluster_nodes is defined and cluster_nodes | json_query('resources[*].metadata.name') | unique | sort }}
     expected_nodes: |-
       {{
         (

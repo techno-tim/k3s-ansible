@@ -34,7 +34,10 @@
 
     - name: Assert that the nginx welcome page is available
       ansible.builtin.uri:
-        url: http://{{ ip | ansible.utils.ipwrap }}:{{ port }}/
+        # The default value here fixes ansible-lint error:
+        # 'jinja:Unrecognized type <<class 'ansible.template.AnsibleUndefined'>> for ipwrap filter <value>'
+        # If by any chanche we reach the default case, we have already failed, so it will not save the task!
+        url: http://{{ ip | default([]) | ansible.utils.ipwrap }}:{{ port }}/
         return_content: yes
       register: result
       failed_when: "'Welcome to nginx!' not in result.content"

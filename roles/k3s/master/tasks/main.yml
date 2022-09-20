@@ -64,8 +64,7 @@
     cmd: "systemd-run -p RestartSec=2 \
                       -p Restart=on-failure \
                       --unit=k3s-init \
-                      k3s server {{ server_init_args }} \
-                      {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_node_exists | bool else ''}}"
+                      k3s server {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
   args:
     warn: false  # The ansible systemd module does not support transient units
@@ -153,10 +152,13 @@
     owner: "{{ ansible_user }}"
     mode: "u=rw,g=,o="
 
-- name: Configure kubectl cluster to https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+# The default value here fixes ansible-lint error:
+# 'jinja:Unrecognized type <<class 'ansible.template.AnsibleUndefined'>> for ipwrap filter <value>'
+# If by any chanche we reach the default case, we have already failed, so it will not save the task!
+- name: Configure kubectl cluster to https://{{ apiserver_endpoint | default([]) | ansible.utils.ipwrap }}:6443
   command: >-
     k3s kubectl config set-cluster default
-      --server=https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+      --server=https://{{ apiserver_endpoint | default([]) | ansible.utils.ipwrap }}:6443
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
 

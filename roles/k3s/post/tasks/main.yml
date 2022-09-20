@@ -28,9 +28,9 @@
   command: >-
     k3s kubectl wait {{ item.resource }}
     --namespace='metallb-system'
-    {% if item.name | default(False) -%} {{ item.name }} {%- endif %}
-    {% if item.selector | default(False) -%} --selector='{{ item.selector }}' {%- endif %}
-    {% if item.condition | default(False) -%} {{ item.condition }} {%- endif %}
+    {% if item.name | default(False) -%}{{ item.name }}{%- endif %}
+    {% if item.selector | default(False) -%}--selector='{{ item.selector }}'{%- endif %}
+    {% if item.condition | default(False) -%}{{ item.condition }}{%- endif %}
     --timeout='{{ metal_lb_available_timeout }}'
   changed_when: false
   run_once: true
