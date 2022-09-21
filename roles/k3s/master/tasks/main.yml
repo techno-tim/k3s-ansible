@@ -64,8 +64,7 @@
     cmd: "systemd-run -p RestartSec=2 \
                       -p Restart=on-failure \
                       --unit=k3s-init \
-                      k3s server {{ server_init_args }} \
-                      {{ '--node-taint CriticalAddonsOnly=true:NoExecute' if k3s_single_node|bool == false else ''}}"
+                      k3s server {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
   args:
     warn: false  # The ansible systemd module does not support transient units
@@ -153,12 +152,19 @@
     owner: "{{ ansible_user }}"
     mode: "u=rw,g=,o="
 
-- name: Configure kubectl cluster to https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+- name: Configure kubectl cluster to https://{{ apiserver_endpoint }}:6443
   command: >-
     k3s kubectl config set-cluster default
-      --server=https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+      --server=https://{{ apiserver_endpoint }}:6443
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
+
+- name: Fetch cluster config file from first master to push to agent nodes - allowing agent nodes to run k3s kubectl xxx (patching, convenience)
+  ansible.builtin.fetch:
+    src: ~{{ ansible_user }}/.kube/config
+    flat: true
+    dest: /tmp/kube_config.{{ apiserver_endpoint }}
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
 - name: Create kubectl symlink
   file:
