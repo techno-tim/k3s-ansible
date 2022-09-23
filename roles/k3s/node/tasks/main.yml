@@ -14,3 +14,20 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
+
+
+- name: Create directory /etc/rancher/k3s on agent node
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    state: directory
+    owner: "root"
+    mode: "u=rwx,g=rx,o=rx"
+
+- name: push back a copy of the kubeconfig
+  ansible.builtin.copy:
+    src: /tmp/kube_config.{{ apiserver_endpoint }}
+    dest: /etc/rancher/k3s/k3s.yaml
+    mode: "u=rw,g=r,o=r"
+    owner: root
+    group: root
+

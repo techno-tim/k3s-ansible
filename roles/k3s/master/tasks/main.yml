@@ -160,6 +160,13 @@
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
 
+- name: Fetch cluster config file from first master to push to agent nodes - allowing agent nodes to run k3s kubectl xxx (patching, convenience)
+  ansible.builtin.fetch:
+    src: ~{{ ansible_user }}/.kube/config
+    flat: true
+    dest: /tmp/kube_config.{{ apiserver_endpoint }}
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
 - name: Create kubectl symlink
   file:
     src: /usr/local/bin/k3s
@@ -193,3 +200,5 @@
     - "{{ k3s_server_manifests_directories.files }}"
   loop_control:
     label: "{{ item.path }}"
+
+
