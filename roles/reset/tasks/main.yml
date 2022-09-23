@@ -29,20 +29,44 @@
   loop_control:
     loop_var: mounted_fs
 
+#
+# it may become or be a common practice to separate /var/lib/rancher and /var/lib/kubelet into their own volumes.  Maybe it would be better to just move /var altogether, but that's not
+# terribly convenient for remote or headless machines (e.g. raspberry pi compute modules, embedded in Turing Pi or Desk Pi where you can't get to single user mode.
+# Recommendation, in this case, is to mount a new volume, such as /k3s-data or similar and symlink /var/lib/rancher and /var/lib/kubelet into directories 
+# other k3s data points like /run/k3s are small/transient/in memory and shouldn't be on a volume
+# 
+# The approach is to delete the files in the folders first, then remove the folders/files that are not symlinks in the follow up
+#
+- name: find service files within the directories that can by symlinks, binaries and data for people who have separate volume and symlink for /var/lib/rancher and /var/lib/kubelet
+  ansible.builtin.find:
+    paths:
+      - /var/lib/rancher/
+      - /var/lib/kubelet/
+    hidden: true
+    recurse: false
+    file_type: any
+  register: to_delete_files
+
+- name: find service files, binaries and data for people who have separate volume and symlink for /var/lib/rancher and /var/lib/kubelet
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  ignore_errors: true
+  with_items: "{{ to_delete_files.files }}"
+
 - name: Remove service files, binaries and data
-  file:
+  ansible.builtin.file:
     name: "{{ item }}"
     state: absent
+  ignore_errors: true
   with_items:
     - /usr/local/bin/k3s
     - "{{ systemd_dir }}/k3s.service"
     - "{{ systemd_dir }}/k3s-node.service"
-    - /etc/rancher/k3s
     - /run/k3s
     - /run/flannel
     - /etc/rancher/
-    - /var/lib/kubelet
-    - /var/lib/rancher/k3s
+    - /var/lib/kubelet/
     - /var/lib/rancher/
     - /var/lib/cni/
 
@@ -61,3 +85,4 @@
 - name: Reboot and wait for node to come back up
   reboot:
     reboot_timeout: 3600
+
