@@ -3,28 +3,34 @@ dependency:
   name: galaxy
 driver:
   name: vagrant
-platforms:
+.platform_presets:
   - &control
-    name: control1
-    box: generic/ubuntu2204
     memory: 2048
     cpus: 2
+    groups:
+      - k3s_cluster
+      - master
+  - &node
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
+  - &ubuntu
+    box: generic/ubuntu2204
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
       ssh.username: "vagrant"
       ssh.password: "vagrant"
-    groups:
-      - k3s_cluster
-      - master
+platforms:
+  - <<: [*control, *ubuntu]
+    name: control1
     interfaces:
       - network_name: private_network
         ip: fdad:bad:ba55::de:11
-  - <<: *control
+  - <<: [*node, *ubuntu]
     name: node1
-    groups:
-      - k3s_cluster
-      - node
     interfaces:
       - network_name: private_network
         ip: fdad:bad:ba55::de:21

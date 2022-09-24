@@ -1,0 +1,6 @@
+---
+# Indicates whether the k3s prerequisites for Raspberry Pi should be set up
+# Possible values:
+#   - present
+#   - absent
+state: present

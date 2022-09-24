@@ -6,8 +6,16 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
   notify: reboot
-  when: not ansible_check_mode
 
 - name: Install linux-modules-extra-raspi
-  apt: name=linux-modules-extra-raspi state=present
-  when: (raspberry_pi) and (not ansible_check_mode)
+  apt:
+    name: linux-modules-extra-raspi
+    state: present
+
+- name: Teardown
+  when: state == "absent"
+  block:
+    - name: Remove linux-modules-extra-raspi
+      apt:
+        name: linux-modules-extra-raspi
+        state: absent
