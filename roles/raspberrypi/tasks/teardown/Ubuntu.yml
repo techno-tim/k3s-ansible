@@ -1,0 +1,5 @@
+---
+- name: Remove linux-modules-extra-raspi
+  apt:
+    name: linux-modules-extra-raspi
+    state: absent

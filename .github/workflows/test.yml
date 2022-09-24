@@ -43,6 +43,12 @@ jobs:
           restore-keys: |
             vagrant-boxes
 
+      - name: Download Vagrant boxes for all scenarios
+        # To save some cache space, all scenarios share the same cache key.
+        # On the other hand, this means that the cache contents should be
+        # the same across all scenarios. This step ensures that.
+        run: ./.github/download-boxes.sh
+
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v2
         with:
