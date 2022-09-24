@@ -18,10 +18,21 @@ jobs:
       - name: Set up Python 3.x
         uses: actions/setup-python@b55428b1882923874294fa556849718a1d7f2ca5 #4.0.2
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
-      - name: Install test dependencies
-        run: pip3 install yamllint ansible-lint ansible
+      - name: Install dependencies
+        run: |
+          echo "::group::Upgrade pip"
+          python3 -m pip install --upgrade pip
+          echo "::endgroup::"
+
+          echo "::group::Install Python requirements from requirements.txt"
+          python3 -m pip install -r requirements.txt
+          echo "::endgroup::"
+
+          echo "::group::Install Ansible role requirements from collections/requirements.yml"
+          ansible-galaxy install -r collections/requirements.yml
+          echo "::endgroup::"
 
       - name: Run yamllint
         run: yamllint .
