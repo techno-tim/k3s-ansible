@@ -153,12 +153,19 @@
     owner: "{{ ansible_user }}"
     mode: "u=rw,g=,o="
 
-- name: Configure kubectl cluster to https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+- name: Configure kubectl cluster to {{ endpoint_url }}
   command: >-
     k3s kubectl config set-cluster default
-      --server=https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+      --server={{ endpoint_url }}
       --kubeconfig ~{{ ansible_user }}/.kube/config
   changed_when: true
+  vars:
+    endpoint_url: >-
+      https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443
+  # Deactivated linter rules:
+  #   - jinja[invalid]: As of version 6.6.0, ansible-lint complains that the input to ipwrap
+  #                     would be undefined. This will not be the case during playbook execution.
+  # noqa jinja[invalid]
 
 - name: Create kubectl symlink
   file:
