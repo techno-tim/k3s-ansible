@@ -36,6 +36,8 @@
         #    the default has IPv4 ranges only.
         extra_server_args: >-
           {{ extra_args }}
+          --tls-san {{ apiserver_endpoint }}
+          {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
           --disable servicelb
           --disable traefik
           --disable-network-policy
