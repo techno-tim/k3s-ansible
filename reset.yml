@@ -4,9 +4,9 @@
   gather_facts: yes
   become: yes
   roles:
+    - role: reset
     - role: raspberrypi
       vars: {state: absent}
-    - role: reset
   post_tasks:
     - name: Reboot and wait for node to come back up
       reboot:
