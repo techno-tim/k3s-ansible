@@ -17,11 +17,14 @@ all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
     uniq)
 
 # Read the boxes that are currently present on the system (for the current provider)
-present_boxes=$(vagrant box list |
-    grep "${PROVIDER}" | # Filter by boxes available for the current provider
-    awk '{print $1;}' |  # The box name is the first word in each line
-    sort |
-    uniq)
+present_boxes=$(
+    (vagrant box list |
+        grep "${PROVIDER}" | # Filter by boxes available for the current provider
+        awk '{print $1;}' |  # The box name is the first word in each line
+        sort |
+        uniq) ||
+        echo "" # In case any of these commands fails, just use an empty list
+)
 
 # The boxes that we need to download are the ones present in $all_boxes, but not $present_boxes.
 download_boxes=$(comm -2 -3 <(echo "${all_boxes}") <(echo "${present_boxes}"))
