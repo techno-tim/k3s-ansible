@@ -65,6 +65,8 @@ jobs:
           ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
           ANSIBLE_SSH_RETRIES: 4
           ANSIBLE_TIMEOUT: 60
+          PY_COLORS: 1
+          ANSIBLE_FORCE_COLOR: 1
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
