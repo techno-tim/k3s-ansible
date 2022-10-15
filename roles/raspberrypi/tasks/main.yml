@@ -47,7 +47,7 @@
     - raspberry_pi|default(false)
     - ansible_facts.lsb.description|default("") is match("Debian.*bullseye")
 
-- name: execute OS related {{ action }} tasks on the Raspberry Pi
+- name: execute OS related tasks on the Raspberry Pi - {{ action }}
   include_tasks: "{{ item }}"
   with_first_found:
     - "{{ action }}/{{ detected_distribution }}-{{ detected_distribution_major_version }}.yml"
