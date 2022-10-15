@@ -11,11 +11,3 @@
   apt:
     name: linux-modules-extra-raspi
     state: present
-
-- name: Teardown
-  when: state == "absent"
-  block:
-    - name: Remove linux-modules-extra-raspi
-      apt:
-        name: linux-modules-extra-raspi
-        state: absent
