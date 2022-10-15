@@ -3,10 +3,12 @@
   run_once: true
   delegate_to: "{{ outside_host }}"
   block:
-    - ansible.builtin.import_tasks: kubecfg-fetch.yml
+    - name: "Test CASE: Get kube config"
+      ansible.builtin.import_tasks: kubecfg-fetch.yml
     - name: "TEST CASE: Get nodes"
       ansible.builtin.include_tasks: test/get-nodes.yml
     - name: "TEST CASE: Deploy example"
       ansible.builtin.include_tasks: test/deploy-example.yml
   always:
-    - ansible.builtin.import_tasks: kubecfg-cleanup.yml
+    - name: "TEST CASE: Cleanup"
+      ansible.builtin.import_tasks: kubecfg-cleanup.yml
