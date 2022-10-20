@@ -1,3 +1,0 @@
----
-# Timeout to wait for MetalLB services to come up
-metal_lb_available_timeout: 120s
