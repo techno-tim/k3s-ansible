@@ -40,6 +40,15 @@
     mode: 0644
   when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
+- name: Copy vip manifest to first master
+  template:
+    src: "vip.cloud.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip-cloud.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
 # these will be copied and installed now, then tested later and apply config
 
 - name: Init cluster inside the transient k3s-init service
