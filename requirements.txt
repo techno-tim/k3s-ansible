@@ -57,7 +57,7 @@ resolvelib==0.8.1
 rich==12.6.0
 rsa==4.9
 ruamel.yaml==0.17.21
-ruamel.yaml.clib==0.2.6
+ruamel.yaml.clib==0.2.7
 selinux==0.2.1
 six==1.16.0
 subprocess-tee==0.3.5
