@@ -68,4 +68,4 @@ urllib3==1.26.12
 wcmatch==8.4.1
 websocket-client==1.4.1
 yamllint==1.28.0
-zipp==3.9.0
+zipp==3.10.0
