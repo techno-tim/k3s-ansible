@@ -7,8 +7,8 @@ on:
       - master
 
 jobs:
-  ansible-lint:
-    name: YAML Lint + Ansible Lint
+  pre-commit-ci:
+    name: Pre-Commit
     runs-on: ubuntu-latest
 
     steps:
@@ -34,8 +34,5 @@ jobs:
           ansible-galaxy install -r collections/requirements.yml
           echo "::endgroup::"
 
-      - name: Run yamllint
-        run: yamllint .
-
-      - name: Run ansible-lint
-        run: ansible-lint
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
