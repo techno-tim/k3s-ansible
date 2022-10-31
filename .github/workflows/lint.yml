@@ -9,7 +9,7 @@ on:
 jobs:
   pre-commit-ci:
     name: Pre-Commit
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, x64]
 
     steps:
       - name: Check out the codebase
