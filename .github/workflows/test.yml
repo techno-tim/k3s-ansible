@@ -10,7 +10,7 @@ on:
 jobs:
   molecule:
     name: Molecule
-    runs-on: macos-12
+    runs-on: self-hosted
 
     strategy:
       matrix:
