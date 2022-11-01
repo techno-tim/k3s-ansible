@@ -5,9 +5,14 @@
 # already present on the system.
 
 set -euo pipefail
-
+YQ_VERSION=v4.29.2
+YQ_BINARY=yq_linux_amd64
 GIT_ROOT=$(git rev-parse --show-toplevel)
 PROVIDER=virtualbox
+
+# gey yq used for filtering
+wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+    chmod +x /usr/bin/yq
 
 # Read all boxes for all platforms from the "molecule.yml" files
 all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
