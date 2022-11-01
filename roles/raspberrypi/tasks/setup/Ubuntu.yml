@@ -8,5 +8,6 @@
   notify: reboot
 
 - name: Install linux-modules-extra-raspi
-  apt: name=linux-modules-extra-raspi state=present
-  when: raspberry_pi
+  apt:
+    name: linux-modules-extra-raspi
+    state: present

@@ -13,7 +13,6 @@
 - name: Flush iptables before changing to iptables-legacy
   iptables:
     flush: true
-  changed_when: false   # iptables flush always returns changed
 
 - name: Changing to iptables-legacy
   alternatives:

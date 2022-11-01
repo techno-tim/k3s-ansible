@@ -1,8 +1,9 @@
 ---
-- name: Enable cgroup via boot commandline if not already enabled for Centos
+- name: Enable cgroup via boot commandline if not already enabled for Rocky
   lineinfile:
     path: /boot/cmdline.txt
     backrefs: yes
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
   notify: reboot
+  when: not ansible_check_mode

@@ -1,0 +1,19 @@
+---
+- name: Create temporary directory for kubecfg
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: kubecfg
+  register: kubecfg
+- name: Gathering facts
+  delegate_to: "{{ groups['master'][0] }}"
+  ansible.builtin.gather_facts:
+- name: Download kubecfg
+  ansible.builtin.fetch:
+    src: "{{ ansible_env.HOME }}/.kube/config"
+    dest: "{{ kubecfg.path }}/"
+    flat: true
+  delegate_to: "{{ groups['master'][0] }}"
+  delegate_facts: true
+- name: Store path to kubecfg
+  ansible.builtin.set_fact:
+    kubecfg_path: "{{ kubecfg.path }}/config"
