@@ -11,8 +11,8 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 PROVIDER=virtualbox
 
 # get yq used for filtering
-wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY} -O /usr/bin/yq &&\
-    chmod +x /usr/bin/yq
+sudo wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY} -O /usr/bin/yq &&\
+    sudo chmod +x /usr/bin/yq
 
 # Read all boxes for all platforms from the "molecule.yml" files
 all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
