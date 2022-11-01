@@ -19,6 +19,8 @@ jobs:
         uses: actions/setup-python@b55428b1882923874294fa556849718a1d7f2ca5 #4.0.2
         with:
           python-version: "3.x"
+          cache: 'pip' # caching pip dependencies
+
 
       - name: Install dependencies
         run: |
@@ -35,4 +37,4 @@ jobs:
           echo "::endgroup::"
 
       - name: Run pre-commit
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@v3.0.0@646c83fcd040023954eafda54b4db0192ce70507 #3.0.0
