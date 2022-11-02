@@ -58,9 +58,14 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Install dependencies
-        run: >-
-          python3 -m pip install --upgrade pip &&
+        run: |
+          echo "::group::Upgrade pip"
+          python3 -m pip install --upgrade pip
+          echo "::endgroup::"
+
+          echo "::group::Install Python requirements from requirements.txt"
           python3 -m pip install -r requirements.txt
+          echo "::endgroup::"
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
