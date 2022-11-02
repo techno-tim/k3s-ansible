@@ -21,6 +21,7 @@ jobs:
       fail-fast: false
     env:
       PYTHON_VERSION: "3.10"
+      VAGRANT_DEFAULT_PROVIDER: virtualbox
 
     steps:
       - name: Check out the codebase
@@ -92,10 +93,6 @@ jobs:
           echo "::group::Install Python requirements from requirements.txt"
           python3 -m pip install -r requirements.txt
           echo "::endgroup::"
-
-      - name: Init Vagrant with provider
-        run: |
-          vagrant up --provider virtualbox
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
