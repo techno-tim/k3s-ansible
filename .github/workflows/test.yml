@@ -46,8 +46,8 @@ jobs:
           sudo apt update && sudo apt install -y vagrant
           vagrant version
           vagrant plugin list
-          sudo /sbin/rcvboxdrv setup
-          sudo modprobe vboxdrv
+          vagrant plugin install vagrant-vbguest
+          vagrant plugin list
           echo "::endgroup::"
 
       - name: Configure VirtualBox
