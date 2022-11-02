@@ -27,9 +27,17 @@ jobs:
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Cache Ansible
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
 
       - name: Install dependencies
         run: |
