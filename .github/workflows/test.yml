@@ -50,7 +50,7 @@ jobs:
         run: ./.github/download-boxes.sh
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-      - uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # 4.3.0
+        uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # 4.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
