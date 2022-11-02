@@ -93,6 +93,10 @@ jobs:
           python3 -m pip install -r requirements.txt
           echo "::endgroup::"
 
+      - name: Init Vagrant with provider
+        run: |
+          vagrant up --provider virtualbox
+
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
         env:
