@@ -35,8 +35,8 @@ jobs:
           wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
           sudo apt update && sudo apt install -y dkms virtualbox-6.1
-          vboxmanage --version
           sudo modprobe vboxdrv
+          vboxmanage --version
           echo "::endgroup::"
 
       - name: Install Vagrant
