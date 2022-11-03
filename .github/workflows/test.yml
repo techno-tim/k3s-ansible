@@ -38,6 +38,8 @@ jobs:
           echo "::endgroup::"
           echo "::group::Virtual Box Test"
           vboxmanage --version
+          sudo /sbin/vboxconfig
+          vboxmanage --version
           echo "::endgroup::"
 
       - name: Install Vagrant
