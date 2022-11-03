@@ -37,7 +37,6 @@ jobs:
           sudo apt update && sudo apt install -y linux-headers-generic dkms virtualbox-6.1
           echo "::endgroup::"
           echo "::group::Virtual Box Test"
-          sudo modprobe vboxdrv
           vboxmanage --version
           echo "::endgroup::"
 
