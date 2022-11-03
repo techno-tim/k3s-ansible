@@ -35,7 +35,7 @@ jobs:
           # wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
           # echo "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
           # sudo apt update && sudo apt install -y virtualbox-6.1
-          sudo apt update && sudo apt install -y virtualbox virtualbox-dkm
+           sudo apt update && sudo apt install -y virtualbox virtualbox-dkm
           vboxmanage --version
           sudo modprobe vboxdrv
           echo "::endgroup::"
