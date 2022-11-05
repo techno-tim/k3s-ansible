@@ -47,7 +47,7 @@ pyasn1-modules==0.2.8
 pycparser==2.21
 Pygments==2.13.0
 pyparsing==3.0.9
-pyrsistent==0.18.1
+pyrsistent==0.19.2
 python-dateutil==2.8.2
 python-slugify==6.1.2
 python-vagrant==1.0.0
