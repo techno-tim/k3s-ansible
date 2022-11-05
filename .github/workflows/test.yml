@@ -28,6 +28,14 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Configure VirtualBox
+        run: |-
+          sudo mkdir -p /etc/vbox
+          cat <<EOF | sudo tee -a /etc/vbox/networks.conf > /dev/null
+          * 192.168.30.0/24
+          * fdad:bad:ba55::/64
+          EOF
+
       - name: Cache pip
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
         with:
