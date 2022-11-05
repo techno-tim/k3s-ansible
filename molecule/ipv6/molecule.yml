@@ -4,6 +4,7 @@ dependency:
 driver:
   name: vagrant
 platforms:
+
   - name: control1
     box: generic/ubuntu2204
     memory: 2048
@@ -19,7 +20,7 @@ platforms:
       # see: https://github.com/chef/bento/issues/1405
       ssh.username: "vagrant"
       ssh.password: "vagrant"
-  
+
   - name: node1
     box: generic/ubuntu2204
     memory: 2048
