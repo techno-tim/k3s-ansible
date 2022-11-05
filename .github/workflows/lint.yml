@@ -10,7 +10,7 @@ on:
 jobs:
   pre-commit-ci:
     name: Pre-Commit
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     env:
       PYTHON_VERSION: "3.10"
 
