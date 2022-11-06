@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Check out the codebase
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Configure VirtualBox
         run: |-
@@ -34,8 +36,16 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
+      - name: Cache pip
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Cache Vagrant boxes
-        uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77 # 3.0.8
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
         with:
           path: |
             ~/.vagrant.d/boxes
@@ -50,14 +60,20 @@ jobs:
         run: ./.github/download-boxes.sh
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # 4.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip' # caching pip dependencies
 
       - name: Install dependencies
-        run: >-
-          python3 -m pip install --upgrade pip &&
+        run: |
+          echo "::group::Upgrade pip"
+          python3 -m pip install --upgrade pip
+          echo "::endgroup::"
+
+          echo "::group::Install Python requirements from requirements.txt"
           python3 -m pip install -r requirements.txt
+          echo "::endgroup::"
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
@@ -70,7 +86,7 @@ jobs:
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
-        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # 3.1.0
+        uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # 3.1.1
         with:
           name: logs
           path: |

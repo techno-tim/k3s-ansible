@@ -5,20 +5,42 @@ on:
   push:
     branches:
       - master
-
+    paths-ignore:
+      - '**/README.md'
 jobs:
   pre-commit-ci:
     name: Pre-Commit
     runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: "3.10"
 
     steps:
       - name: Check out the codebase
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
-
-      - name: Set up Python 3.x
-        uses: actions/setup-python@b55428b1882923874294fa556849718a1d7f2ca5 #4.0.2
         with:
-          python-version: "3.x"
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # 4.3.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip' # caching pip dependencies
+
+      - name: Cache pip
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache Ansible
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
 
       - name: Install dependencies
         run: |
@@ -35,4 +57,17 @@ jobs:
           echo "::endgroup::"
 
       - name: Run pre-commit
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@646c83fcd040023954eafda54b4db0192ce70507 # 3.0.0
+
+  ensure-pinned-actions:
+    name: Ensure SHA Pinned Actions
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@6ca5574367befbc9efdb2fa25978084159c5902d # 1.3.0
+        with:
+          allowlist: |
+            aws-actions/
+            docker/login-action
