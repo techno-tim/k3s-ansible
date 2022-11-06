@@ -3,56 +3,73 @@ dependency:
   name: galaxy
 driver:
   name: vagrant
-.platform_presets:
-  - &control
+platforms:
+
+  - name: control1
+    box: generic/ubuntu2204
     memory: 2048
     cpus: 2
     groups:
       - k3s_cluster
       - master
-  - &node
-    memory: 2048
-    cpus: 2
-    groups:
-      - k3s_cluster
-      - node
-  - &debian
-    box: generic/debian11
-  - &rocky
-    box: generic/rocky9
-  - &ubuntu
-    box: generic/ubuntu2204
+    interfaces:
+      - network_name: private_network
+        ip: 192.168.30.38
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
       ssh.username: "vagrant"
       ssh.password: "vagrant"
-platforms:
-  - <<: [*control, *ubuntu]
-    name: control1
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.38
-  - <<: [*control, *debian]
-    name: control2
+
+  - name: control2
+    box: generic/debian11
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - master
     interfaces:
       - network_name: private_network
         ip: 192.168.30.39
-  - <<: [*control, *rocky]
-    name: control3
+
+  - name: control3
+    box: generic/rocky9
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - master
     interfaces:
       - network_name: private_network
         ip: 192.168.30.40
-  - <<: [*node, *ubuntu]
-    name: node1
+
+  - name: node1
+    box: generic/ubuntu2204
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
     interfaces:
       - network_name: private_network
         ip: 192.168.30.41
-  - <<: [*node, *rocky]
-    name: node2
+    config_options:
+      # We currently can not use public-key based authentication on Ubuntu 22.04,
+      # see: https://github.com/chef/bento/issues/1405
+      ssh.username: "vagrant"
+      ssh.password: "vagrant"
+
+  - name: node2
+    box: generic/rocky9
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
     interfaces:
       - network_name: private_network
         ip: 192.168.30.42
+
 provisioner:
   name: ansible
   playbooks:
