@@ -8,6 +8,9 @@ systemd_dir: /etc/systemd/system
 # Set your timezone
 system_timezone: "Your/Timezone"
 
+# Assign inventory name as hostname for unconfigured nodes
+override_system_hostname: yes
+
 # interface which will be used for flannel
 flannel_iface: "eth0"
 

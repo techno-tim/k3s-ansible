@@ -4,6 +4,12 @@
     name: "{{ system_timezone }}"
   when: (system_timezone is defined) and (system_timezone != "Your/Timezone")
 
+- name: Assign inventory name to unconfigured hostnames
+  hostname:
+    name: "{{ inventory_hostname }}"
+    use: systemd
+  when: override_system_hostname
+
 - name: Set SELinux to disabled state
   selinux:
     state: disabled
