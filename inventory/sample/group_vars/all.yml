@@ -1,7 +1,8 @@
 ---
+# K3s binary version @ https://github.com/k3s-io/k3s/releases
 k3s_version: v1.24.7+k3s1
-# this is the user that has ssh access to these machines
-ansible_user: ansibleuser
+
+# Systemd directory
 systemd_dir: /etc/systemd/system
 
 # Set your timezone
