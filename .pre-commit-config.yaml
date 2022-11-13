@@ -24,3 +24,8 @@ repos:
     rev: 4c7c3dd7161ef39e984cb295e93a968236dc8e8a  # v0.8.0.4
     hooks:
       - id: shellcheck
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: 04618e68aa2380828a36a23ff5f65a06ae8f59b9  # v1.3.1
+    hooks:
+      - id: remove-crlf
+      - id: remove-tabs
