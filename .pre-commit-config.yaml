@@ -6,6 +6,11 @@ repos:
       - id: requirements-txt-fixer
       - id: sort-simple-yaml
       - id: detect-private-key
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
   - repo: https://github.com/adrienverge/yamllint.git
     rev: 9cce2940414e9560ae4c8518ddaee2ac1863a4d2  # v1.28.0
     hooks:
