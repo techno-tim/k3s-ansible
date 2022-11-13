@@ -112,6 +112,10 @@ It is run automatically in CI, but you can also run the tests locally.
 This might be helpful for quick feedback in a few cases.
 You can find more information about it [here](molecule/README.md).
 
+### Pre-commit Hooks
+
+This repo uses `pre-commit` and `pre-commit-hooks` to lint and fix common style and syntax errors.  Be sure to install python packages and then run `pre-commit install`.  For more information, see [pre-commit](https://pre-commit.com/)
+
 ## Thanks 🤝
 
 This repo is really standing on the shoulders of giants. Thank you to all those who have contributed and thanks to these repos for code and ideas:
