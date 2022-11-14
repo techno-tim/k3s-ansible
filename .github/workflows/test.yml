@@ -6,7 +6,6 @@ jobs:
   molecule:
     name: Molecule
     runs-on: macos-12
-    needs: [pre-commit-ci, ensure-pinned-actions]
     strategy:
       matrix:
         scenario:
