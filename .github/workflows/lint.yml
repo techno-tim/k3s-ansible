@@ -1,12 +1,7 @@
 ---
 name: Linting
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '**/README.md'
+  workflow_call:
 jobs:
   pre-commit-ci:
     name: Pre-Commit

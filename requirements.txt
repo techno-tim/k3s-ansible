@@ -128,6 +128,8 @@ pluggy==1.0.0
     # via molecule
 pre-commit==2.20.0
     # via -r requirements.in
+pre-commit-hooks==4.3.0
+    # via -r requirements.in
 pyasn1==0.4.8
     # via
     #   pyasn1-modules
@@ -179,7 +181,9 @@ rich==12.6.0
 rsa==4.9
     # via google-auth
 ruamel-yaml==0.17.21
-    # via ansible-lint
+    # via
+    #   ansible-lint
+    #   pre-commit-hooks
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 selinux==0.2.1
@@ -196,7 +200,9 @@ text-unidecode==1.3
 toml==0.10.2
     # via pre-commit
 tomli==2.0.1
-    # via black
+    # via
+    #   black
+    #   pre-commit-hooks
 typing-extensions==4.4.0
     # via
     #   black

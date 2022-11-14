@@ -1,0 +1,15 @@
+---
+name: "CI"
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/README.md'
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+  test:
+    uses: ./.github/workflows/test.yml
+    needs: [lint]

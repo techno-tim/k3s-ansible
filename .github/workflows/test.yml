@@ -1,17 +1,11 @@
 ---
 name: Test
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '**/README.md'
+  workflow_call:
 jobs:
   molecule:
     name: Molecule
     runs-on: macos-12
-
     strategy:
       matrix:
         scenario:
