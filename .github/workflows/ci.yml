@@ -8,8 +8,10 @@ on:
     paths-ignore:
       - '**/README.md'
 jobs:
-  lint:
+  pre-commit-ci:
+    uses: ./.github/workflows/lint.yml
+  ensure-pinned-actions:
     uses: ./.github/workflows/lint.yml
   test:
     uses: ./.github/workflows/test.yml
-    needs: lint
+    needs: [lint, ensure-pinned-actions]
