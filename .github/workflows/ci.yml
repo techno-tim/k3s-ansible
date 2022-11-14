@@ -14,4 +14,4 @@ jobs:
     uses: ./.github/workflows/lint.yml
   test:
     uses: ./.github/workflows/test.yml
-    needs: [lint, ensure-pinned-actions]
+    needs: [pre-commit-ci, ensure-pinned-actions]
