@@ -1,4 +1,5 @@
 ---
+
 - name: Clean previous runs of k3s-init
   systemd:
     name: k3s-init
@@ -10,7 +11,7 @@
   failed_when: false
   changed_when: false
   args:
-    warn: false # The ansible systemd module does not support reset-failed
+    warn: false  # The ansible systemd module does not support reset-failed
 
 - name: Create manifests directory on first master
   file:
@@ -61,12 +62,10 @@
 - name: Init cluster inside the transient k3s-init service
   command:
     cmd: "systemd-run -p RestartSec=2 \
-      -p Restart=on-failure \
-      --unit=k3s-init \
-      k3s server {{ server_init_args }}"
+                      -p Restart=on-failure \
+                      --unit=k3s-init \
+                      k3s server {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
-  #args:
-  #warn: false  # The ansible systemd module does not support transient units
 
 - name: Verification
   block:
