@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
+        uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v3 2.5.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
@@ -54,7 +54,7 @@ jobs:
         run: ./.github/download-boxes.sh
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984 # 4.3.0
+        uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
