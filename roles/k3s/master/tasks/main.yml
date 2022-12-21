@@ -16,24 +16,8 @@
 - name: Deploy vip manifest
   include_tasks: vip.yml
 
-# these will be copied and installed now, then tested later and apply config
-- name: Copy metallb namespace to first master
-  template:
-    src: "metallb.namespace.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
-
-- name: Copy metallb manifest to first master
-  template:
-    src: "metallb.crds.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
-    owner: root
-    group: root
-    mode: 0644
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+- name: Deploy metallb manifest
+  include_tasks: metallb.yml
 
 - name: Init cluster inside the transient k3s-init service
   command:
