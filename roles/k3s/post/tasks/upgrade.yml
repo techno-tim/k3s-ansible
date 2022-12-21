@@ -1,0 +1,27 @@
+---
+- name: Create manifests directory for temp configuration
+  file:
+    path: /tmp/k3s
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  with_items: "{{ groups['master'] }}"
+  run_once: true
+
+- name: Copy upgrade plan manifest to first master
+  template:
+    src: "upgrade.crs.j2"
+    dest: "/tmp/k3s/upgrade-crs.yaml"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  with_items: "{{ groups['master'] }}"
+  run_once: true
+
+- name: Test system-upgrade namespace
+  command: >-
+    k3s kubectl -n system-upgrade
+  changed_when: false
+  with_items: "{{ groups['master'] }}"
+  run_once: true
+
+## TODO : Need to add more test post configuration
