@@ -19,9 +19,6 @@
 - name: Deploy metallb manifest
   include_tasks: metallb.yml
 
-- name: Deploy system-upgrade manifest
-  include_tasks: upgrade.yml
-
 - name: Init cluster inside the transient k3s-init service
   command:
     cmd: "systemd-run -p RestartSec=2 \

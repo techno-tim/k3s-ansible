@@ -1,4 +1,4 @@
----  
+---
 - name: Deploy metallb pool
   include_tasks: metallb.yml
 
