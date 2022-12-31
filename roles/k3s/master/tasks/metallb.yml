@@ -1,0 +1,27 @@
+---
+- name: Create manifests directory on first master
+  file:
+    path: /var/lib/rancher/k3s/server/manifests
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
+- name: Copy metallb namespace to first master
+  template:
+    src: "metallb.namespace.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
+- name: Copy metallb manifest to first master
+  template:
+    src: "metallb.crds.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
