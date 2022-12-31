@@ -2,6 +2,9 @@
 - name: Deploy metallb pool
   include_tasks: metallb.yml
 
+- name: Deploy system-upgrade plan
+  include_tasks: upgrade.yml
+
 - name: Remove tmp directory used for manifests
   file:
     path: /tmp/k3s
