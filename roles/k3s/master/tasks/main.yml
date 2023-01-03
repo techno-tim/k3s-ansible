@@ -21,6 +21,7 @@
 
 - name: Deploy kured manifest
   include_tasks: kured.yml
+  when: kured_tag_version is defined  # Set variable to "" to skip deployment
 
 - name: Init cluster inside the transient k3s-init service
   command:

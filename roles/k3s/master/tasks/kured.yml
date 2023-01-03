@@ -1,4 +1,5 @@
 ---
+
 - name: Create manifests directory on first master
   file:
     path: /var/lib/rancher/k3s/server/manifests
