@@ -10,7 +10,7 @@
 
 - name: Copy kured manifest to first master
   template:
-    src: "kured.namespace.j2"
+    src: "kured.yaml.j2"
     dest: "/var/lib/rancher/k3s/server/manifests/kured.yaml"
     owner: root
     group: root
