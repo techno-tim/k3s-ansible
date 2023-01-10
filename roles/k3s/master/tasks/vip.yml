@@ -1,0 +1,27 @@
+---
+- name: Create manifests directory on first master
+  file:
+    path: /var/lib/rancher/k3s/server/manifests
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
+- name: Copy vip rbac manifest to first master
+  template:
+    src: "vip.rbac.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip-rbac.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+
+- name: Copy vip manifest to first master
+  template:
+    src: "vip.yaml.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/vip.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
