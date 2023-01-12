@@ -1,21 +1,21 @@
 ---
 k3s_version: v1.24.9+k3s1
 # this is the user that has ssh access to these machines
-ansible_user: ansibleuser
+ansible_user: ansible
 systemd_dir: /etc/systemd/system
 
 # Set your timezone
-system_timezone: "Your/Timezone"
+system_timezone: "Europe/Berlin"
 
 # interface which will be used for flannel
 flannel_iface: "eth0"
 
 # apiserver_endpoint is virtual ip-address which will be configured on each master
-apiserver_endpoint: "192.168.30.222"
+apiserver_endpoint: "10.10.100.170"
 
 # k3s_token is required  masters can talk together securely
 # this token should be alpha numeric only
-k3s_token: "some-SUPER-DEDEUPER-secret-password"
+k3s_token: "1234567890"
 
 # The IP on which the node is reachable in the cluster.
 # Here, a sensible default is provided, you can still override
@@ -48,4 +48,4 @@ metal_lb_speaker_tag_version: "v0.13.7"
 metal_lb_controller_tag_version: "v0.13.7"
 
 # metallb ip range for load balancer
-metal_lb_ip_range: "192.168.30.80-192.168.30.90"
+metal_lb_ip_range: "10.10.100.80-10.10.100.89"
