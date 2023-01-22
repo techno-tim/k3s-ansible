@@ -1,0 +1,7 @@
+---
+- name: configure rc.local for proxmox lxc containers
+  copy:
+    src: "{{ playbook_dir }}/scripts/rc.local"
+    dest: "/etc/rc.local"
+    mode: "u=rwx,g=rx,o=rx"
+  notify: reboot server
