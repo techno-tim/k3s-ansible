@@ -15,7 +15,7 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "native"
 
 - name: Set image versions for metallb manifest
   ansible.builtin.replace:
@@ -27,4 +27,13 @@
       to: "metallb/speaker:{{ metal_lb_speaker_tag_version }}"
   loop_control:
     label: "{{ item.change }} => {{ item.to }}"
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "native"
+
+- name: Copy metallb-frr manifest to first master
+  template:
+    src: "metallb-frr.crds.j2"
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-frr-crds.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "frr"
