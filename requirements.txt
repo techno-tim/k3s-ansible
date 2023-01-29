@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-ansible-compat==2.2.4
+ansible-compat==2.2.7
     # via
     #   ansible-lint
     #   molecule
@@ -12,7 +12,7 @@ ansible-core==2.14.1
     # via
     #   -r requirements.in
     #   ansible-lint
-ansible-lint==6.8.6
+ansible-lint==6.11.0
     # via -r requirements.in
 arrow==1.2.3
     # via jinja2-time
