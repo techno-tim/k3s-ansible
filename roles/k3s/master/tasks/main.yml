@@ -19,6 +19,13 @@
 - name: Deploy metallb manifest
   include_tasks: metallb.yml
 
+- name: Create node password file if not exist
+  lineinfile:
+    path: /etc/rancher/node/password
+    line: "{{ (node_password_salt | default('') + ansible_hostname) | md5 }}"
+    create: yes
+    mode: 0600
+
 - name: Init cluster inside the transient k3s-init service
   command:
     cmd: "systemd-run -p RestartSec=2 \

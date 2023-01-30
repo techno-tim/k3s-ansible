@@ -6,6 +6,6 @@ server_init_args: >-
     {% else %}
       --server https://{{ hostvars[groups['master'][0]].k3s_node_ip }}:6443
     {% endif %}
-    --token {{ k3s_token }}
   {% endif %}
+  --token {{ k3s_token }}
   {{ extra_server_args | default('') }}

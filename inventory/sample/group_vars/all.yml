@@ -70,3 +70,10 @@ proxmox_lxc_ct_ids:
   - 202
   - 203
   - 204
+
+# When we use an external data source instead of etcd, we have the possibility to archieve idempotency for the 
+# initialization of the cluster. The only problem is that we have to keep the random nodepassword of the nodes
+# for rejoining. Considering the security, we use {{ node_password_salt + ansible_hostname | md5 }} as the 
+# invariant nodepassword for each node. After that, the nodes can be re-registered to the cluster when the cluster
+# is reinitialized by this playbook.
+node_password_salt: "some-random-word"

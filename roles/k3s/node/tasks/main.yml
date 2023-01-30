@@ -1,5 +1,12 @@
 ---
 
+- name: Create node password file if not exist
+  lineinfile:
+    path: /etc/rancher/node/password
+    line: "{{ (node_password_salt | default('') + ansible_hostname) | md5 }}"
+    create: yes
+    mode: 0600
+
 - name: Copy K3s service file
   template:
     src: "k3s.service.j2"
