@@ -3,12 +3,10 @@
   set_fact:
     rc_local: "{{ lookup('template', 'templates/rc.local.j2') }}"
 
-- name: configure rc.local for proxmox lxc containers
+- name: Remove rc.local modificaitons for proxmox lxc containers
   become: true
   blockinfile:
     path: /etc/rc.local
     content: '{{ rc_local }}'
-    create: true
-    state: present
-    mode: "u=rwx,g=rx,o=rx"
-  notify: reboot server
+    create: false
+    state: absent

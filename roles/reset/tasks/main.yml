@@ -54,3 +54,6 @@
   file:
     path: /tmp/k3s
     state: absent
+
+- name: Remove LXC modifications if applicable
+  include_tasks: lxc.yml
