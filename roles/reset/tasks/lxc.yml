@@ -1,13 +1,9 @@
 ---
-- name: Set rc.local fact
-  set_fact:
-    rc_local: "{{ lookup('template', 'templates/rc.local.j2') }}"
-
 - name: Remove rc.local modificaitons for proxmox lxc containers
   become: true
   blockinfile:
     path: /etc/rc.local
-    content: '{{ rc_local }}'
+    content: "{{ lookup('template', 'templates/rc.local.j2') }}"
     create: false
     state: absent
 
