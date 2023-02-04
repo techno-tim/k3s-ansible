@@ -79,11 +79,23 @@
   until: this.rc == 0
   retries: 5
 
-- name: Test metallb-system resources
+- name: Test metallb-system resources for Layer 2 configuration
   command: >-
     k3s kubectl -n metallb-system get {{ item }}
   changed_when: false
   run_once: true
+  when: metal_lb_mode == "layer2"
   with_items:
     - IPAddressPool
     - L2Advertisement
+
+- name: Test metallb-system resources for BGP configuration
+  command: >-
+    k3s kubectl -n metallb-system get {{ item }}
+  changed_when: false
+  run_once: true
+  when: metal_lb_mode == "bgp"
+  with_items:
+    - IPAddressPool
+    - BGPPeer
+    - BGPAdvertisement
