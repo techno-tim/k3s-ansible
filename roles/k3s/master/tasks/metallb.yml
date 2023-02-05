@@ -8,20 +8,23 @@
     mode: 0644
   when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
-- name: Copy metallb namespace to first master
-  template:
-    src: "metallb.namespace.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb-namespace.yaml"
+- name: Download metallb manifest to first master
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metal_lb_controller_tag_version }}/config/manifests/metallb-native.yaml"  # noqa yaml[line-length]
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
     owner: root
     group: root
     mode: 0644
   when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
 
-- name: Copy metallb manifest to first master
-  template:
-    src: "metallb.crds.j2"
-    dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
-    owner: root
-    group: root
-    mode: 0644
+- name: Set image versions for metallb manifest
+  ansible.builtin.replace:
+    path: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
+    regexp: "{{ item.change | ansible.builtin.regex_escape }}"
+    replace: "{{ item.to }}"
+  with_items:
+    - change: "metallb/speaker:{{ metal_lb_controller_tag_version }}"
+      to: "metallb/speaker:{{ metal_lb_speaker_tag_version }}"
+  loop_control:
+    label: "{{ item.change }} => {{ item.to }}"
   when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
