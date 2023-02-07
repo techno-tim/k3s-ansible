@@ -1,5 +1,4 @@
 ---
-ansible_user: root
 server_init_args: >-
   {% if groups['master'] | length > 1 %}
     {% if ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] %}
