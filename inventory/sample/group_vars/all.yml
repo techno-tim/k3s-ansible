@@ -4,6 +4,9 @@ k3s_version: v1.24.10+k3s1
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
 
+# to disable strict host key checking un-comment the following line
+# ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
 # Set your timezone
 system_timezone: "Your/Timezone"
 
