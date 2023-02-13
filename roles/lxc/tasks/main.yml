@@ -5,3 +5,15 @@
     dest: "/etc/rc.local"
     mode: "u=rwx,g=rx,o=rx"
   notify: reboot server
+
+- name: Validate K3S storage backend
+  shell: 
+    cmd: df -T /var/lib/ | sed 1d | awk '{print $2}'
+  register: storagebackend
+
+- name: Change snapshot driver to zfs
+  set_fact:
+    extra_server_args: >-
+      {{ extra_server_args }}
+      --snapshotter=native
+  when: storagebackend.stdout == "zfs"
