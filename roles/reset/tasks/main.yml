@@ -62,3 +62,16 @@
     content: "{{ lookup('template', 'templates/rc.local.j2') }}"
     create: false
     state: absent
+
+- name: Check rc.local for cleanup
+  become: true
+  slurp:
+    src: /etc/rc.local
+  register: rcslurp
+
+- name: Cleanup rc.local if we only have a Shebang line
+  become: true
+  file:
+    path: /etc/rc.local
+    state: absent
+  when: ((rcslurp.content | b64decode).splitlines() | length) <= 1

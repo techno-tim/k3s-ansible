@@ -1,10 +1,21 @@
 ---
-- name: configure rc.local for proxmox lxc containers
-  become: true
+- name: Check for rc.local file
+  stat:
+    path: /etc/rc.local
+  register: rcfile
+
+- name: Create rc.local if needed
+  lineinfile:
+    path: /etc/rc.local
+    line: "#!/bin/sh -e"
+    create: true
+    insertbefore: BOF
+    mode: "u=rwx,g=rx,o=rx"
+  when: rcfile.stat.exists != true
+
+- name: Wrtie rc.local file
   blockinfile:
     path: /etc/rc.local
     content: "{{ lookup('template', 'templates/rc.local.j2') }}"
-    create: true
     state: present
-    mode: "u=rwx,g=rx,o=rx"
   notify: reboot server
