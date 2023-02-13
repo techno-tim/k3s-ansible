@@ -11,7 +11,7 @@
     create: true
     insertbefore: BOF
     mode: "u=rwx,g=rx,o=rx"
-  when: rcfile.stat.exists != true
+  when: not rcfile.stat.exists
 
 - name: Wrtie rc.local file
   blockinfile:
