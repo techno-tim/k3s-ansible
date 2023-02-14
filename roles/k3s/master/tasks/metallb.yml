@@ -15,7 +15,16 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "native"
+
+- name: Download metallb-frr manifest to first master
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metal_lb_controller_tag_version }}/config/manifests/metallb-frr.yaml"  # noqa yaml[line-length]
+    dest: "/var/lib/rancher/k3s/server/manifests/metallb-frr-crds.yaml"
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "frr"
 
 - name: Set image versions for metallb manifest
   ansible.builtin.replace:
@@ -27,4 +36,16 @@
       to: "metallb/speaker:{{ metal_lb_speaker_tag_version }}"
   loop_control:
     label: "{{ item.change }} => {{ item.to }}"
-  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname']
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "native"
+
+- name: Set image versions for metallb-frr manifest
+  ansible.builtin.replace:
+    path: "/var/lib/rancher/k3s/server/manifests/metallb-frr-crds.yaml"
+    regexp: "{{ item.change | ansible.builtin.regex_escape }}"
+    replace: "{{ item.to }}"
+  with_items:
+    - change: "metallb/speaker:{{ metal_lb_controller_tag_version }}"
+      to: "metallb/speaker:{{ metal_lb_speaker_tag_version }}"
+  loop_control:
+    label: "{{ item.change }} => {{ item.to }}"
+  when: ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] and metal_lb_type == "frr"
