@@ -51,4 +51,3 @@
     state: absent
   loop: "{{ proxmox_lxc_filtered_files }}"
   notify: reboot containers
-
