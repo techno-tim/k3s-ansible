@@ -71,6 +71,7 @@ jobs:
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
+        timeout-minutes: 90
         env:
           ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
           ANSIBLE_SSH_RETRIES: 4

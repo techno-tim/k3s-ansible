@@ -1,4 +1,9 @@
 ---
+# If you want to explicitly define an interface that ALL control nodes
+# should use to propagate the VIP, define it here. Otherwise, kube-vip
+# will determine the right interface automatically at runtime.
+kube_vip_iface: null
+
 server_init_args: >-
   {% if groups['master'] | length > 1 %}
     {% if ansible_hostname == hostvars[groups['master'][0]]['ansible_hostname'] %}
