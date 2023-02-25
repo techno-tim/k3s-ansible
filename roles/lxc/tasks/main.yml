@@ -13,7 +13,7 @@
     mode: "u=rwx,g=rx,o=rx"
   when: not rcfile.stat.exists
 
-- name: Wrtie rc.local file
+- name: Write rc.local file
   blockinfile:
     path: /etc/rc.local
     content: "{{ lookup('template', 'templates/rc.local.j2') }}"
