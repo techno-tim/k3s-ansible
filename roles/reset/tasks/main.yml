@@ -60,7 +60,7 @@
     path: /etc/rc.local
   register: rcfile
 
-- name: Remove rc.local modificaitons for proxmox lxc containers
+- name: Remove rc.local modifications for proxmox lxc containers
   become: true
   blockinfile:
     path: /etc/rc.local
