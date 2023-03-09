@@ -13,3 +13,11 @@
       become: true
       reboot:
         reboot_timeout: 3600
+
+- hosts: proxmox
+  gather_facts: true
+  become: yes
+  remote_user: "{{ proxmox_lxc_ssh_user }}"
+  roles:
+    - role: reset_proxmox_lxc
+      when: proxmox_lxc_configure

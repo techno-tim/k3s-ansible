@@ -28,7 +28,7 @@ on processor architecture:
 
 ## ✅ System requirements
 
-- Deployment environment must have Ansible 2.4.0+.  If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
+- Control Node (the machine you are running `ansible` commands) must have Ansible 2.11+ If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
 
 - You will also need to install collections that this playbook uses by running `ansible-galaxy collection install -r ./collections/requirements.yml` (important❗)
 
@@ -66,6 +66,8 @@ node
 ```
 
 If multiple hosts are in the master group, the playbook will automatically set up k3s in [HA mode with etcd](https://rancher.com/docs/k3s/latest/en/installation/ha-embedded/).
+
+Finally, copy `ansible.example.cfg` to `ansible.cfg` and adapt the inventory path to match the files that you just created.
 
 This requires at least k3s version `1.19.1` however the version is configurable by using the `k3s_version` variable.
 
