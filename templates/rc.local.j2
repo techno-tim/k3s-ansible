@@ -1,5 +1,3 @@
-#!/bin/sh -e
-
 # Kubeadm 1.15 needs /dev/kmsg to be there, but it's not in lxc, but we can just use /dev/console instead
 # see: https://github.com/kubernetes-sigs/kind/issues/662
 if [ ! -e /dev/kmsg ]; then

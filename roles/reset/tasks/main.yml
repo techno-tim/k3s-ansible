@@ -54,3 +54,31 @@
   file:
     path: /tmp/k3s
     state: absent
+
+- name: Check if rc.local exists
+  stat:
+    path: /etc/rc.local
+  register: rcfile
+
+- name: Remove rc.local modifications for proxmox lxc containers
+  become: true
+  blockinfile:
+    path: /etc/rc.local
+    content: "{{ lookup('template', 'templates/rc.local.j2') }}"
+    create: false
+    state: absent
+  when: proxmox_lxc_configure and rclocal.stat.exists
+
+- name: Check rc.local for cleanup
+  become: true
+  slurp:
+    src: /etc/rc.local
+  register: rcslurp
+  when: proxmox_lxc_configure and rclocal.stat.exists
+
+- name: Cleanup rc.local if we only have a Shebang line
+  become: true
+  file:
+    path: /etc/rc.local
+    state: absent
+  when: proxmox_lxc_configure and rclocal.stat.exists and ((rcslurp.content | b64decode).splitlines() | length) <= 1

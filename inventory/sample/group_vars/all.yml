@@ -43,7 +43,19 @@ extra_agent_args: >-
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.7"
 
+# metallb type frr or native
+metal_lb_type: "native"
+
+# metallb mode layer2 or bgp
+metal_lb_mode: "layer2"
+
+# bgp options
+# metal_lb_bgp_my_asn: "64513"
+# metal_lb_bgp_peer_asn: "64512"
+# metal_lb_bgp_peer_address: "192.168.30.1"
+
 # image tag for metal lb
+metal_lb_frr_tag_version: "v7.5.1"
 metal_lb_speaker_tag_version: "v0.13.7"
 metal_lb_controller_tag_version: "v0.13.7"
 

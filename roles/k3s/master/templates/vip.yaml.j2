@@ -30,8 +30,10 @@ spec:
           value: "true"
         - name: port
           value: "6443"
+{% if kube_vip_iface %}
         - name: vip_interface
-          value: {{ flannel_iface }}
+          value: {{ kube_vip_iface }}
+{% endif %}
         - name: vip_cidr
           value: "{{ apiserver_endpoint | ansible.utils.ipsubnet | ansible.utils.ipaddr('prefix') }}"
         - name: cp_enable

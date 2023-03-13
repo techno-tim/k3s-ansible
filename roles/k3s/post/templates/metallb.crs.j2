@@ -13,9 +13,31 @@ spec:
 {% for range in metal_lb_ip_range %}
   - {{ range }}
 {% endfor %}
+
+{% if metal_lb_mode == "layer2" %}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: default
   namespace: metallb-system
+{% endif %}
+{% if metal_lb_mode == "bgp" %}
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  myASN: {{ metal_lb_bgp_my_asn }}
+  peerASN: {{ metal_lb_bgp_peer_asn }}
+  peerAddress: {{ metal_lb_bgp_peer_address }}
+
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: default
+  namespace: metallb-system
+{% endif %}

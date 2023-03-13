@@ -12,6 +12,7 @@
   gather_facts: yes
   roles:
     - role: lxc
+      become: true
       when: proxmox_lxc_configure
     - role: prereq
       become: true

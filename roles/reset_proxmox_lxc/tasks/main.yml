@@ -1,0 +1,53 @@
+---
+- name: check for container files that exist on this host
+  stat:
+    path: "/etc/pve/lxc/{{ item }}.conf"
+  loop: "{{ proxmox_lxc_ct_ids }}"
+  register: stat_results
+
+- name: filter out files that do not exist
+  set_fact:
+    proxmox_lxc_filtered_files:
+      '{{ stat_results.results | rejectattr("stat.exists", "false") | map(attribute="stat.path") }}'
+
+# used for the reboot handler
+- name: get container ids from filtered files
+  set_fact:
+    proxmox_lxc_filtered_ids:
+      '{{ proxmox_lxc_filtered_files | map("split", "/") | map("last") | map("split", ".") | map("first") }}'
+
+- name: Remove LXC apparmor profile
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: "^lxc.apparmor.profile"
+    line: "lxc.apparmor.profile: unconfined"
+    state: absent
+  loop: "{{ proxmox_lxc_filtered_files }}"
+  notify: reboot containers
+
+- name: Remove lxc cgroups
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: "^lxc.cgroup.devices.allow"
+    line: "lxc.cgroup.devices.allow: a"
+    state: absent
+  loop: "{{ proxmox_lxc_filtered_files }}"
+  notify: reboot containers
+
+- name: Remove lxc cap drop
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: "^lxc.cap.drop"
+    line: "lxc.cap.drop: "
+    state: absent
+  loop: "{{ proxmox_lxc_filtered_files }}"
+  notify: reboot containers
+
+- name: Remove lxc mounts
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: "^lxc.mount.auto"
+    line: 'lxc.mount.auto: "proc:rw sys:rw"'
+    state: absent
+  loop: "{{ proxmox_lxc_filtered_files }}"
+  notify: reboot containers
