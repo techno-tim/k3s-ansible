@@ -1,5 +1,5 @@
 ---
-k3s_version: v1.24.10+k3s1
+k3s_version: v1.24.11+k3s1
 # this is the user that has ssh access to these machines
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
