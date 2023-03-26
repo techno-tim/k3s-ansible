@@ -1,0 +1,1 @@
+ansible_user: '{{ proxmox_lxc_ssh_user }}'
