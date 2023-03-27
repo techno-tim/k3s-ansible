@@ -11,7 +11,7 @@ ansible-core==2.14.3
     #   -r requirements.in
     #   ansible-compat
     #   ansible-lint
-ansible-lint==6.14.2
+ansible-lint==6.14.3
     # via -r requirements.in
 arrow==1.2.3
     # via jinja2-time
@@ -113,6 +113,7 @@ packaging==21.3
     #   molecule
 pathspec==0.10.1
     # via
+    #   ansible-lint
     #   black
     #   yamllint
 platformdirs==2.5.2
