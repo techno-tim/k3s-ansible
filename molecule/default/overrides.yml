@@ -9,3 +9,7 @@
 
         # The test VMs might be a bit slow, so we give them more time to join the cluster:
         retry_count: 45
+
+        extra_worker_packages:
+          - open-iscsi
+          - nfs-common
