@@ -40,6 +40,10 @@ extra_server_args: >-
 extra_agent_args: >-
   {{ extra_args }}
 
+extra_worker_packages: []
+# - open-iscsi  # for longhorn
+# - nfs-common  # for longhorn backups
+
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.11"
 

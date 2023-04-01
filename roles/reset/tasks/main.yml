@@ -82,3 +82,8 @@
     path: /etc/rc.local
     state: absent
   when: proxmox_lxc_configure and rcfile.stat.exists and ((rcslurp.content | b64decode).splitlines() | length) <= 1
+
+- name: remove extra worker node packages
+  package:
+    name: "{{ extra_worker_packages }}"
+    state: absent

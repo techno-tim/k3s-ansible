@@ -14,3 +14,8 @@
     daemon_reload: yes
     state: restarted
     enabled: yes
+
+- name: install extra worker node packages
+  package:
+    name: "{{ extra_worker_packages }}"
+    state: present
