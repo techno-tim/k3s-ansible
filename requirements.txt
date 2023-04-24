@@ -202,7 +202,7 @@ wcmatch==8.4.1
     # via ansible-lint
 websocket-client==1.4.2
     # via kubernetes
-yamllint==1.30.0
+yamllint==1.31.0
     # via
     #   -r requirements.in
     #   ansible-lint
