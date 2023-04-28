@@ -1,5 +1,5 @@
 ---
-k3s_version: v1.24.12+k3s1
+k3s_version: v1.25.9+k3s1
 # this is the user that has ssh access to these machines
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
@@ -41,7 +41,7 @@ extra_agent_args: >-
   {{ extra_args }}
 
 # image tag for kube-vip
-kube_vip_tag_version: "v0.5.11"
+kube_vip_tag_version: "v0.5.12"
 
 # metallb type frr or native
 metal_lb_type: "native"
