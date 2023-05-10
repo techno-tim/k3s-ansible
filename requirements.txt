@@ -11,7 +11,7 @@ ansible-core==2.14.5
     #   -r requirements.in
     #   ansible-compat
     #   ansible-lint
-ansible-lint==6.15.0
+ansible-lint==6.16.0
     # via -r requirements.in
 arrow==1.2.3
     # via jinja2-time
@@ -175,10 +175,12 @@ rich==12.6.0
     #   molecule
 rsa==4.9
     # via google-auth
-ruamel-yaml==0.17.21
+ruamel-yaml==0.17.26
     # via
     #   ansible-lint
     #   pre-commit-hooks
+ruamel-yaml-clib==0.2.7
+    # via ruamel-yaml
 selinux==0.2.1
     # via molecule-vagrant
 six==1.16.0
