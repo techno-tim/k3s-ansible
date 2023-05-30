@@ -6,3 +6,10 @@
   file:
     path: /tmp/k3s
     state: absent
+
+- name: Ensure worker role on nodes
+  ansible.builtin.command:
+    cmd: "k3s kubectl label node {{ item }}  node-role.kubernetes.io/worker=worker --overwrite"
+  run_once: true
+  changed_when: false
+  with_items: "{{ groups['node'] }}"
