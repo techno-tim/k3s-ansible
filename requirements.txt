@@ -68,7 +68,7 @@ jinja2-time==0.2.0
     # via cookiecutter
 jmespath==1.0.1
     # via -r requirements.in
-jsonpatch==1.32
+jsonpatch==1.33
     # via -r requirements.in
 jsonpointer==2.3
     # via jsonpatch
