@@ -43,6 +43,8 @@ extra_agent_args: >-
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.12"
 
+metal_lb_configure: false
+
 # metallb type frr or native
 metal_lb_type: "native"
 
