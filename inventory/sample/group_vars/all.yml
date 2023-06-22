@@ -40,6 +40,10 @@ extra_server_args: >-
 extra_agent_args: >-
   {{ extra_args }}
 
+# Extra labels to worker nodes. Could be useful to use additional pod
+# selectors.
+extra_agent_labels: {}
+
 # image tag for kube-vip
 kube_vip_tag_version: "v0.5.12"
 

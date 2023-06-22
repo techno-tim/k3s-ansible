@@ -13,3 +13,13 @@
   run_once: true
   changed_when: false
   with_items: "{{ groups['node'] }}"
+
+- name: Ensure additional labels on nodes
+  ansible.builtin.command:
+    cmd: "k3s kubectl label node {{ item.0 }} {{ item.1.key }}={{ item.1.value }}"
+  run_once: true
+  changed_when: false
+  loop: "{{ groups['node'] | product(extra_agent_labels | dict2items) | list }}"
+  when:
+    - extra_agent_labels is defined
+    - extra_agent_labels | length > 0
