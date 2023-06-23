@@ -4,14 +4,16 @@
 #
 #    pip-compile requirements.in
 #
-ansible-compat==3.0.1
-    # via molecule
+ansible-compat==4.1.2
+    # via
+    #   ansible-lint
+    #   molecule
 ansible-core==2.14.5
     # via
     #   -r requirements.in
     #   ansible-compat
     #   ansible-lint
-ansible-lint==6.15.0
+ansible-lint==6.17.2
     # via -r requirements.in
 arrow==1.2.3
     # via jinja2-time
@@ -111,8 +113,9 @@ packaging==21.3
     #   ansible-core
     #   ansible-lint
     #   molecule
-pathspec==0.10.1
+pathspec==0.11.1
     # via
+    #   ansible-lint
     #   black
     #   yamllint
 platformdirs==2.5.2
@@ -159,8 +162,9 @@ pyyaml==6.0
     #   molecule-vagrant
     #   pre-commit
     #   yamllint
-requests==2.28.1
+requests==2.31.0
     # via
+    #   ansible-lint
     #   cookiecutter
     #   kubernetes
     #   requests-oauthlib
