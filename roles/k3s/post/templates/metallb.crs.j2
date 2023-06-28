@@ -33,7 +33,9 @@ spec:
   myASN: {{ metal_lb_bgp_my_asn }}
   peerASN: {{ metal_lb_bgp_peer_asn }}
   peerAddress: {{ metal_lb_bgp_peer_address }}
-
+{% if metal_lb_type == "frr" %}
+  ebgpMultiHop: true
+{% endif %}
 ---
 apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
