@@ -54,7 +54,7 @@ spec:
           value: "2"
         - name: address
           value: {{ apiserver_endpoint }}
-        image: ghcr.io/kube-vip/kube-vip:{{ kube_vip_tag_version }}
+        image: docker.io/bugaian/kube-vip:{{ kube_vip_tag_version }}
         imagePullPolicy: Always
         name: kube-vip
         resources: {}
