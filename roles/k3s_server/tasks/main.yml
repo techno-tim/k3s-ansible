@@ -6,12 +6,11 @@
     state: stopped
   failed_when: false
 
-- name: Clean previous runs of k3s-init
+- name: Clean previous runs of k3s-init  # noqa command-instead-of-module
+  # The systemd module does not support "reset-failed", so we need to resort to command.
   command: systemctl reset-failed k3s-init
   failed_when: false
   changed_when: false
-  args:
-    warn: false  # The ansible systemd module does not support reset-failed
 
 - name: Deploy vip manifest
   include_tasks: vip.yml
