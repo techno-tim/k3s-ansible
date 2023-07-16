@@ -57,10 +57,6 @@
     - "{{ action }}/default.yml"
   vars:
     action: >-
-      {% if state == "present" -%}
-      setup
-      {%- else -%}
-      teardown
-      {%- endif %}
+      {% if state == "present" %}setup{% else %}teardown{% endif %}
   when:
     - raspberry_pi|default(false)
