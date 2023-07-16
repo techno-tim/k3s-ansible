@@ -1,5 +1,4 @@
 ---
-
 - hosts: proxmox
   gather_facts: true
   become: yes
@@ -22,15 +21,15 @@
 
 - hosts: master
   roles:
-    - role: k3s/master
+    - role: k3s_server
       become: true
 
 - hosts: node
   roles:
-    - role: k3s/node
+    - role: k3s_agent
       become: true
 
 - hosts: master
   roles:
-    - role: k3s/post
+    - role: k3s_server_post
       become: true

@@ -6,4 +6,4 @@ outside_host: localhost
 testing_namespace: molecule-verify-from-outside
 
 # The directory in which the example manifests reside
-example_manifests_path: ../../../../example
+example_manifests_path: ../../../example
