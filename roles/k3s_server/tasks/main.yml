@@ -1,6 +1,6 @@
 ---
 
-- name: Clean previous runs of k3s-init
+- name: Stop k3s-init
   systemd:
     name: k3s-init
     state: stopped
