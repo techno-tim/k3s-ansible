@@ -1,5 +1,4 @@
 ansible-core>=2.13.5
-ansible-lint>=6.8.6
 jmespath>=1.0.1
 jsonpatch>=1.32
 kubernetes>=25.3.0
@@ -9,4 +8,3 @@ netaddr>=0.8.0
 pre-commit>=2.20.0
 pre-commit-hooks>=1.3.1
 pyyaml>=6.0
-yamllint>=1.28.0
