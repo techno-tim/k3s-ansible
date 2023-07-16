@@ -17,13 +17,13 @@
     flush: true
 
 - name: Changing to iptables-legacy
-  alternatives:
+  community.general.alternatives:
     path: /usr/sbin/iptables-legacy
     name: iptables
   register: ip4_legacy
 
 - name: Changing to ip6tables-legacy
-  alternatives:
+  community.general.alternatives:
     path: /usr/sbin/ip6tables-legacy
     name: ip6tables
   register: ip6_legacy
