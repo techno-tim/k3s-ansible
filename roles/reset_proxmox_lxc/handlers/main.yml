@@ -1,5 +1,1 @@
----
-- name: Reboot containers
-  command:
-    "pct reboot {{ item }}"
-  loop: "{{ proxmox_lxc_filtered_ids }}"
+../../proxmox_lxc/handlers/main.yml

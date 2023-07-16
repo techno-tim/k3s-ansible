@@ -10,12 +10,6 @@
     proxmox_lxc_filtered_files:
       '{{ stat_results.results | rejectattr("stat.exists", "false") | map(attribute="stat.path") }}'
 
-# used for the reboot handler
-- name: Get container ids from filtered files
-  set_fact:
-    proxmox_lxc_filtered_ids:
-      '{{ proxmox_lxc_filtered_files | map("split", "/") | map("last") | map("split", ".") | map("first") }}'
-
 - name: Remove LXC apparmor profile
   lineinfile:
     dest: "{{ item }}"
