@@ -9,7 +9,7 @@
   check_mode: false
 
 - name: Umount filesystem
-  mount:
+  ansible.posix.mount:
     path: "{{ item }}"
     state: unmounted
   with_items:

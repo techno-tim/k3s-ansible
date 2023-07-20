@@ -10,7 +10,7 @@
 
 - name: "Download to first master: manifest for metallb-{{ metal_lb_type }}"
   ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metal_lb_controller_tag_version }}/config/manifests/metallb-{{metal_lb_type}}.yaml"  # noqa yaml[line-length]
+    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metal_lb_controller_tag_version }}/config/manifests/metallb-{{ metal_lb_type }}.yaml"  # noqa yaml[line-length]
     dest: "/var/lib/rancher/k3s/server/manifests/metallb-crds.yaml"
     owner: root
     group: root

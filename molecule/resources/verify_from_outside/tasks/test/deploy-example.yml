@@ -34,14 +34,14 @@
 
     - name: Assert that the nginx welcome page is available
       ansible.builtin.uri:
-        url: http://{{ ip | ansible.utils.ipwrap }}:{{ port }}/
+        url: http://{{ ip | ansible.utils.ipwrap }}:{{ port_ }}/
         return_content: yes
       register: result
       failed_when: "'Welcome to nginx!' not in result.content"
       vars:
         ip: >-
           {{ nginx_services.resources[0].status.loadBalancer.ingress[0].ip }}
-        port: >-
+        port_: >-
           {{ nginx_services.resources[0].spec.ports[0].port }}
       # Deactivated linter rules:
       #   - jinja[invalid]: As of version 6.6.0, ansible-lint complains that the input to ipwrap
