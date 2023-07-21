@@ -8,7 +8,7 @@ This is based on the work from [this fork](https://github.com/212850a/k3s-ansibl
 
 If you want more context on how this works, see:
 
-📄 [Documentation](https://docs.technotim.live/posts/k3s-etcd-ansible/) (including example commands)
+📄 [Documentation](https://technotim.live/posts/k3s-etcd-ansible/) (including example commands)
 
 📺 [Watch the Video](https://www.youtube.com/watch?v=CbkEWcUZ7zM)
 
@@ -28,7 +28,7 @@ on processor architecture:
 
 ## ✅ System requirements
 
-- Control Node (the machine you are running `ansible` commands) must have Ansible 2.11+ If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://docs.technotim.live/posts/ansible-automation/).
+- Control Node (the machine you are running `ansible` commands) must have Ansible 2.11+ If you need a quick primer on Ansible [you can check out my docs and setting up Ansible](https://technotim.live/posts/ansible-automation/).
 
 - You will also need to install collections that this playbook uses by running `ansible-galaxy collection install -r ./collections/requirements.yml` (important❗)
 
@@ -101,7 +101,7 @@ scp debian@master_ip:~/.kube/config ~/.kube/config
 
 ### 🔨 Testing your cluster
 
-See the commands [here](https://docs.technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
+See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
 
 ### Troubleshooting
 
