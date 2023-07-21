@@ -6,7 +6,7 @@
 #
 ansible-compat==3.0.1
     # via molecule
-ansible-core==2.14.5
+ansible-core==2.15.2
     # via
     #   -r requirements.in
     #   ansible-compat
@@ -127,7 +127,7 @@ python-slugify==6.1.2
     # via cookiecutter
 python-vagrant==1.0.0
     # via molecule-vagrant
-pyyaml==6.0
+pyyaml==6.0.1
     # via
     #   -r requirements.in
     #   ansible-compat
