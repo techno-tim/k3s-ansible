@@ -7,7 +7,7 @@ jobs:
     name: Pre-Commit
     runs-on: ubuntu-latest
     env:
-      PYTHON_VERSION: "3.10"
+      PYTHON_VERSION: "3.11"
 
     steps:
       - name: Check out the codebase
