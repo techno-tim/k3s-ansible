@@ -1,5 +1,11 @@
 ---
-- name: reboot containers
-  command:
-    "pct reboot {{ item }}"
-  loop: "{{ proxmox_lxc_filtered_ids }}"
+- name: Reboot containers
+  block:
+    - name: Get container ids from filtered files
+      set_fact:
+        proxmox_lxc_filtered_ids: >-
+          {{ proxmox_lxc_filtered_files | map("split", "/") | map("last") | map("split", ".") | map("first") }}
+    - name: Reboot container
+      command: "pct reboot {{ item }}"
+      loop: "{{ proxmox_lxc_filtered_ids }}"
+      changed_when: true

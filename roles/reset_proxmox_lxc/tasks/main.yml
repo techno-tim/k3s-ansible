@@ -1,20 +1,14 @@
 ---
-- name: check for container files that exist on this host
+- name: Check for container files that exist on this host
   stat:
     path: "/etc/pve/lxc/{{ item }}.conf"
   loop: "{{ proxmox_lxc_ct_ids }}"
   register: stat_results
 
-- name: filter out files that do not exist
+- name: Filter out files that do not exist
   set_fact:
     proxmox_lxc_filtered_files:
       '{{ stat_results.results | rejectattr("stat.exists", "false") | map(attribute="stat.path") }}'
-
-# used for the reboot handler
-- name: get container ids from filtered files
-  set_fact:
-    proxmox_lxc_filtered_ids:
-      '{{ proxmox_lxc_filtered_files | map("split", "/") | map("last") | map("split", ".") | map("first") }}'
 
 - name: Remove LXC apparmor profile
   lineinfile:

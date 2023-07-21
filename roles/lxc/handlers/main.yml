@@ -1,4 +1,4 @@
 ---
-- name: reboot server
+- name: Reboot server
   become: true
   reboot:
