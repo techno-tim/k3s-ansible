@@ -5,7 +5,7 @@
     state: directory
     owner: "{{ ansible_user_id }}"
     mode: 0755
-  with_items: "{{ groups['master'] }}"
+  with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Copy metallb CRs manifest to first master
@@ -14,14 +14,14 @@
     dest: "/tmp/k3s/metallb-crs.yaml"
     owner: "{{ ansible_user_id }}"
     mode: 0755
-  with_items: "{{ groups['master'] }}"
+  with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Test metallb-system namespace
   command: >-
     k3s kubectl -n metallb-system
   changed_when: false
-  with_items: "{{ groups['master'] }}"
+  with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Wait for MetalLB resources
@@ -66,7 +66,7 @@
   command: >-
     k3s kubectl -n metallb-system get endpoints webhook-service
   changed_when: false
-  with_items: "{{ groups['master'] }}"
+  with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Apply metallb CRs
