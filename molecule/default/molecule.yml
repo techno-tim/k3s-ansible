@@ -14,7 +14,7 @@ platforms:
       - master
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.38
+        ip: 10.10.0.6
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
@@ -30,7 +30,7 @@ platforms:
       - master
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.39
+        ip: 10.10.0.7
 
   - name: control3
     box: generic/rocky9
@@ -41,7 +41,7 @@ platforms:
       - master
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.40
+        ip: 10.10.0.8
 
   - name: node1
     box: generic/ubuntu2204
@@ -52,7 +52,7 @@ platforms:
       - node
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.41
+        ip: 10.10.0.3
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
@@ -68,7 +68,40 @@ platforms:
       - node
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.42
+        ip: 10.10.0.4
+
+  - name: node3
+    box: generic/rocky9
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
+    interfaces:
+      - network_name: private_network
+        ip: 10.10.0.5
+
+  - name: node4
+    box: generic/rocky9
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
+    interfaces:
+      - network_name: private_network
+        ip: 10.10.0.9
+
+  - name: node5
+    box: generic/rocky9
+    memory: 2048
+    cpus: 2
+    groups:
+      - k3s_cluster
+      - node
+    interfaces:
+      - network_name: private_network
+        ip: 10.10.0.10
 
 provisioner:
   name: ansible

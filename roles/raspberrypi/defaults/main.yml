@@ -3,4 +3,4 @@
 # Possible values:
 #   - present
 #   - absent
-state: present
+state: -absent
