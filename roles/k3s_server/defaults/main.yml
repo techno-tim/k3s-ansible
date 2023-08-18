@@ -1,0 +1,20 @@
+---
+# If you want to explicitly define an interface that ALL control nodes
+# should use to propagate the VIP, define it here. Otherwise, kube-vip
+# will determine the right interface automatically at runtime.
+kube_vip_iface: null
+
+# Name of the master group
+group_name_master: master
+
+# yamllint disable rule:line-length
+server_init_args: >-
+  {% if groups[group_name_master | default('master')] | length > 1 %}
+    {% if ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname'] %}
+      --cluster-init
+    {% else %}
+      --server https://{{ hostvars[groups[group_name_master | default('master')][0]].k3s_node_ip | split(",") | first | ansible.utils.ipwrap }}:6443
+    {% endif %}
+    --token {{ k3s_token }}
+  {% endif %}
+  {{ extra_server_args | default('') }}

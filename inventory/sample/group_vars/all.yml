@@ -55,7 +55,6 @@ metal_lb_mode: "layer2"
 # metal_lb_bgp_peer_address: "192.168.30.1"
 
 # image tag for metal lb
-metal_lb_frr_tag_version: "v7.5.1"
 metal_lb_speaker_tag_version: "v0.13.9"
 metal_lb_controller_tag_version: "v0.13.9"
 
