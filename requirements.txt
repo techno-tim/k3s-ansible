@@ -103,7 +103,7 @@ pluggy==1.0.0
     # via molecule
 pre-commit==2.21.0
     # via -r requirements.in
-pre-commit-hooks==4.4.0
+pre-commit-hooks==4.5.0
     # via -r requirements.in
 pyasn1==0.4.8
     # via
