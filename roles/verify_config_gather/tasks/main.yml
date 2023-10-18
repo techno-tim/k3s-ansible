@@ -1,0 +1,117 @@
+---
+# To be ran on all hosts before role verify_config.
+# Gathers facts and ensures they are set
+
+- name: Set routing4_prefix from regex
+  set_fact:
+    routing4_prefix: "{{ hostvars[inventory_hostname]['ansible_' ~ flannel_iface]['ipv4']['broadcast']
+      | regex_replace('\\.?255', '') }}"
+    routing6_cidr: "{{ hostvars[inventory_hostname]['ansible_' ~ flannel_iface]['ipv6'][0]['address'] }}/{{
+      hostvars[inventory_hostname]['ansible_' ~ flannel_iface]['ipv6'][0]['prefix'] }}"
+
+- name: Check if fact routing4_prefix exists and is not empty
+  assert:
+    that:
+      - routing4_prefix is defined
+      - routing4_prefix is not none
+      - routing4_prefix != ''
+    fail_msg: >-
+      The fact 'routing_4prefix' is not defined, is null, or is empty
+      (based on flannel_iface: {{ flannel_iface }} ipv4 broadcast).
+
+# metal_lb_bgp_peer_address
+- name: Assert that metal_lb_bgp_peer_address starts with routing4_prefix, or is ipv6
+  assert:
+    that:
+      - >
+        metal_lb_bgp_peer_address.startswith(routing4_prefix)
+        or metal_lb_bgp_peer_address.matches('.*:.*')
+    fail_msg: >
+      The fact 'metal_lb_bgp_peer_address' <{{ metal_lb_bgp_peer_address }}>
+      doesn't start with the routing prefix <{{ routing4_prefix }}>
+  when: metal_lb_bgp_peer_address is defined
+
+# metal_lb_ip_range
+- name: >
+    Assert that metal_lb_ip_range (when string) contains <ipv4>-<ipv4>
+    and both ips start with routing4_prefix, skip any containing ':' (ipv6)
+  assert:
+    that:
+      - metal_lb_ip_range | regex_search('^{{ routing4_prefix }}\.[0-9]{1,3}-{{ routing4_prefix }}\.[0-9]{1,3}$|.*:.*')
+    fail_msg: >
+      metal_lb_ip_range <{{ metal_lb_ip_range }}> has one or more ipv4s
+      that don't start with the routing prefix <{{ routing4_prefix }}>
+  when: metal_lb_ip_range is string
+
+- name: Assert that metal_lb_ip_ranges (when list) has only strings that match the regexes in the task above
+  assert:
+    that:
+      - >
+        ( metal_lb_ip_range
+        | select('match', '^{{ routing4_prefix }}\.[0-9]{1,3}-{{ routing4_prefix }}\.[0-9]{1,3}$|.*:.*')
+        | list | length
+        )
+        ==
+        (metal_lb_ip_range
+        | length
+        )
+    fail_msg: >
+      metal_lb_ip_range <{{ metal_lb_ip_range }}> has one or more values with ipv4s
+      that don't start with the routing prefix <{{ routing4_prefix }}>
+  when: metal_lb_ip_range is not string and metal_lb_ip_range is not mapping and metal_lb_ip_range is iterable
+
+# apiserver_endpoint
+- name: Assert that apiserver_endpoint is not in metal_lb_ip_range (when string) using network_in_usable
+  # For /<mask> ranges
+  assert:
+    that:
+      - not ( metal_lb_ip_range | ansible.utils.network_in_usable( apiserver_endpoint ))
+    fail_msg: "apiserver_endpoint {{ apiserver_endpoint }} cannot be in the metal_lb_ip_range {{ metal_lb_ip_range }}"
+    success_msg: >
+      apiserver_endpoint {{ apiserver_endpoint }} is *probably* not in the metal_lb_ip_range {{ metal_lb_ip_range }}
+  when: metal_lb_ip_range is string
+
+- name: >
+    Assert that apiserver_endpoint is not in metal_lb_ip_range (when string)
+    using custom filter netaddr_ip_in_dash_range
+  # For <ip>-<ip> ranges. Not sure this works for ipv6
+  assert:
+    that:
+      - not (apiserver_endpoint | netaddr_ip_in_dash_range(metal_lb_ip_range))
+    fail_msg: "apiserver_endpoint {{ apiserver_endpoint }} cannot be in the metal_lb_ip_range {{ metal_lb_ip_range }}"
+    success_msg: >
+      apiserver_endpoint {{ apiserver_endpoint }} is *probably* not in the metal_lb_ip_range {{ metal_lb_ip_range }}
+  when: metal_lb_ip_range is string
+  # *probably* in the success_msg sections of the prior two tasks because not all cases may work
+
+- name: Assert that apiserver_endpoint is not in metal_lb_ip_ranges (when list) using logic of the task above
+  assert:
+    that:
+      - not (apiserver_endpoint | netaddr_ip_in_dash_range(item))
+    # this probably fails on an ipv6 range ''::1-::2', and on <ipv4or6>/<mask> ranges
+    fail_msg: "apiserver_endpoint {{ apiserver_endpoint }} cannot be in the metal_lb_ip_range item {{ item }}"
+    success_msg: >
+      apiserver_endpoint {{ apiserver_endpoint }} is *probably* not in the metal_lb_ip_range item {{ item }}
+  loop: "{{ metal_lb_ip_range | list }}"
+  when: metal_lb_ip_range is not string   and metal_lb_ip_range is not mapping   and metal_lb_ip_range is iterable
+  # these (when string, when list tasks) smell funny.
+  # It seems there should be a way in one task to handle an object that is a string or a list
+  #    and loop on {{ [metal_lb_ip_range] }}  or {{ metal_lb_ip_range }} respectively
+  # when it is a string it skips each char :(
+  # I tried the select pattern like in the task
+  #    'assert that metal_lb_ip_ranges (when list) has only strings that match the regexes in the task above'
+  #  but it didn't work
+
+- name: Assert that apiserver_endpoint, is ipv4 and starts with routing4_prefix, or is ipv6 and is in routing6_cidr
+  assert:
+    that:
+      - apiserver_endpoint is defined
+      - apiserver_endpoint is not none
+      - >-
+        ( apiserver_endpoint | ansible.utils.ipv4 and apiserver_endpoint.startswith(routing4_prefix) )
+        or
+        ( apiserver_endpoint | ansible.utils.ipv6 and apiserver_endpoint | ansible.utils.ipaddr(routing6_cidr))
+    fail_msg: >
+      The fact 'apiserver_endpoint' <{{ apiserver_endpoint }}>
+      doesn't start with the routing prefix <{{ routing4_prefix }}>
+      or is not in the routing6_cidr <{{ routing6_cidr }}>

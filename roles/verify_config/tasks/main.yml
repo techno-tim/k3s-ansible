@@ -1,0 +1,13 @@
+---
+# To be ran on localhost after verify_config_gather role.
+# Verifies gatherd facts.
+- name: Collect all routing4_prefixes into a list
+  set_fact:
+    all_routing4_prefixes: "{{ groups['all'] | map('extract', hostvars, 'routing4_prefix') | list }}"
+    routing4_prefix: "{{ groups['all'] | map('extract', hostvars, 'routing4_prefix') | list | first }}"
+
+- name: Ensure all hosts have the same routing4_prefix
+  assert:
+    that: all_routing4_prefixes | unique | length == 1
+    fail_msg: "Not all hosts have the same routing4_prefix."
+    success_msg: "Using verified routing prefix {{ routing4_prefix }} across all hosts"

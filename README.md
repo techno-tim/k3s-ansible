@@ -73,6 +73,21 @@ This requires at least k3s version `1.19.1` however the version is configurable 
 
 If needed, you can also edit `inventory/my-cluster/group_vars/all.yml` to match your environment.
 
+#### verify routing prefixes and ip addresses in all.yml
+Ensure that the ip routing prefix matches the the one from the flannel_iface (`eth0` by default) for each host.
+Example `192.168.30` is the default routing prefix, and it is used in the following variables:
+- apiserver_endpoint
+- metal_lb_bgp_peer_address (commented by default)
+- metal_lb_ip_range
+Also Ensure that the apiserver_endpoint is not in the metal_lb_ip_range
+
+For your convience The playbook site.yml verifies the above elements of the config are valid.
+* Optionally to skip these verifications set, in all.yml `verify_config: false`  
+* Optionally to just verify the config Run
+    `ansible-playbook -i inventory/my-cluster/hosts.ini verify_config.yml`
+* Optionally manually recover ip routing prefix based on inet and netmask from
+    `ansible -i inventory/my-cluster/hosts.ini --become -m shell -a 'ifconfig eth0 | grep "inet "' all`
+
 ### ☸️ Create Cluster
 
 Start provisioning of the cluster using the following command:

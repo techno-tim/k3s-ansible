@@ -1,0 +1,14 @@
+---
+- name: Gather config for verify
+  hosts: all
+  gather_facts: true
+  roles:
+    - role: verify_config_gather
+      when: verify_config is not defined or verify_config
+
+- name: Verify config
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - role: verify_config
+      when: verify_config is not defined or verify_config

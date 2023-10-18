@@ -1,4 +1,7 @@
 ---
+- name: Import verify_config playbook
+  ansible.builtin.import_playbook: verify_config.yml
+
 - name: Prepare Proxmox cluster
   hosts: proxmox
   gather_facts: true
