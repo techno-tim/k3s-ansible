@@ -1,0 +1,6 @@
+---
+# Indicates whether custom registries for k3s should be configured
+# Possible values:
+#   - present
+#   - absent
+state: present

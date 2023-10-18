@@ -20,6 +20,9 @@
       become: true
     - role: raspberrypi
       become: true
+    - role: k3s_custom_registries
+      become: true
+      when: custom_registries
 
 - name: Setup k3s servers
   hosts: master
