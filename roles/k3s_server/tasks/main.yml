@@ -17,6 +17,7 @@
 
 - name: Deploy metallb manifest
   include_tasks: metallb.yml
+  when: metal_lb_configure
 
 - name: Init cluster inside the transient k3s-init service
   command:
