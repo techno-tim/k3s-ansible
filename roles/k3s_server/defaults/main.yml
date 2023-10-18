@@ -18,6 +18,3 @@ server_init_args: >-
     --token {{ k3s_token }}
   {% endif %}
   {{ extra_server_args | default('') }}
-
-# Whether to configure MetalLB or not, users should change it in the all.yml
-metal_lb_configure: true

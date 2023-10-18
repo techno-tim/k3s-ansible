@@ -1,7 +1,7 @@
 ---
 - name: Deploy metallb pool
   include_tasks: metallb.yml
-  when: metal_lb_configure
+  tags: metallb
 
 - name: Remove tmp directory used for manifests
   file:
