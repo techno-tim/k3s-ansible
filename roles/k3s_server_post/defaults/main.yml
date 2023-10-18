@@ -4,3 +4,6 @@ metal_lb_available_timeout: 120s
 
 # Name of the master group
 group_name_master: master
+
+# Whether to configure MetalLB or not, users should change it in the all.yml
+metal_lb_configure: true
