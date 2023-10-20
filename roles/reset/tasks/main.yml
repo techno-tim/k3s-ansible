@@ -53,7 +53,7 @@
   with_items:
     - "{{ systemd_dir }}/k3s.service.d"
     - "{{ systemd_dir }}/k3s-node.service.d"
-  when: http_proxy_configure | default(false)
+  when: proxy_env is defined
 
 - name: Reload daemon_reload
   systemd:
