@@ -1,4 +1,6 @@
 .env/
 *.log
 ansible.cfg
-__pycache__
+
+__pycache__/
+*.py[cod]
