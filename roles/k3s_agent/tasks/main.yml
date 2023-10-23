@@ -1,5 +1,9 @@
 ---
 
+- name: Deploy K3s http_proxy conf
+  include_tasks: http_proxy.yml
+  when: proxy_env is defined
+
 - name: Copy K3s service file
   template:
     src: "k3s.service.j2"

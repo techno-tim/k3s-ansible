@@ -122,4 +122,10 @@ custom_registries_yaml: |
         username: yourusername
         password: yourpassword
 
+# Only enable and configure these if you access the internet through a proxy
+# proxy_env:
+#   HTTP_PROXY: "http://proxy.domain.local:3128"
+#   HTTPS_PROXY: "http://proxy.domain.local:3128"
+#   NO_PROXY: "*.domain.local,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+
 verify_config: true
