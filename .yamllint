@@ -7,3 +7,6 @@ rules:
     level: warning
   truthy:
     allowed-values: ['true', 'false', 'yes', 'no']
+
+ignore:
+  - galaxy.yml
