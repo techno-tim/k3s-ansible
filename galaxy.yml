@@ -31,9 +31,6 @@ description: >
 license:
 - Apache-2.0
 
-# The path to the license file for the collection. This path is relative to the root of the collection. This key is
-# mutually exclusive with 'license'
-license_file: ''
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
