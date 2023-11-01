@@ -21,7 +21,10 @@ authors:
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
-description: your collection description
+description: >
+  The easiest way to bootstrap a self-hosted High Availability Kubernetes
+  cluster. A fully automated HA k3s etcd install with kube-vip, MetalLB,
+  and more.
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
