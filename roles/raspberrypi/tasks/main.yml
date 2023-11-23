@@ -33,6 +33,14 @@
     - raspberry_pi|default(false)
     - ansible_facts.lsb.description|default("") is match("Debian.*buster")
 
+- name: Set detected_distribution to Raspbian (ARM64 on Debian Bookworm)
+  set_fact:
+    detected_distribution: Raspbian
+  when:
+    - ansible_facts.architecture is search("aarch64")
+    - raspberry_pi|default(false)
+    - ansible_facts.lsb.description|default("") is match("Debian.*bookworm")
+
 - name: Set detected_distribution_major_version
   set_fact:
     detected_distribution_major_version: "{{ ansible_facts.lsb.major_release }}"
