@@ -6,7 +6,7 @@
 #
 ansible-compat==3.0.1
     # via molecule
-ansible-core==2.15.2
+ansible-core==2.15.4
     # via
     #   -r requirements.in
     #   ansible-compat
@@ -86,7 +86,7 @@ molecule==4.0.4
     #   molecule-vagrant
 molecule-vagrant==1.0.0
     # via -r requirements.in
-netaddr==0.8.0
+netaddr==0.9.0
     # via -r requirements.in
 nodeenv==1.7.0
     # via pre-commit
@@ -103,7 +103,7 @@ pluggy==1.0.0
     # via molecule
 pre-commit==2.21.0
     # via -r requirements.in
-pre-commit-hooks==4.4.0
+pre-commit-hooks==4.5.0
     # via -r requirements.in
 pyasn1==0.4.8
     # via
