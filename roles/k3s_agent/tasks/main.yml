@@ -1,4 +1,13 @@
 ---
+- name: Check if system is PXE-booted
+  command: cat /proc/cmdline
+  register: boot_cmdline
+  changed_when: false
+
+- name: Set fact for PXE-booted system
+  set_fact:
+    is_pxe_booted: "{{ 'root=/dev/nfs' in boot_cmdline.stdout }}"
+  when: boot_cmdline is defined
 
 - name: Deploy K3s http_proxy conf
   include_tasks: http_proxy.yml
