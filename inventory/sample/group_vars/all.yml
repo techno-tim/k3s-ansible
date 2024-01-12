@@ -1,5 +1,5 @@
 ---
-k3s_version: v1.25.12+k3s1
+k3s_version: v1.25.16+k3s4
 # this is the user that has ssh access to these machines
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
@@ -7,8 +7,14 @@ systemd_dir: /etc/systemd/system
 # Set your timezone
 system_timezone: "Your/Timezone"
 
-# interface which will be used for flannel
-flannel_iface: "eth0"
+# node interface which will be used for the container network interface (flannel or calico)
+container_iface: "eth0"
+
+# set use_calico to true to use tigera operator/calico instead of the default CNI flannel
+# install reference: https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico
+use_calico: false
+calico_cidr: "10.52.0.0/16" # pod cidr pool
+calico_tag: "v3.27.0" # calico version tag
 
 # apiserver_endpoint is virtual ip-address which will be configured on each master
 apiserver_endpoint: "192.168.30.222"
@@ -20,23 +26,30 @@ k3s_token: "some-SUPER-DEDEUPER-secret-password"
 # The IP on which the node is reachable in the cluster.
 # Here, a sensible default is provided, you can still override
 # it for each of your hosts, though.
-k3s_node_ip: '{{ ansible_facts[flannel_iface]["ipv4"]["address"] }}'
+k3s_node_ip: '{{ ansible_facts[container_iface]["ipv4"]["address"] }}'
 
 # Disable the taint manually by setting: k3s_master_taint = false
 k3s_master_taint: "{{ true if groups['node'] | default([]) | length >= 1 else false }}"
 
 # these arguments are recommended for servers as well as agents:
 extra_args: >-
-  --flannel-iface={{ flannel_iface }}
+  {{ '--flannel-iface=' + container_iface if not use_calico else '' }}
   --node-ip={{ k3s_node_ip }}
 
 # change these to your liking, the only required are: --disable servicelb, --tls-san {{ apiserver_endpoint }}
+# the contents of the if block is also required if using calico
 extra_server_args: >-
   {{ extra_args }}
   {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
+  {% if use_calico %}
+  --flannel-backend=none
+  --disable-network-policy
+  --cluster-cidr={{ calico_cidr }}
+  {% endif %}
   --tls-san {{ apiserver_endpoint }}
   --disable servicelb
   --disable traefik
+
 extra_agent_args: >-
   {{ extra_args }}
 

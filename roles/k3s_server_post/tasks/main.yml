@@ -1,4 +1,9 @@
 ---
+- name: Deploy calico
+  include_tasks: calico.yml
+  tags: calico
+  when: use_calico == true
+
 - name: Deploy metallb pool
   include_tasks: metallb.yml
   tags: metallb

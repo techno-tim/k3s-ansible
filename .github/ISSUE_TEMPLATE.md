@@ -35,7 +35,7 @@ k3s_version: ""
 ansible_user: NA
 systemd_dir: ""
 
-flannel_iface: ""
+container_iface: ""
 
 apiserver_endpoint: ""
 

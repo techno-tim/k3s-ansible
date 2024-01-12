@@ -6,7 +6,7 @@
       ansible.builtin.set_fact:
         # See:
         # https://github.com/flannel-io/flannel/blob/67d603aaf45ef80f5dd39f43714fc5e6f8a637eb/Documentation/troubleshooting.md#Vagrant
-        flannel_iface: eth1
+        container_iface: eth1
 
         # In this scenario, we have multiple interfaces that the VIP could be
         # broadcasted on. Since we have assigned a dedicated private network
@@ -27,13 +27,13 @@
           - fdad:bad:ba55::1b:0/112
           - 192.168.123.80-192.168.123.90
 
-        # k3s_node_ip is by default set to the IPv4 address of flannel_iface.
+        # k3s_node_ip is by default set to the IPv4 address of container_iface.
         # We want IPv6 addresses here of course, so we just specify them
         # manually below.
         k3s_node_ip: "{{ node_ipv4 }},{{ node_ipv6 }}"
 
     - name: Override host variables (2/2)
-      # Since "extra_args" depends on "k3s_node_ip" and "flannel_iface" we have
+      # Since "extra_args" depends on "k3s_node_ip" and "container_iface" we have
       # to set this AFTER overriding the both of them.
       ansible.builtin.set_fact:
         # A few extra server args are necessary:

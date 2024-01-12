@@ -1,0 +1,28 @@
+# This section includes base Calico installation configuration.
+# For more information, see: https://docs.tigera.io/calico/latest/reference/installation/api#operator.tigera.io/v1.Installation
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  # Configures Calico networking.
+  calicoNetwork:
+    # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: {{ calico_blockSize if calico_blockSize is defined else '26' }}
+      cidr: {{ calico_cidr if calico_cidr is defined else '10.52.0.0/16' }}
+      encapsulation: {{ calico_encapsulation if calico_encapsulation is defined else 'VXLANCrossSubnet' }}
+      natOutgoing: {{ calico_natOutgoing if calico_natOutgoing is defined else 'Enabled' }}
+      nodeSelector: {{ calico_nodeSelector if calico_nodeSelector is defined else 'all()' }}
+    nodeAddressAutodetectionV4:
+      interface: {{ container_iface if container_iface is defined else 'eth0' }}
+
+---
+
+# This section configures the Calico API server.
+# For more information, see: https://docs.tigera.io/calico/latest/reference/installation/api#operator.tigera.io/v1.APIServer
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
