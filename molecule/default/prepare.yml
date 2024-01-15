@@ -17,6 +17,6 @@
       # and security needs.
       ansible.builtin.systemd:
         name: firewalld
-        enabled: no
+        enabled: false
         state: stopped
       become: true
