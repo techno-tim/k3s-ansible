@@ -17,13 +17,14 @@
   when:
     grep_cpuinfo_raspberrypi.rc == 0 or grep_device_tree_model_raspberrypi.rc == 0
 
-- name: Set detected_distribution to Raspbian (ARM64 on Raspbian, Debian Buster or Bookworm)
+- name: Set detected_distribution to Raspbian (ARM64 on Raspbian, Debian Buster/Bullseye/Bookworm)
   set_fact:
     detected_distribution: Raspbian
   vars:
     allowed_descriptions:
       - "[Rr]aspbian.*"
       - "Debian.*buster"
+      - "Debian.*bullseye"
       - "Debian.*bookworm"
   when:
     - ansible_facts.architecture is search("aarch64")
