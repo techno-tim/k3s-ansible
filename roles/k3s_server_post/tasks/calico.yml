@@ -73,12 +73,12 @@
       command: >-
         {% if item.type == 'daemonset' %}
         k3s kubectl wait pods
-        --namespace='calico-system'
+        --namespace='{{ item.namespace }}'
         --selector={{ item.selector }}
         --for=condition=Ready
         {% else %}
         k3s kubectl wait {{ item.type }}/{{ item.name }}
-        --namespace='calico-system'
+        --namespace='{{ item.namespace }}'
         --for=condition=Available
         {% endif %}
         --timeout=7s
@@ -88,10 +88,12 @@
       retries: 30
       delay: 7
       with_items:
-        - { name: calico-typha, type: deployment }
-        - { name: calico-kube-controllers, type: deployment }
-        - { name: csi-node-driver, type: daemonset, selector: 'k8s-app=csi-node-driver' }
-        - { name: calico-node, type: daemonset, selector: 'k8s-app=calico-node' }
+        - { name: calico-typha, type: deployment, namespace: calico-system }
+        - { name: calico-kube-controllers, type: deployment, namespace: calico-system }
+        - { name: csi-node-driver, type: daemonset, selector: 'k8s-app=csi-node-driver', namespace: calico-system }
+        - { name: calico-node, type: daemonset, selector: 'k8s-app=calico-node', namespace: calico-system }
+        - { name: calico-apiserver, type: deployment, selector: 'k8s-app=calico-apiserver', namespace: calico-apiserver }
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
   when: ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname']
+  run_once: true # stops "skipped" log spam
