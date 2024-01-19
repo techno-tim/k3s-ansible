@@ -95,5 +95,17 @@
         - { name: calico-apiserver, type: deployment, selector: 'k8s-app=calico-apiserver', namespace: calico-apiserver }
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
+
+    - name: Patch Felix configuration for eBPF mode
+      ansible.builtin.command:
+        cmd: >
+          kubectl patch felixconfiguration default
+          --type='merge' 
+          --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
+      register: patch_result
+      changed_when: "'felixconfiguration.projectcalico.org/default patched' in patch_result.stdout"
+      failed_when: "'Error' in patch_result.stderr"
+      when: calico_ebpf == true
+
   when: ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname']
   run_once: true # stops "skipped" log spam

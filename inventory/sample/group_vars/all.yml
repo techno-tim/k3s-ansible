@@ -13,6 +13,7 @@ container_iface: "eth0"
 # set use_calico to true to use tigera operator/calico instead of the default CNI flannel
 # install reference: https://docs.tigera.io/calico/latest/getting-started/kubernetes/k3s/multi-node-install#install-calico
 use_calico: false
+calico_ebpf: false # use eBPF dataplane instead of iptables https://docs.tigera.io/calico/latest/operations/ebpf
 calico_cidr: "10.52.0.0/16" # pod cidr pool
 calico_tag: "v3.27.0" # calico version tag
 
