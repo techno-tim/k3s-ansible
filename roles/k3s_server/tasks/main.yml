@@ -6,6 +6,13 @@
     state: stopped
   failed_when: false
 
+# k3s-init won't work if the port is already in use
+- name: Stop k3s
+  systemd:
+    name: k3s
+    state: stopped
+  failed_when: false
+
 - name: Clean previous runs of k3s-init  # noqa command-instead-of-module
   # The systemd module does not support "reset-failed", so we need to resort to command.
   command: systemctl reset-failed k3s-init
@@ -29,7 +36,7 @@
                       -p Restart=on-failure \
                       --unit=k3s-init \
                       k3s server {{ server_init_args }}"
-    creates: "{{ systemd_dir }}/k3s.service"
+    creates: "{{ systemd_dir }}/k3s-init.service"
 
 - name: Verification
   when: not ansible_check_mode
