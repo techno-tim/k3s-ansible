@@ -27,3 +27,15 @@ kind: APIServer
 metadata:
   name: default
 spec: {}
+
+{% if calico_ebpf %}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kubernetes-services-endpoint
+  namespace: tigera-operator
+data:
+  KUBERNETES_SERVICE_HOST: '{{ apiserver_endpoint }}'
+  KUBERNETES_SERVICE_PORT: '6443'
+{% endif %}
