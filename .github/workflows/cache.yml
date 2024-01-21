@@ -29,6 +29,12 @@ jobs:
           restore-keys: |
             ansible-
 
+      - name: Install dependencies
+        run: |
+          echo "::group::Install Ansible role requirements from collections/requirements.yml"
+          ansible-galaxy install -r collections/requirements.yml
+          echo "::endgroup::"
+
       - name: Configure Homebrew cache
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
