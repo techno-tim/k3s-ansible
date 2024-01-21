@@ -38,15 +38,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Cache Vagrant boxes
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
-        with:
-          path: |
-            ~/.vagrant.d/boxes
-          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
-          restore-keys: |
-            vagrant-boxes
-
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
         # On the other hand, this means that the cache contents should be
