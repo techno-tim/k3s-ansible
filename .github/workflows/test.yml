@@ -30,13 +30,13 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
-      - name: Cache pip
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+      - name: Restore pip
+        uses: actions/cache/restore@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+        id: cache
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: ${{ runner.os }}-pip-
+          fail-on-cache-miss: true
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
