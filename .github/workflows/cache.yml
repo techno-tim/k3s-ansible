@@ -15,6 +15,21 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Update Homebrew
+        run: |
+          brew update --preinstall
+          echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
+      - name: Configure Homebrew cache
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          path: |
+            ~/Library/Caches/Homebrew
+          key: brew-${{ hashFiles('.github/brew-formulae') }}
+          restore-keys: brew-
+      - name: Install Homebrew dependencies
+        run: |
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
+
       - name: Cache Vagrant boxes
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
@@ -24,20 +39,8 @@ jobs:
           restore-keys: |
             vagrant-boxes
 
-      - name: Update Homebrew
-        run: |
-          brew update --preinstall
-          echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
-      - name: Configure Homebrew cache
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        with:
-          path: |
-            ~/Library/Caches/Homebrew/virtualbox--*
-            ~/Library/Caches/Homebrew/vagrant--*
-            ~/Library/Caches/Homebrew/downloads/*--virtualbox-*
-            ~/Library/Caches/Homebrew/downloads/*--vagrant-*
-          key: brew-${{ hashFiles('.github/brew-formulae') }}
-          restore-keys: brew-
-      - name: Install Homebrew dependencies
-        run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
+      - name: Download Vagrant boxes for all scenarios
+        # To save some cache space, all scenarios share the same cache key.
+        # On the other hand, this means that the cache contents should be
+        # the same across all scenarios. This step ensures that.
+        run: ./.github/download-boxes.sh
