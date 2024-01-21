@@ -50,14 +50,15 @@ jobs:
             ~/Library/Caches/Homebrew
           key: brew-${{ hashFiles('.github/brew-formulae') }}
           restore-keys: brew-
-      - name: Install Homebrew dependencies
-        run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
 
       - name: Update Homebrew
         run: |
           brew update --preinstall
           echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
+
+      - name: Install Homebrew dependencies
+        run: |
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
 
       - name: Cache Vagrant boxes
         id: cache-vagrant
