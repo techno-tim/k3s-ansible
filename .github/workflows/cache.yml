@@ -45,6 +45,7 @@ jobs:
 
       - name: Configure Homebrew cache
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        id: cache-homebrew
         with:
           path: |
             ~/Library/Caches/Homebrew
@@ -52,11 +53,13 @@ jobs:
           restore-keys: brew-
 
       - name: Update Homebrew
+        if: steps.cache-homebrew.outputs.cache-hit != 'true' # only run if false since this is just a cache step
         run: |
           brew update --preinstall
           echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
 
       - name: Install Homebrew dependencies
+        if: steps.cache-homebrew.outputs.cache-hit != 'true' # only run if false since this is just a cache step
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
 
