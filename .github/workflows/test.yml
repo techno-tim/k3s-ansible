@@ -41,7 +41,7 @@ jobs:
 
       - name: Install Homebrew dependencies
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew install virtualbox vagrant
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask virtualbox vagrant vagrant-manager
 
       - name: Restore vagrant Boxes cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
