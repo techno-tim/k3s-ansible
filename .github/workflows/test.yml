@@ -30,14 +30,6 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
-      - name: Restore pip
-        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        id: cache
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-
-          fail-on-cache-miss: true
-
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
         # On the other hand, this means that the cache contents should be
@@ -46,9 +38,11 @@ jobs:
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
+        id: pip-cache
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
+      - run: echo '${{ steps.pip-cache.outputs.cache-hit }}' # true if cache-hit occurred on the primary key
 
       - name: Install dependencies
         run: |
