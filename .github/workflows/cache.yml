@@ -27,7 +27,7 @@ jobs:
       - name: Update Homebrew
         run: |
           brew update --preinstall
-          ls -l  "$(brew --repository)/Library/Taps/homebrew/homebrew-core/Formula/"
+          ls -l  "$(brew --repository)/Library"
           cat "" > .github/brew-formulae
       - name: Configure Homebrew cache
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
