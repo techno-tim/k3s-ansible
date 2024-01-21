@@ -22,6 +22,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Restore Ansible cache
+        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          path: ~/.ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
+
       - name: Restore Homebrew cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
@@ -32,12 +38,6 @@ jobs:
         run: |
           brew update --preinstall
           echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
-
-      - name: Restore Ansible cache
-        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        with:
-          path: ~/.ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
 
       - name: Install Homebrew dependencies
         run: |
