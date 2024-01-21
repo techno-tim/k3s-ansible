@@ -47,25 +47,6 @@ jobs:
           ansible-galaxy install -r collections/requirements.yml
           echo "::endgroup::"
 
-      - name: Configure Homebrew cache
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        id: cache-homebrew
-        with:
-          path: |
-            ~/Library/Caches/Homebrew
-          key: brew-${{ hashFiles('./Brewfile') }}
-          restore-keys: brew-
-
-      - name: Update Homebrew
-        if: steps.cache-homebrew.outputs.cache-hit != 'true' # only run if false since this is just a cache step
-        run: |
-          brew update --preinstall
-
-      - name: Install Homebrew dependencies
-        if: steps.cache-homebrew.outputs.cache-hit != 'true' # only run if false since this is just a cache step
-        run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file ./Brewfile
-
       - name: Cache Vagrant boxes
         id: cache-vagrant
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
@@ -76,6 +57,27 @@ jobs:
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
           restore-keys: |
             vagrant-boxes
+
+      - name: Configure Homebrew cache
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        id: cache-homebrew
+        with:
+          path: |
+            ~/Library/Caches/Homebrew
+          key: brew-${{ hashFiles('./Brewfile') }}
+          restore-keys: brew-
+
+      - name: Update Homebrew
+        if: | # only run if false since this is just a cache step
+          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+        run: |
+          brew update --preinstall
+
+      - name: Install Homebrew dependencies
+        if: | # only run if false since this is just a cache step
+          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+        run: |
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file ./Brewfile
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
