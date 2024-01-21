@@ -43,7 +43,6 @@ jobs:
           path: ~/.vagrant.d/boxes
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
 
-
       - name: Configure VirtualBox
         run: |-
           sudo mkdir -p /etc/vbox
