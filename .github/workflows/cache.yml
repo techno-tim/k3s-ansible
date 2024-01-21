@@ -60,8 +60,10 @@ jobs:
           echo ${{ hashFiles ('"$(brew --repository)"') }} > .github/brew-formulae
 
       - name: Cache Vagrant boxes
+        id: cache-vagrant
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
+          lookup-only: true #if it exists, we don't need to restore and can skip the next step
           path: |
             ~/.vagrant.d/boxes
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
@@ -72,4 +74,5 @@ jobs:
         # To save some cache space, all scenarios share the same cache key.
         # On the other hand, this means that the cache contents should be
         # the same across all scenarios. This step ensures that.
+        if: steps.cache-vagrant.outputs.cache-hit != 'true' # only run if false since this is just a cache step
         run: ./.github/download-boxes.sh
