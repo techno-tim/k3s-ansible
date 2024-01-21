@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/lint.yml
   cache:
     uses: ./.github/workflows/cache.yml
+    needs: [lint]
   test:
     uses: ./.github/workflows/test.yml
-    needs: [lint]
+    needs: [lint,cache]
