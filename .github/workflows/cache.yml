@@ -77,7 +77,7 @@ jobs:
         if: | # only run if false since this is just a cache step
           steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --file ./Brewfile
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --cache --file ./Brewfile
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
