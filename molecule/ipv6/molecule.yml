@@ -7,7 +7,7 @@ platforms:
   - name: control1
     box: generic/ubuntu2204
     memory: 1024
-    cpus: 1
+    cpus: 2
     groups:
       - k3s_cluster
       - master
@@ -23,7 +23,7 @@ platforms:
   - name: control2
     box: generic/ubuntu2204
     memory: 1024
-    cpus: 1
+    cpus: 2
     groups:
       - k3s_cluster
       - master
@@ -39,7 +39,7 @@ platforms:
   - name: node1
     box: generic/ubuntu2204
     memory: 1024
-    cpus: 1
+    cpus: 2
     groups:
       - k3s_cluster
       - node
