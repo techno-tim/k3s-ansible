@@ -1,5 +1,5 @@
 tap "homebrew/bundle"
 tap "homebrew/cask-versions"
-cask "virtualbox"
+cask "virtualbox6"
 cask "vagrant"
 cask "vagrant-manager"
