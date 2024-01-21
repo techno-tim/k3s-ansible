@@ -58,13 +58,6 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
-        id: pip-cache
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip' # caching pip dependencies
-
       - name: Install dependencies
         run: |
           echo "::group::Upgrade pip"
@@ -89,7 +82,7 @@ jobs:
         env:
           ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
           ANSIBLE_SSH_RETRIES: 4
-          ANSIBLE_TIMEOUT: 60
+          ANSIBLE_TIMEOUT: 120
           PY_COLORS: 1
           ANSIBLE_FORCE_COLOR: 1
 

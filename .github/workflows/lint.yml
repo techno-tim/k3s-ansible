@@ -21,13 +21,11 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
-      - name: Cache Ansible
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+      - name: Restore Ansible cache
+        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
           path: ~/.ansible/collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
 
       - name: Install dependencies
         run: |
