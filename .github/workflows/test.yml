@@ -39,7 +39,6 @@ jobs:
         with:
           path: |
             ~/Library/Caches/Homebrew
-            /usr/local/Caskroom
           key: brew-${{ hashFiles('./Brewfile') }}
 
       - name: Update Homebrew
