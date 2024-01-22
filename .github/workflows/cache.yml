@@ -5,7 +5,7 @@ on:
 jobs:
   molecule:
     name: cache
-    runs-on: macos-13
+    runs-on: macos-12
     env:
       PYTHON_VERSION: "3.11"
 
@@ -58,26 +58,26 @@ jobs:
           restore-keys: |
             vagrant-boxes
 
-      - name: Configure Homebrew cache
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        id: cache-homebrew
-        with:
-          path: |
-            ~/Library/Caches/Homebrew
-          key: brew-${{ hashFiles('./Brewfile') }}
-          restore-keys: brew-
+      # - name: Configure Homebrew cache
+      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+      #   id: cache-homebrew
+      #   with:
+      #     path: |
+      #       ~/Library/Caches/Homebrew
+      #     key: brew-${{ hashFiles('./Brewfile') }}
+      #     restore-keys: brew-
 
-      - name: Update Homebrew
-        if: | # only run if false since this is just a cache step
-          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
-        run: |
-          brew update --preinstall
+      # - name: Update Homebrew
+      #   if: | # only run if false since this is just a cache step
+      #     steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+      #   run: |
+      #     brew update --preinstall
 
-      - name: Install Homebrew dependencies
-        if: | # only run if false since this is just a cache step
-          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
-        run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
+      # - name: Install Homebrew dependencies
+      #   if: | # only run if false since this is just a cache step
+      #     steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+      #   run: |
+      #     env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
