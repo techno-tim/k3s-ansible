@@ -6,8 +6,8 @@ driver:
 platforms:
   - name: control1
     box: generic/ubuntu2204
-    memory: 2048
-    cpus: 2
+    memory: 1024
+    cpu: 1
     groups:
       - k3s_cluster
       - master
@@ -22,8 +22,8 @@ platforms:
 
   - name: control2
     box: generic/ubuntu2204
-    memory: 2048
-    cpus: 2
+    memory: 1024
+    cpu: 1
     groups:
       - k3s_cluster
       - master
@@ -38,8 +38,8 @@ platforms:
 
   - name: node1
     box: generic/ubuntu2204
-    memory: 2048
-    cpus: 2
+    memory: 1024
+    cpu: 1
     groups:
       - k3s_cluster
       - node
