@@ -37,7 +37,9 @@ jobs:
       - name: Restore Homebrew cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
-          path: ~/Library/Caches/Homebrew
+          path: |
+            ~/Library/Caches/Homebrew
+            /usr/local/Caskroom
           key: brew-${{ hashFiles('./Brewfile') }}
 
       - name: Update Homebrew
