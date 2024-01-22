@@ -26,7 +26,7 @@ jobs:
         id: cache-ansible
         with:
           path: ~/.ansible/collections
-          key: ansible-${{ hashFiles('collections/requirements.txt') }}
+          key: ansible-${{ hashFiles('collections/requirements.yml') }}
           restore-keys: |
             ansible-
 
