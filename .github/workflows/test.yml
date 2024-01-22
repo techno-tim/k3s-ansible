@@ -5,7 +5,7 @@ on:
 jobs:
   molecule:
     name: Molecule
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
       matrix:
         scenario:
@@ -22,25 +22,19 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Restore Ansible cache
+      - name: Restore Homebrew cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
-          path: ~/.ansible/collections
-          key: ansible-${{ hashFiles('collections/requirements.yml') }}
+          path: ~/Library/Caches/Homebrew
+          key: brew-${{ hashFiles('./Brewfile') }}
 
-      # - name: Restore Homebrew cache
-      #   uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   with:
-      #     path: ~/Library/Caches/Homebrew
-      #     key: brew-${{ hashFiles('./Brewfile') }}
+      - name: Update Homebrew
+        run: |
+          brew update --preinstall
 
-      # - name: Update Homebrew
-      #   run: |
-      #     brew update --preinstall
-
-      # - name: Install Homebrew dependencies
-      #   run: |
-      #     env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
+      - name: Install Homebrew dependencies
+        run: |
+          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
 
       - name: Restore vagrant Boxes cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
@@ -57,9 +51,6 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
-      - name: Add Vagrant Boxes
-        run: ./.github/add-boxes.sh
-
       - name: Install dependencies
         run: |
           echo "::group::Upgrade pip"
@@ -68,10 +59,6 @@ jobs:
 
           echo "::group::Install Python requirements from requirements.txt"
           python3 -m pip install -r requirements.txt
-          echo "::endgroup::"
-
-          echo "::group::Install Ansible role requirements from collections/requirements.yml"
-          ansible-galaxy install -r collections/requirements.yml
           echo "::endgroup::"
 
       - name: Test with molecule
