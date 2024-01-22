@@ -73,7 +73,7 @@ jobs:
           path: ~/.ansible/collections
           key: ansible-${{ hashFiles('collections/requirements.yml') }}
           restore-keys: |
-            ${{ runner.os }}-ansible-
+            ansible-
 
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
