@@ -57,6 +57,9 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
+      - name: Add Vagrant Boxes
+        run: ./.github/download-boxes.sh
+
       - name: Install dependencies
         run: |
           echo "::group::Upgrade pip"

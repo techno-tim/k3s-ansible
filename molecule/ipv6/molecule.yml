@@ -53,6 +53,8 @@ platforms:
       ssh.password: "vagrant"
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_VERBOSITY: 3
   playbooks:
     converge: ../resources/converge.yml
     side_effect: ../resources/reset.yml
