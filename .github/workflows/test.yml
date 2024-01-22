@@ -58,7 +58,7 @@ jobs:
           EOF
 
       - name: Add Vagrant Boxes
-        run: ./.github/download-boxes.sh
+        run: ./.github/add-boxes.sh
 
       - name: Install dependencies
         run: |
