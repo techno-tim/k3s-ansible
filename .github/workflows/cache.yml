@@ -69,7 +69,7 @@ jobs:
 
       - name: Update Homebrew
         if: | # only run if false since this is just a cache step
-          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-vagrant.outputs.cache-hit != 'true'
         run: |
           brew update --preinstall
 
