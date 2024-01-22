@@ -45,6 +45,7 @@
     - /var/lib/rancher/k3s
     - /var/lib/rancher/
     - /var/lib/cni/
+    - /etc/cni/net.d
 
 - name: Remove K3s http_proxy files
   file:
