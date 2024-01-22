@@ -74,8 +74,8 @@ jobs:
           brew update --preinstall
 
       - name: Install Homebrew dependencies
-        if: | # only run if false since this is just a cache step
-          steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
+        # if: | # only run if false since this is just a cache step
+        #   steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-homebrew.outputs.cache-hit != 'true'
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
 
