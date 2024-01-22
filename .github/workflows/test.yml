@@ -61,6 +61,10 @@ jobs:
           python3 -m pip install -r requirements.txt
           echo "::endgroup::"
 
+          echo "::group::Install Ansible role requirements from collections/requirements.yml"
+          ansible-galaxy install -r collections/requirements.yml
+          echo "::endgroup::"
+
       - name: Test with molecule
         run: molecule test --scenario-name ${{ matrix.scenario }}
         timeout-minutes: 90
