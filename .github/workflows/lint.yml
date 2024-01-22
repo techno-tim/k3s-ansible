@@ -46,7 +46,7 @@ jobs:
 
   ensure-pinned-actions:
     name: Ensure SHA Pinned Actions
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     steps:
       - name: Checkout code
         uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v3 2.5.0
