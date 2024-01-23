@@ -78,6 +78,8 @@ jobs:
           steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-cache-vagrant.outputs.cache-hit != 'true'
         run: |
           env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
+          vagrant --version
+          virtualbox --version
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
