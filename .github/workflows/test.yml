@@ -22,11 +22,18 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Restore Ansible cache
-        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        with:
-          path: ~/.ansible/collections
-          key: ansible-${{ hashFiles('collections/requirements.yml') }}
+      # - name: Restore Ansible cache
+      #   uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+      #   with:
+      #     path: ~/.ansible/collections
+      #     key: ansible-${{ hashFiles('collections/requirements.yml') }}
+      - name: Configure VirtualBox
+        run: |-
+          sudo mkdir -p /etc/vbox
+          cat <<EOF | sudo tee -a /etc/vbox/networks.conf > /dev/null
+          * 192.168.30.0/24
+          * fdad:bad:ba55::/64
+          EOF
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
@@ -56,14 +63,6 @@ jobs:
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
           fail-on-cache-miss: true
 
-      - name: Configure VirtualBox
-        run: |-
-          sudo mkdir -p /etc/vbox
-          cat <<EOF | sudo tee -a /etc/vbox/networks.conf > /dev/null
-          * 192.168.30.0/24
-          * fdad:bad:ba55::/64
-          EOF
-
       - name: Install dependencies
         run: |
           echo "::group::Upgrade pip"
@@ -72,10 +71,6 @@ jobs:
 
           echo "::group::Install Python requirements from requirements.txt"
           python3 -m pip install -r requirements.txt
-          echo "::endgroup::"
-
-          echo "::group::Install Ansible role requirements from collections/requirements.yml"
-          ansible-galaxy install -r collections/requirements.yml
           echo "::endgroup::"
 
       - name: Test with molecule

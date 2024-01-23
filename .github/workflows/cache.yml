@@ -21,14 +21,14 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
-      - name: Cache Ansible
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        id: cache-ansible
-        with:
-          path: ~/.ansible/collections
-          key: ansible-${{ hashFiles('collections/requirements.yml') }}
-          restore-keys: |
-            ansible-
+      # - name: Cache Ansible
+      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+      #   id: cache-ansible
+      #   with:
+      #     path: ~/.ansible/collections
+      #     key: ansible-${{ hashFiles('collections/requirements.yml') }}
+      #     restore-keys: |
+      #       ansible-
 
       - name: Install dependencies
         run: |
@@ -40,12 +40,12 @@ jobs:
           python3 -m pip install -r requirements.txt
           echo "::endgroup::"
 
-      - name: Install ansible dependencies
-        if: steps.cache-ansible.outputs.cache-hit != 'true' # only run if false since this is just a cache step
-        run: |
-          echo "::group::Install Ansible role requirements from collections/requirements.yml"
-          ansible-galaxy install -r collections/requirements.yml
-          echo "::endgroup::"
+      # - name: Install ansible dependencies
+      #   if: steps.cache-ansible.outputs.cache-hit != 'true' # only run if false since this is just a cache step
+      #   run: |
+      #     echo "::group::Install Ansible role requirements from collections/requirements.yml"
+      #     ansible-galaxy install -r collections/requirements.yml
+      #     echo "::endgroup::"
 
       - name: Cache Vagrant boxes
         id: cache-vagrant
