@@ -5,7 +5,7 @@ on:
 jobs:
   molecule:
     name: Molecule
-    runs-on: ubuntu-large-runner
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         scenario:
