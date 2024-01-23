@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
   options:
-    requirements-file: ../collections/requirements.yml
+    requirements-file: ../../collections/requirements.yml
 driver:
   name: vagrant
 platforms:
