@@ -8,7 +8,7 @@ on:
     paths-ignore:
       - '**/README.md'
 jobs:
-  cache:
+  pre:
     uses: ./.github/workflows/cache.yml
   lint:
     uses: ./.github/workflows/lint.yml

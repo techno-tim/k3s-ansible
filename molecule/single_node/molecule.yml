@@ -1,13 +1,15 @@
 ---
 dependency:
   name: galaxy
+  options:
+    requirements-file: ../collections/requirements.yml
 driver:
   name: vagrant
 platforms:
   - name: control1
     box: generic/ubuntu2204
     memory: 512
-    cpus: 2
+    cpus: 1
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
