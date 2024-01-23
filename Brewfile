@@ -1,5 +1,7 @@
 tap "homebrew/bundle"
-tap "homebrew/cask-versions"
+tap "hashicorp/tap"
+
+brew "hashicorp/tap/hashicorp-vagrant"
 
 cask "virtualbox"
 cask "vagrant"
