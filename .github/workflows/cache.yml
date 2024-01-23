@@ -47,16 +47,16 @@ jobs:
       #     ansible-galaxy install -r collections/requirements.yml
       #     echo "::endgroup::"
 
-      # - name: Cache Vagrant boxes
-      #   id: cache-vagrant
-      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   with:
-      #     lookup-only: true #if it exists, we don't need to restore and can skip the next step
-      #     path: |
-      #       ~/.vagrant.d/boxes
-      #     key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
-      #     restore-keys: |
-      #       vagrant-boxes
+      - name: Cache Vagrant boxes
+        id: cache-vagrant
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          lookup-only: true #if it exists, we don't need to restore and can skip the next step
+          path: |
+            ~/.vagrant.d/boxes
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
+          restore-keys: |
+            vagrant-boxes
 
       - name: Configure Homebrew cache
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
@@ -81,9 +81,11 @@ jobs:
           vagrant --version
           vboxmanage --version
 
-      # - name: Download Vagrant boxes for all scenarios
-      #   # To save some cache space, all scenarios share the same cache key.
-      #   # On the other hand, this means that the cache contents should be
-      #   # the same across all scenarios. This step ensures that.
-      #   if: steps.cache-vagrant.outputs.cache-hit != 'true' # only run if false since this is just a cache step
-      #   run: ./.github/download-boxes.sh
+      - name: Download Vagrant boxes for all scenarios
+        # To save some cache space, all scenarios share the same cache key.
+        # On the other hand, this means that the cache contents should be
+        # the same across all scenarios. This step ensures that.
+        if: steps.cache-vagrant.outputs.cache-hit != 'true' # only run if false since this is just a cache step
+        run: |
+          ./.github/download-boxes.sh
+          vagrant box list

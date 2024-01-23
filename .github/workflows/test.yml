@@ -58,29 +58,12 @@ jobs:
           vagrant --version
           vboxmanage --version
 
-      # - name: Cache Vagrant boxes
-      #   id: cache-vagrant
-      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   with:
-      #     path: |
-      #       ~/.vagrant.d/boxes
-      #     key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
-      #     restore-keys: |
-      #       vagrant-boxes
-
-      - name: Download Vagrant boxes for all scenarios
-        # To save some cache space, all scenarios share the same cache key.
-        # On the other hand, this means that the cache contents should be
-        # the same across all scenarios. This step ensures that.
-        run: ./.github/download-boxes.sh
-
-
-      # - name: Restore vagrant Boxes cache
-      #   uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   with:
-      #     path: ~/.vagrant.d/boxes
-      #     key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
-      #     fail-on-cache-miss: true
+      - name: Restore vagrant Boxes cache
+        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          path: ~/.vagrant.d/boxes
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
+          fail-on-cache-miss: true
 
       - name: Install dependencies
         run: |
