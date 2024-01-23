@@ -5,7 +5,7 @@ on:
 jobs:
   molecule:
     name: Molecule
-    runs-on: macos-12
+    runs-on: ubuntu-large-runner
     strategy:
       matrix:
         scenario:
@@ -41,22 +41,28 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
-      - name: Restore Homebrew cache
-        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-        with:
-          path: |
-            ~/Library/Caches/Homebrew
-          key: brew-${{ hashFiles('./Brewfile') }}
+      # - name: Restore Homebrew cache
+      #   uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+      #   with:
+      #     path: |
+      #       ~/Library/Caches/Homebrew
+      #     key: brew-${{ hashFiles('./Brewfile') }}
 
-      - name: Update Homebrew
-        run: |
-          brew update --preinstall
+      # - name: Update Homebrew
+      #   run: |
+      #     brew update --preinstall
 
-      - name: Install Homebrew dependencies
+      # - name: Install Homebrew dependencies
+      #   run: |
+      #     env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
+      #     vagrant --version
+      #     vboxmanage --version
+
+      - name: install apt packages
         run: |
-          env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
-          vagrant --version
-          vboxmanage --version
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt -y install vagrant virtualbox
 
       - name: Restore vagrant Boxes cache
         uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
