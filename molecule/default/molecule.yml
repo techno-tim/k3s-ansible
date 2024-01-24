@@ -9,8 +9,8 @@ platforms:
 
   - name: control1
     box: generic/ubuntu2204
-    memory: 512
-    cpus: 1
+    memory: 4096
+    cpus: 4
     groups:
       - k3s_cluster
       - master
@@ -25,8 +25,8 @@ platforms:
 
   - name: control2
     box: generic/debian11
-    memory: 512
-    cpus: 1
+    memory: 4096
+    cpus: 4
     groups:
       - k3s_cluster
       - master
@@ -36,8 +36,8 @@ platforms:
 
   - name: control3
     box: generic/rocky9
-    memory: 512
-    cpus: 1
+    memory: 4096
+    cpus: 4
     groups:
       - k3s_cluster
       - master
@@ -47,8 +47,8 @@ platforms:
 
   - name: node1
     box: generic/ubuntu2204
-    memory: 512
-    cpus: 1
+    memory: 4096
+    cpus: 4
     groups:
       - k3s_cluster
       - node
@@ -63,8 +63,8 @@ platforms:
 
   - name: node2
     box: generic/rocky9
-    memory: 512
-    cpus: 1
+    memory: 4096
+    cpus: 4
     groups:
       - k3s_cluster
       - node

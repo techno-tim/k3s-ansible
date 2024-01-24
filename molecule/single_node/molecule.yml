@@ -8,8 +8,8 @@ driver:
 platforms:
   - name: control1
     box: generic/ubuntu2204
-    memory: 512
-    cpus: 1
+    memory: 8192
+    cpus: 8
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
