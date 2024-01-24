@@ -30,15 +30,15 @@ jobs:
       #     restore-keys: |
       #       ansible-
 
-      - name: Install dependencies
-        run: |
-          echo "::group::Upgrade pip"
-          python3 -m pip install --upgrade pip
-          echo "::endgroup::"
+      # - name: Install dependencies
+      #   run: |
+      #     echo "::group::Upgrade pip"
+      #     python3 -m pip install --upgrade pip
+      #     echo "::endgroup::"
 
-          echo "::group::Install Python requirements from requirements.txt"
-          python3 -m pip install -r requirements.txt
-          echo "::endgroup::"
+      #     echo "::group::Install Python requirements from requirements.txt"
+      #     python3 -m pip install -r requirements.txt
+      #     echo "::endgroup::"
 
       # - name: Install ansible dependencies
       #   if: steps.cache-ansible.outputs.cache-hit != 'true' # only run if false since this is just a cache step
@@ -58,11 +58,11 @@ jobs:
           restore-keys: |
             vagrant-boxes
 
-      - name: install apt packages
-        run: |
-          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-          sudo apt update && sudo apt -y install vagrant virtualbox
+      # - name: install apt packages
+      #   run: |
+      #     wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      #     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+      #     sudo apt update && sudo apt -y install vagrant virtualbox
 
 
       # - name: Configure Homebrew cache
