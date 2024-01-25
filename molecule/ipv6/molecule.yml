@@ -6,7 +6,7 @@ driver:
 platforms:
   - name: control1
     box: generic/ubuntu2204
-    memory: 4096
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -22,7 +22,7 @@ platforms:
 
   - name: control2
     box: generic/ubuntu2204
-    memory: 4096
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -38,7 +38,7 @@ platforms:
 
   - name: node1
     box: generic/ubuntu2204
-    memory: 4096
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
