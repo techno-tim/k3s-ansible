@@ -5,7 +5,7 @@ on:
 jobs:
   pre-commit-ci:
     name: Pre-Commit
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       PYTHON_VERSION: "3.11"
 
