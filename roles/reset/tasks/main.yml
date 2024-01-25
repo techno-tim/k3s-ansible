@@ -3,7 +3,7 @@
   systemd:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   failed_when: false
   with_items:
     - k3s
@@ -46,9 +46,20 @@
     - /var/lib/rancher/
     - /var/lib/cni/
 
+- name: Remove K3s http_proxy files
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ systemd_dir }}/k3s.service.d/http_proxy.conf"
+    - "{{ systemd_dir }}/k3s.service.d"
+    - "{{ systemd_dir }}/k3s-node.service.d/http_proxy.conf"
+    - "{{ systemd_dir }}/k3s-node.service.d"
+  when: proxy_env is defined
+
 - name: Reload daemon_reload
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Remove tmp directory used for manifests
   file:

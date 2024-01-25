@@ -1,0 +1,42 @@
+---
+name: "Cache"
+on:
+  workflow_call:
+jobs:
+  molecule:
+    name: cache
+    runs-on: self-hosted
+    env:
+      PYTHON_VERSION: "3.11"
+
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v3 2.5.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip' # caching pip dependencies
+
+      - name: Cache Vagrant boxes
+        id: cache-vagrant
+        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          lookup-only: true #if it exists, we don't need to restore and can skip the next step
+          path: |
+            ~/.vagrant.d/boxes
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
+          restore-keys: |
+            vagrant-boxes
+
+      - name: Download Vagrant boxes for all scenarios
+        # To save some cache space, all scenarios share the same cache key.
+        # On the other hand, this means that the cache contents should be
+        # the same across all scenarios. This step ensures that.
+        if: steps.cache-vagrant.outputs.cache-hit != 'true' # only run if false since this is just a cache step
+        run: |
+          ./.github/download-boxes.sh
+          vagrant box list

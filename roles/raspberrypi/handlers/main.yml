@@ -1,3 +1,4 @@
 ---
 - name: Reboot
   reboot:
+  listen: reboot
