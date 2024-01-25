@@ -1,6 +1,6 @@
 ---
 # Timeout to wait for MetalLB services to come up
-metal_lb_available_timeout: 120s
+metal_lb_available_timeout: 240s
 
 # Name of the master group
 group_name_master: master

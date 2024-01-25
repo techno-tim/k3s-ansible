@@ -3,7 +3,7 @@
   systemd:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   failed_when: false
   with_items:
     - k3s
@@ -59,7 +59,7 @@
 
 - name: Reload daemon_reload
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
 
 - name: Remove tmp directory used for manifests
   file:
