@@ -51,7 +51,9 @@
     name: "{{ item }}"
     state: absent
   with_items:
+    - "{{ systemd_dir }}/k3s.service.d/http_proxy.conf"
     - "{{ systemd_dir }}/k3s.service.d"
+    - "{{ systemd_dir }}/k3s-node.service.d/http_proxy.conf"
     - "{{ systemd_dir }}/k3s-node.service.d"
   when: proxy_env is defined
 
