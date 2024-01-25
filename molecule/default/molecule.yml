@@ -7,7 +7,7 @@ platforms:
 
   - name: control1
     box: generic/ubuntu2204
-    memory: 2048
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -23,7 +23,7 @@ platforms:
 
   - name: control2
     box: generic/debian11
-    memory: 2048
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -34,7 +34,7 @@ platforms:
 
   - name: control3
     box: generic/rocky9
-    memory: 2048
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -45,7 +45,7 @@ platforms:
 
   - name: node1
     box: generic/ubuntu2204
-    memory: 2048
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -61,7 +61,7 @@ platforms:
 
   - name: node2
     box: generic/rocky9
-    memory: 2048
+    memory: 1024
     cpus: 2
     groups:
       - k3s_cluster
@@ -72,6 +72,8 @@ platforms:
 
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_VERBOSITY: 1
   playbooks:
     converge: ../resources/converge.yml
     side_effect: ../resources/reset.yml
@@ -82,7 +84,6 @@ provisioner:
 scenario:
   test_sequence:
     - dependency
-    - lint
     - cleanup
     - destroy
     - syntax

@@ -1,7 +1,7 @@
 ---
 - name: Reboot k3s_cluster
   hosts: k3s_cluster
-  gather_facts: yes
+  gather_facts: true
   tasks:
     - name: Reboot the nodes (and Wait upto 5 mins max)
       become: true
