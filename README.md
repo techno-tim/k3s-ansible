@@ -118,6 +118,28 @@ You can find more information about it [here](molecule/README.md).
 
 This repo uses `pre-commit` and `pre-commit-hooks` to lint and fix common style and syntax errors.  Be sure to install python packages and then run `pre-commit install`.  For more information, see [pre-commit](https://pre-commit.com/)
 
+## 🌌 Ansible Galaxy
+
+This collection can now be used in larger ansible projects.
+
+Instructions:
+
+- create or modify a file `collections/requirements.yml` in your project
+
+```yml
+collections:
+  - name: ansible.utils
+  - name: community.general
+  - name: ansible.posix
+  - name: kubernetes.core
+  - name: https://github.com/techno-tim/k3s-ansible.git
+    type: git
+    version: master
+```
+
+- install via `ansible-galaxy collection install -r ./collections/requirements.yml`
+- every role is now available via the prefix `techno_tim.k3s_ansible.` e.g. `techno_tim.k3s_ansible.lxc`
+
 ## Thanks 🤝
 
 This repo is really standing on the shoulders of giants. Thank you to all those who have contributed and thanks to these repos for code and ideas:
