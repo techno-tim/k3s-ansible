@@ -1,8 +1,6 @@
 ---
 dependency:
   name: galaxy
-  options:
-    requirements-file: collections/requirements.yml
 driver:
   name: vagrant
 platforms:
@@ -56,7 +54,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_VERBOSITY: 3
+    ANSIBLE_VERBOSITY: 1
   playbooks:
     converge: ../resources/converge.yml
     side_effect: ../resources/reset.yml

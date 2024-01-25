@@ -21,32 +21,6 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
-      # - name: Cache Ansible
-      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   id: cache-ansible
-      #   with:
-      #     path: ~/.ansible/collections
-      #     key: ansible-${{ hashFiles('collections/requirements.yml') }}
-      #     restore-keys: |
-      #       ansible-
-
-      # - name: Install dependencies
-      #   run: |
-      #     echo "::group::Upgrade pip"
-      #     python3 -m pip install --upgrade pip
-      #     echo "::endgroup::"
-
-      #     echo "::group::Install Python requirements from requirements.txt"
-      #     python3 -m pip install -r requirements.txt
-      #     echo "::endgroup::"
-
-      # - name: Install ansible dependencies
-      #   if: steps.cache-ansible.outputs.cache-hit != 'true' # only run if false since this is just a cache step
-      #   run: |
-      #     echo "::group::Install Ansible role requirements from collections/requirements.yml"
-      #     ansible-galaxy install -r collections/requirements.yml
-      #     echo "::endgroup::"
-
       - name: Cache Vagrant boxes
         id: cache-vagrant
         uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
@@ -57,36 +31,6 @@ jobs:
           key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
           restore-keys: |
             vagrant-boxes
-
-      # - name: install apt packages
-      #   run: |
-      #     wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-      #     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-      #     sudo apt update && sudo apt -y install vagrant virtualbox
-
-
-      # - name: Configure Homebrew cache
-      #   uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
-      #   id: cache-homebrew
-      #   with:
-      #     path: |
-      #       ~/Library/Caches/Homebrew
-      #     key: brew-${{ hashFiles('./Brewfile') }}
-      #     restore-keys: brew-
-
-      # - name: Update Homebrew
-      #   if: | # only run if false since this is just a cache step
-      #     steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-vagrant.outputs.cache-hit != 'true'
-      #   run: |
-      #     brew update --preinstall
-
-      # - name: Install Homebrew dependencies
-      #   if: | # only run if false since this is just a cache step
-      #     steps.cache-homebrew.outputs.cache-hit != 'true' || steps.cache-cache-vagrant.outputs.cache-hit != 'true'
-      #   run: |
-      #     env HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-upgrade  --file ./Brewfile
-      #     vagrant --version
-      #     vboxmanage --version
 
       - name: Download Vagrant boxes for all scenarios
         # To save some cache space, all scenarios share the same cache key.
