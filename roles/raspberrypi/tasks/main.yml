@@ -17,35 +17,25 @@
   when:
     grep_cpuinfo_raspberrypi.rc == 0 or grep_device_tree_model_raspberrypi.rc == 0
 
-- name: Set detected_distribution to Raspbian
+- name: Set detected_distribution to Raspbian (ARM64 on Raspbian, Debian Buster/Bullseye/Bookworm)
   set_fact:
     detected_distribution: Raspbian
-  when: >
-    raspberry_pi|default(false) and
-    ( ansible_facts.lsb.id|default("") == "Raspbian" or
-      ansible_facts.lsb.description|default("") is match("[Rr]aspbian.*") )
-
-- name: Set detected_distribution to Raspbian (ARM64 on Debian Buster)
-  set_fact:
-    detected_distribution: Raspbian
+  vars:
+    allowed_descriptions:
+      - "[Rr]aspbian.*"
+      - "Debian.*buster"
+      - "Debian.*bullseye"
+      - "Debian.*bookworm"
   when:
     - ansible_facts.architecture is search("aarch64")
     - raspberry_pi|default(false)
-    - ansible_facts.lsb.description|default("") is match("Debian.*buster")
+    - ansible_facts.lsb.description|default("") is match(allowed_descriptions | join('|'))
 
 - name: Set detected_distribution_major_version
   set_fact:
     detected_distribution_major_version: "{{ ansible_facts.lsb.major_release }}"
   when:
     - detected_distribution | default("") == "Raspbian"
-
-- name: Set detected_distribution to Raspbian (ARM64 on Debian Bullseye)
-  set_fact:
-    detected_distribution: Raspbian
-  when:
-    - ansible_facts.architecture is search("aarch64")
-    - raspberry_pi|default(false)
-    - ansible_facts.lsb.description|default("") is match("Debian.*bullseye")
 
 - name: Execute OS related tasks on the Raspberry Pi - {{ action_ }}
   include_tasks: "{{ item }}"
