@@ -66,9 +66,9 @@ metal_lb_ip_range: "192.168.30.80-192.168.30.90"
 # Please read https://gist.github.com/triangletodd/02f595cd4c0dc9aac5f7763ca2264185 before using this.
 # Most notably, your containers must be privileged, and must not have nesting set to true.
 # Please note this script disables most of the security of lxc containers, with the trade off being that lxc
-# containers are significantly more resource efficent compared to full VMs.
+# containers are significantly more resource efficient compared to full VMs.
 # Mixing and matching VMs and lxc containers is not supported, ymmv if you want to do this.
-# I would only really recommend using this if you have partiularly low powered proxmox nodes where the overhead of
+# I would only really recommend using this if you have particularly low powered proxmox nodes where the overhead of
 # VMs would use a significant portion of your available resources.
 proxmox_lxc_configure: false
 # the user that you would use to ssh into the host, for example if you run ssh some-user@my-proxmox-host,
