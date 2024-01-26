@@ -64,6 +64,31 @@ jobs:
           PY_COLORS: 1
           ANSIBLE_FORCE_COLOR: 1
 
+      # these steps are necessary if not using ephemeral nodes
+      - name: Delete old Vagrant box versions
+        if: always() # do this even if a step before has failed
+        run: vagrant box prune --force
+
+      - name: Remove all local Vagrant boxes
+        if: always() # do this even if a step before has failed
+        run: vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f
+
+      - name: Remove all Virtualbox VMs
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list vms | awk -F'"' '{print $2}' | xargs -I {} VBoxManage unregistervm --delete "{}"
+
+      - name: Remove all Virtualbox HDs
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list hdds | awk -F':' '/^UUID:/ {print $2}' | xargs -I {} VBoxManage closemedium disk "{}" --delete
+
+      - name: Remove all Virtualbox Networks
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list hostonlyifs | grep '^Name:' | awk '{print $2}' | grep '^vboxnet' | xargs -I {} VBoxManage hostonlyif remove {}
+
+      - name: Remove Virtualbox network config
+        if: always() # do this even if a step before has failed
+        run: sudo rm /etc/vbox/networks.conf
+
       - name: Upload log files
         if: always() # do this even if a step before has failed
         uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # 3.1.1
@@ -71,7 +96,3 @@ jobs:
           name: logs
           path: |
             ${{ runner.temp }}/logs
-
-      - name: Delete old box versions
-        if: always() # do this even if a step before has failed
-        run: vagrant box prune --force
