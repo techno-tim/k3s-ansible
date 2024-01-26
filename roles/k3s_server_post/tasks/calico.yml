@@ -1,5 +1,8 @@
 ---
-- block:
+- name: Deploy Calico to cluster
+  when: ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname']
+  run_once: true
+  block:
     - name: Create manifests directory on first master
       file:
         path: /tmp/k3s
@@ -20,6 +23,9 @@
       ansible.builtin.template:
         src: "calico.crs.j2"
         dest: /tmp/k3s/custom-resources.yaml
+        owner: root
+        group: root
+        mode: 0755
 
     - name: Deploy or replace Tigera Operator
       block:
@@ -49,10 +55,10 @@
       retries: 7
       delay: 7
       with_items:
-        - { name: tigera-operator, type: deployment }
+        - {name: tigera-operator, type: deployment}
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
-    
+
     - name: Deploy Calico custom resources
       block:
         - name: Deploy custom resources for Calico
@@ -68,7 +74,7 @@
           register: apply_cr
           changed_when: "'configured' in apply_cr.stdout or 'created' in apply_cr.stdout"
           failed_when: "'Error' in apply_cr.stderr"
-    
+
     - name: Wait for Calico system resources to be available
       command: >-
         {% if item.type == 'daemonset' %}
@@ -88,11 +94,11 @@
       retries: 30
       delay: 7
       with_items:
-        - { name: calico-typha, type: deployment, namespace: calico-system }
-        - { name: calico-kube-controllers, type: deployment, namespace: calico-system }
-        - { name: csi-node-driver, type: daemonset, selector: 'k8s-app=csi-node-driver', namespace: calico-system }
-        - { name: calico-node, type: daemonset, selector: 'k8s-app=calico-node', namespace: calico-system }
-        - { name: calico-apiserver, type: deployment, selector: 'k8s-app=calico-apiserver', namespace: calico-apiserver }
+        - {name: calico-typha, type: deployment, namespace: calico-system}
+        - {name: calico-kube-controllers, type: deployment, namespace: calico-system}
+        - {name: csi-node-driver, type: daemonset, selector: 'k8s-app=csi-node-driver', namespace: calico-system}
+        - {name: calico-node, type: daemonset, selector: 'k8s-app=calico-node', namespace: calico-system}
+        - {name: calico-apiserver, type: deployment, namespace: calico-apiserver}
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
 
@@ -100,12 +106,9 @@
       ansible.builtin.command:
         cmd: >
           kubectl patch felixconfiguration default
-          --type='merge' 
+          --type='merge'
           --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
       register: patch_result
       changed_when: "'felixconfiguration.projectcalico.org/default patched' in patch_result.stdout"
       failed_when: "'Error' in patch_result.stderr"
-      when: calico_ebpf == true
-
-  when: ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname']
-  run_once: true # stops "skipped" log spam
+      when: calico_ebpf
