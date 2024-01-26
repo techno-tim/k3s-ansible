@@ -22,7 +22,7 @@ platforms:
       ssh.password: "vagrant"
 
   - name: control2
-    box: generic/debian11
+    box: generic/debian12
     memory: 1024
     cpus: 2
     groups:
