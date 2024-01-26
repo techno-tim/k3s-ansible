@@ -5,7 +5,7 @@ on:
 jobs:
   pre-commit-ci:
     name: Pre-Commit
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       PYTHON_VERSION: "3.11"
 
@@ -21,21 +21,11 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
 
-      - name: Cache pip
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache Ansible
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
+      - name: Restore Ansible cache
+        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
         with:
           path: ~/.ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('collections/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
+          key: ansible-${{ hashFiles('collections/requirements.yml') }}
 
       - name: Install dependencies
         run: |
@@ -47,16 +37,12 @@ jobs:
           python3 -m pip install -r requirements.txt
           echo "::endgroup::"
 
-          echo "::group::Install Ansible role requirements from collections/requirements.yml"
-          ansible-galaxy install -r collections/requirements.yml
-          echo "::endgroup::"
-
       - name: Run pre-commit
         uses: pre-commit/action@646c83fcd040023954eafda54b4db0192ce70507 # 3.0.0
 
   ensure-pinned-actions:
     name: Ensure SHA Pinned Actions
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v3 2.5.0
