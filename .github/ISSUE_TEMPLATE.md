@@ -35,7 +35,12 @@ k3s_version: ""
 ansible_user: NA
 systemd_dir: ""
 
-container_iface: ""
+flannel_iface: ""
+
+#calico_iface: ""
+calico_ebpf: ""
+calico_cidr: ""
+calico_tag: ""
 
 apiserver_endpoint: ""
 
