@@ -1,5 +1,5 @@
 ---
-k3s_version: v1.25.16+k3s4
+k3s_version: v1.29.0+k3s1
 # this is the user that has ssh access to these machines
 ansible_user: ansibleuser
 systemd_dir: /etc/systemd/system
@@ -9,6 +9,12 @@ system_timezone: "Your/Timezone"
 
 # interface which will be used for flannel
 flannel_iface: "eth0"
+
+# uncomment calico_iface to use tigera operator/calico cni instead of flannel https://docs.tigera.io/calico/latest/about
+# calico_iface: "eth0"
+calico_ebpf: false           # use eBPF dataplane instead of iptables
+calico_cidr: "10.52.0.0/16"  # calico cluster pod cidr pool
+calico_tag: "v3.27.0"        # calico version tag
 
 # apiserver_endpoint is virtual ip-address which will be configured on each master
 apiserver_endpoint: "192.168.30.222"
@@ -20,28 +26,35 @@ k3s_token: "some-SUPER-DEDEUPER-secret-password"
 # The IP on which the node is reachable in the cluster.
 # Here, a sensible default is provided, you can still override
 # it for each of your hosts, though.
-k3s_node_ip: '{{ ansible_facts[flannel_iface]["ipv4"]["address"] }}'
+k3s_node_ip: "{{ ansible_facts[(calico_iface | default(flannel_iface))]['ipv4']['address'] }}"
 
 # Disable the taint manually by setting: k3s_master_taint = false
 k3s_master_taint: "{{ true if groups['node'] | default([]) | length >= 1 else false }}"
 
 # these arguments are recommended for servers as well as agents:
 extra_args: >-
-  --flannel-iface={{ flannel_iface }}
+  {{ '--flannel-iface=' + flannel_iface if calico_iface is not defined else '' }}
   --node-ip={{ k3s_node_ip }}
 
 # change these to your liking, the only required are: --disable servicelb, --tls-san {{ apiserver_endpoint }}
+# the contents of the if block is also required if using calico
 extra_server_args: >-
   {{ extra_args }}
   {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
+  {% if calico_iface is defined %}
+  --flannel-backend=none
+  --disable-network-policy
+  --cluster-cidr={{ calico_cidr | default('10.52.0.0/16') }}
+  {% endif %}
   --tls-san {{ apiserver_endpoint }}
   --disable servicelb
   --disable traefik
+
 extra_agent_args: >-
   {{ extra_args }}
 
 # image tag for kube-vip
-kube_vip_tag_version: "v0.5.12"
+kube_vip_tag_version: "v0.6.4"
 
 # metallb type frr or native
 metal_lb_type: "native"
@@ -55,8 +68,8 @@ metal_lb_mode: "layer2"
 # metal_lb_bgp_peer_address: "192.168.30.1"
 
 # image tag for metal lb
-metal_lb_speaker_tag_version: "v0.13.9"
-metal_lb_controller_tag_version: "v0.13.9"
+metal_lb_speaker_tag_version: "v0.13.12"
+metal_lb_controller_tag_version: "v0.13.12"
 
 # metallb ip range for load balancer
 metal_lb_ip_range: "192.168.30.80-192.168.30.90"
@@ -66,9 +79,9 @@ metal_lb_ip_range: "192.168.30.80-192.168.30.90"
 # Please read https://gist.github.com/triangletodd/02f595cd4c0dc9aac5f7763ca2264185 before using this.
 # Most notably, your containers must be privileged, and must not have nesting set to true.
 # Please note this script disables most of the security of lxc containers, with the trade off being that lxc
-# containers are significantly more resource efficent compared to full VMs.
+# containers are significantly more resource efficient compared to full VMs.
 # Mixing and matching VMs and lxc containers is not supported, ymmv if you want to do this.
-# I would only really recommend using this if you have partiularly low powered proxmox nodes where the overhead of
+# I would only really recommend using this if you have particularly low powered proxmox nodes where the overhead of
 # VMs would use a significant portion of your available resources.
 proxmox_lxc_configure: false
 # the user that you would use to ssh into the host, for example if you run ssh some-user@my-proxmox-host,
