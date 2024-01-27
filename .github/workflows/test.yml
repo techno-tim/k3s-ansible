@@ -46,7 +46,7 @@ jobs:
 
       - name: Remove Virtualbox network config
         if: always() # do this even if a step before has failed
-        run: sudo rm /etc/vbox/networks.conf
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Configure VirtualBox
         run: |-
@@ -112,7 +112,7 @@ jobs:
 
       - name: Remove Virtualbox network config
         if: always() # do this even if a step before has failed
-        run: sudo rm /etc/vbox/networks.conf
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
