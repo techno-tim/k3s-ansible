@@ -12,6 +12,7 @@ jobs:
           - default
           - ipv6
           - single_node
+          - calico
       fail-fast: false
     env:
       PYTHON_VERSION: "3.11"

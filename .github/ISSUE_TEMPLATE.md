@@ -37,6 +37,11 @@ systemd_dir: ""
 
 flannel_iface: ""
 
+#calico_iface: ""
+calico_ebpf: ""
+calico_cidr: ""
+calico_tag: ""
+
 apiserver_endpoint: ""
 
 k3s_token: "NA"
