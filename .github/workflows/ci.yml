@@ -3,6 +3,7 @@ name: "CI"
 on:
   pull_request:
     types:
+      - opened
       - synchronize
     paths-ignore:
       - '**/README.md'
