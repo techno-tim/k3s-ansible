@@ -30,7 +30,7 @@ jobs:
 
       - name: Remove all local Vagrant boxes
         if: always() # do this even if a step before has failed
-        run: vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f
+        run: if vagrant box list 2>/dev/null; then vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f 2>/dev/null && echo "All Vagrant boxes removed." || echo "No Vagrant boxes found."; else echo "No Vagrant boxes found."; fi
 
       - name: Remove all Virtualbox VMs
         if: always() # do this even if a step before has failed
@@ -46,7 +46,7 @@ jobs:
 
       - name: Remove Virtualbox network config
         if: always() # do this even if a step before has failed
-        run: sudo rm /etc/vbox/networks.conf
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Configure VirtualBox
         run: |-
@@ -96,7 +96,7 @@ jobs:
 
       - name: Remove all local Vagrant boxes
         if: always() # do this even if a step before has failed
-        run: vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f
+        run: if vagrant box list 2>/dev/null; then vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f 2>/dev/null && echo "All Vagrant boxes removed." || echo "No Vagrant boxes found."; else echo "No Vagrant boxes found."; fi
 
       - name: Remove all Virtualbox VMs
         if: always() # do this even if a step before has failed
@@ -112,7 +112,7 @@ jobs:
 
       - name: Remove Virtualbox network config
         if: always() # do this even if a step before has failed
-        run: sudo rm /etc/vbox/networks.conf
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
