@@ -4,72 +4,21 @@ dependency:
 driver:
   name: vagrant
 platforms:
-
   - name: control1
     box: generic/ubuntu2204
-    memory: 1024
-    cpus: 2
-    groups:
-      - k3s_cluster
-      - master
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.38
+    memory: 4096
+    cpus: 4
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
       ssh.username: "vagrant"
       ssh.password: "vagrant"
-
-  - name: control2
-    box: generic/debian12
-    memory: 1024
-    cpus: 2
     groups:
       - k3s_cluster
       - master
     interfaces:
       - network_name: private_network
-        ip: 192.168.30.39
-
-  - name: control3
-    box: generic/rocky9
-    memory: 1024
-    cpus: 2
-    groups:
-      - k3s_cluster
-      - master
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.40
-
-  - name: node1
-    box: generic/ubuntu2204
-    memory: 1024
-    cpus: 2
-    groups:
-      - k3s_cluster
-      - node
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.41
-    config_options:
-      # We currently can not use public-key based authentication on Ubuntu 22.04,
-      # see: https://github.com/chef/bento/issues/1405
-      ssh.username: "vagrant"
-      ssh.password: "vagrant"
-
-  - name: node2
-    box: generic/rocky9
-    memory: 1024
-    cpus: 2
-    groups:
-      - k3s_cluster
-      - node
-    interfaces:
-      - network_name: private_network
-        ip: 192.168.30.42
-
+        ip: 192.168.30.62
 provisioner:
   name: ansible
   env:

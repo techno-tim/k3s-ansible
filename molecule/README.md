@@ -13,6 +13,8 @@ We have these scenarios:
   To save a bit of test time, this cluster is _not_ highly available, it consists of only one control and one worker node.
 - **single_node**:
   Very similar to the default scenario, but uses only a single node for all cluster functionality.
+- **calico**:
+  The same as single node, but uses calico cni instead of flannel.
 
 ## How to execute
 
