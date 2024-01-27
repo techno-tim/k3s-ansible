@@ -56,6 +56,9 @@ extra_agent_args: >-
 # image tag for kube-vip
 kube_vip_tag_version: "v0.6.4"
 
+# tag for kube-vip-cloud-provider manifest
+kube_vip_cloud_provider_tag_version: "main"
+
 # metallb type frr or native
 metal_lb_type: "native"
 
@@ -71,8 +74,10 @@ metal_lb_mode: "layer2"
 metal_lb_speaker_tag_version: "v0.13.12"
 metal_lb_controller_tag_version: "v0.13.12"
 
-# metallb ip range for load balancer
-metal_lb_ip_range: "192.168.30.80-192.168.30.90"
+# loadbalancer to use for services: "kube-vip" or "metallb"
+service_lb_type: "metallb"
+# ip range for service load balancer
+service_lb_ip_range: "192.168.30.80-192.168.30.90"
 
 # Only enable if your nodes are proxmox LXC nodes, make sure to configure your proxmox nodes
 # in your hosts.ini file.

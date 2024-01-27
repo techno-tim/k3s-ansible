@@ -54,7 +54,8 @@ kube_vip_tag_version: ""
 metal_lb_speaker_tag_version: ""
 metal_lb_controller_tag_version: ""
 
-metal_lb_ip_range: ""
+service_lb_type: ""
+service_lb_ip_range: ""
 ```
 
 ### Hosts

@@ -99,3 +99,8 @@
     - IPAddressPool
     - BGPPeer
     - BGPAdvertisement
+
+- name: Remove tmp directory used for manifests
+  file:
+    path: /tmp/k3s
+    state: absent

@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubevip
+  namespace: kube-system
+data:
+{% if service_lb_ip_range is string %}
+{# service_lb_ip_range was used in the legacy way: single string instead of a list #}
+{#   => transform to list with single element #}
+{% set service_lb_ip_range = [service_lb_ip_range] %}
+{% endif %}
+{% for range in service_lb_ip_range %}
+  range-global: {{ range }}
+{% endfor %}

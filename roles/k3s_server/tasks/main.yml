@@ -26,9 +26,10 @@
 - name: Deploy vip manifest
   include_tasks: vip.yml
 
-- name: Deploy metallb manifest
-  include_tasks: metallb.yml
-  tags: metallb
+- name: Deploy manifest for {{ service_lb_type }}
+  include_tasks: "{{ service_lb_type }}.yml"
+  tags:
+    - service_lb
 
 - name: Init cluster inside the transient k3s-init service
   command:

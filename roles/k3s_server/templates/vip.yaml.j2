@@ -43,7 +43,7 @@ spec:
         - name: vip_ddns
           value: "false"
         - name: svc_enable
-          value: "false"
+          value: "{{ 'true' if service_lb_type == 'kube-vip' else 'false' }}"
         - name: vip_leaderelection
           value: "true"
         - name: vip_leaseduration
