@@ -2,6 +2,8 @@
 name: "CI"
 on:
   pull_request:
+    types:
+      - synchronize
     paths-ignore:
       - '**/README.md'
 jobs:
