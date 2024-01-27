@@ -23,6 +23,8 @@
           delete rs "${REPLICAS}"
       done
     fi
+  args:
+    executable: /bin/bash
   changed_when: false
   run_once: true
   with_items: "{{ groups[group_name_master | default('master')] }}"
