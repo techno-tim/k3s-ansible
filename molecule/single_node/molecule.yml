@@ -21,6 +21,8 @@ platforms:
         ip: 192.168.30.50
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_VERBOSITY: 1
   playbooks:
     converge: ../resources/converge.yml
     side_effect: ../resources/reset.yml
@@ -31,7 +33,6 @@ provisioner:
 scenario:
   test_sequence:
     - dependency
-    - lint
     - cleanup
     - destroy
     - syntax

@@ -2,7 +2,7 @@
 - name: Prepare Proxmox cluster
   hosts: proxmox
   gather_facts: true
-  become: yes
+  become: true
   environment: "{{ proxy_env | default({}) }}"
   roles:
     - role: proxmox_lxc
@@ -10,7 +10,7 @@
 
 - name: Prepare k3s nodes
   hosts: k3s_cluster
-  gather_facts: yes
+  gather_facts: true
   environment: "{{ proxy_env | default({}) }}"
   roles:
     - role: lxc

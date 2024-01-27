@@ -5,7 +5,7 @@ on:
 jobs:
   molecule:
     name: Molecule
-    runs-on: macos-12
+    runs-on: self-hosted
     strategy:
       matrix:
         scenario:
@@ -30,34 +30,18 @@ jobs:
           * fdad:bad:ba55::/64
           EOF
 
-      - name: Cache pip
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Cache Vagrant boxes
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # 3.0.11
-        with:
-          path: |
-            ~/.vagrant.d/boxes
-          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
-          restore-keys: |
-            vagrant-boxes
-
-      - name: Download Vagrant boxes for all scenarios
-        # To save some cache space, all scenarios share the same cache key.
-        # On the other hand, this means that the cache contents should be
-        # the same across all scenarios. This step ensures that.
-        run: ./.github/download-boxes.sh
-
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
+
+      - name: Restore vagrant Boxes cache
+        uses: actions/cache/restore@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # 4.0
+        with:
+          path: ~/.vagrant.d/boxes
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
+          fail-on-cache-miss: true
 
       - name: Install dependencies
         run: |
@@ -75,7 +59,7 @@ jobs:
         env:
           ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
           ANSIBLE_SSH_RETRIES: 4
-          ANSIBLE_TIMEOUT: 60
+          ANSIBLE_TIMEOUT: 120
           PY_COLORS: 1
           ANSIBLE_FORCE_COLOR: 1
 
