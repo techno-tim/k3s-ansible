@@ -6,6 +6,10 @@
 
 - name: Deploy metallb pool
   include_tasks: metallb.yml
-  tags:
-    - service_lb
-  when: service_lb_type == "metallb"
+  tags: metallb
+  when: service_lb_type | default('metallb') == 'metallb'
+
+- name: Remove tmp directory used for manifests
+  file:
+    path: /tmp/k3s
+    state: absent

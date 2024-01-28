@@ -23,7 +23,7 @@
         apiserver_endpoint: fdad:bad:ba55::333
 
         # We give MetalLB address space for both IPv4 and IPv6
-        service_lb_ip_range:
+        metal_lb_ip_range:
           - fdad:bad:ba55::1b:0/112
           - 192.168.123.80-192.168.123.90
 
