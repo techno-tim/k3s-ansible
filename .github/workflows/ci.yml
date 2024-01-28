@@ -10,12 +10,12 @@ on:
       - '**/FUNDING.yml'
       - '**/host.ini'
       - '**/*.md'
-      - '.editorconfig'
-      - 'ansible.example.cfg'
-      - 'deploy.sh'
-      - 'LICENSE'
-      - 'reboot.sh'
-      - 'reset.sh'
+      - '**/.editorconfig'
+      - '**/ansible.example.cfg'
+      - '**/deploy.sh'
+      - '**/LICENSE'
+      - '**/reboot.sh'
+      - '**/reset.sh'
 jobs:
   pre:
     uses: ./.github/workflows/cache.yml
