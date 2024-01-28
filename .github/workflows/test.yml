@@ -57,7 +57,7 @@ jobs:
           EOF
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@75f3110429a8c05be0e1bf360334e4cced2b63fa # 2.3.3
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # 5.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip' # caching pip dependencies
