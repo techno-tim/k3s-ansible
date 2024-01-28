@@ -8,6 +8,27 @@
   with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
+- name: Delete outdated metallb replicas
+  shell: |-
+    set -o pipefail
+
+    REPLICAS=$(k3s kubectl --namespace='metallb-system' get replicasets \
+      -l 'component=controller,app=metallb' \
+      -o jsonpath='{.items[0].spec.template.spec.containers[0].image}, {.items[0].metadata.name}' 2>/dev/null || true)
+    REPLICAS_SETS=$(echo ${REPLICAS} | grep -v '{{ metal_lb_controller_tag_version }}' | sed -e "s/^.*\s//g")
+    if [ -n "${REPLICAS_SETS}" ] ; then
+      for REPLICAS in "${REPLICAS_SETS}"
+      do
+        k3s kubectl --namespace='metallb-system' \
+          delete rs "${REPLICAS}"
+      done
+    fi
+  args:
+    executable: /bin/bash
+  changed_when: false
+  run_once: true
+  with_items: "{{ groups[group_name_master | default('master')] }}"
+
 - name: Copy metallb CRs manifest to first master
   template:
     src: "metallb.crs.j2"
