@@ -57,11 +57,11 @@ extra_agent_args: >-
 kube_vip_tag_version: "v0.6.4"
 
 # tag for kube-vip-cloud-provider manifest
-#kube_vip_cloud_provider_tag_version: "main"
+# kube_vip_cloud_provider_tag_version: "main"
 
-# kube-vip ip range for load balancer 
+# kube-vip ip range for load balancer
 # (uncomment to use kube-vip for services instead of MetalLB)
-#kube_vip_lb_ip_range: "192.168.30.80-192.168.30.90"
+# kube_vip_lb_ip_range: "192.168.30.80-192.168.30.90"
 
 # metallb type frr or native
 metal_lb_type: "native"
