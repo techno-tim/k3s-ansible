@@ -10,6 +10,4 @@ data:
 {#   => transform to list with single element #}
 {% set kube_vip_lb_ip_range = [kube_vip_lb_ip_range] %}
 {% endif %}
-{% for range in service_lb_ip_range %}
-  range-global: {{ range }}
-{% endfor %}
+  range-global: {{ kube_vip_lb_ip_range | join(',') }}
