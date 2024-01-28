@@ -29,12 +29,12 @@
 - name: Deploy metallb manifest
   include_tasks: metallb.yml
   tags: metallb
-  when: service_lb_type | default('metallb') == 'metallb'
+  when: kube_vip_lb_ip_range is not defined
 
 - name: Deploy kube-vip manifest
   include_tasks: kube-vip.yml
   tags: kubevip
-  when: service_lb_type | default('metallb') == 'kube-vip'
+  when: kube_vip_lb_ip_range is defined
 
 - name: Init cluster inside the transient k3s-init service
   command:

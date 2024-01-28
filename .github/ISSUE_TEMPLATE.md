@@ -51,7 +51,6 @@ extra_agent_args: ""
 
 kube_vip_tag_version: ""
 
-service_lb_type: ""
 kube_vip_cloud_provider_tag_version: ""
 kube_vip_lb_ip_range: ""
 
