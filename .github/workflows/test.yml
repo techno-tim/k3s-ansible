@@ -12,15 +12,41 @@ jobs:
           - default
           - ipv6
           - single_node
+          - calico
       fail-fast: false
     env:
       PYTHON_VERSION: "3.11"
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # v3 2.5.0
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v3 4.1.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+
+      # these steps are necessary if not using ephemeral nodes
+      - name: Delete old Vagrant box versions
+        if: always() # do this even if a step before has failed
+        run: vagrant box prune --force
+
+      - name: Remove all local Vagrant boxes
+        if: always() # do this even if a step before has failed
+        run: if vagrant box list 2>/dev/null; then vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f 2>/dev/null && echo "All Vagrant boxes removed." || echo "No Vagrant boxes found."; else echo "No Vagrant boxes found."; fi
+
+      - name: Remove all Virtualbox VMs
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list vms | awk -F'"' '{print $2}' | xargs -I {} VBoxManage unregistervm --delete "{}"
+
+      - name: Remove all Virtualbox HDs
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list hdds | awk -F':' '/^UUID:/ {print $2}' | xargs -I {} VBoxManage closemedium disk "{}" --delete
+
+      - name: Remove all Virtualbox Networks
+        if: always() # do this even if a step before has failed
+        run: VBoxManage list hostonlyifs | grep '^Name:' | awk '{print $2}' | grep '^vboxnet' | xargs -I {} VBoxManage hostonlyif remove {}
+
+      - name: Remove Virtualbox network config
+        if: always() # do this even if a step before has failed
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Configure VirtualBox
         run: |-
@@ -70,7 +96,7 @@ jobs:
 
       - name: Remove all local Vagrant boxes
         if: always() # do this even if a step before has failed
-        run: vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f
+        run: if vagrant box list 2>/dev/null; then vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f 2>/dev/null && echo "All Vagrant boxes removed." || echo "No Vagrant boxes found."; else echo "No Vagrant boxes found."; fi
 
       - name: Remove all Virtualbox VMs
         if: always() # do this even if a step before has failed
@@ -86,7 +112,7 @@ jobs:
 
       - name: Remove Virtualbox network config
         if: always() # do this even if a step before has failed
-        run: sudo rm /etc/vbox/networks.conf
+        run: sudo rm /etc/vbox/networks.conf || true
 
       - name: Upload log files
         if: always() # do this even if a step before has failed
