@@ -17,6 +17,8 @@ We have these scenarios:
   The same as single node, but uses calico cni instead of flannel.
 - **cilium**:
   The same as single node, but uses cilium cni instead of flannel.
+- **kube-vip**
+  The same as single node, but uses kube-vip as service loadbalancer instead of MetalLB
 
 ## How to execute
 

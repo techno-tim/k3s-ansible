@@ -1,0 +1,17 @@
+---
+- name: Apply overrides
+  hosts: all
+  tasks:
+    - name: Override host variables
+      ansible.builtin.set_fact:
+        # See:
+        # https://github.com/flannel-io/flannel/blob/67d603aaf45ef80f5dd39f43714fc5e6f8a637eb/Documentation/troubleshooting.md#Vagrant
+        flannel_iface: eth1
+
+        # The test VMs might be a bit slow, so we give them more time to join the cluster:
+        retry_count: 45
+
+        # Make sure that our IP ranges do not collide with those of the other scenarios
+        apiserver_endpoint: "192.168.30.225"
+        # Use kube-vip instead of MetalLB
+        kube_vip_lb_ip_range: "192.168.30.110-192.168.30.119"

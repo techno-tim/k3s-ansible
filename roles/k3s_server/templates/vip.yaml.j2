@@ -43,7 +43,7 @@ spec:
         - name: vip_ddns
           value: "false"
         - name: svc_enable
-          value: "false"
+          value: "{{ 'true' if kube_vip_lb_ip_range is defined else 'false' }}"
         - name: vip_leaderelection
           value: "true"
         - name: vip_leaseduration
