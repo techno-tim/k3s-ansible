@@ -26,6 +26,7 @@
             | join(' ')
             | regex_findall('cilium-cli: (v\d+\.\d+\.\d+)')
             | first
+            | default('unknown')
           }}
       when: cilium_cli_installed.rc == 0
 
@@ -136,18 +137,24 @@
           set_fact:
             installed_cilium_version: >-
               {{
-                cilium_version.stdout_lines | join(' ') |
-                regex_findall('cilium image \(default\): (v\d+\.\d+\.\d+)') | first
+                cilium_version.stdout_lines
+                | join(' ')
+                | regex_findall('cilium image.+(\d+\.\d+\.\d+)')
+                | first
+                | default('unknown')
               }}
-
-        - name: Log installed Cilium version
-          ansible.builtin.debug:
-            msg: "Installed Cilium version: {{ installed_cilium_version | default('Version not detected') }}"
 
         - name: Determine if Cilium needs update
           set_fact:
             cilium_needs_update: >-
-              {{ installed_cilium_version != cilium_tag }}
+              {{ 'v' + installed_cilium_version != cilium_tag }}
+
+        - name: Log result
+          ansible.builtin.debug:
+            msg: >
+              Installed Cilium version: {{ installed_cilium_version }},
+              Target Cilium version: {{ cilium_tag }},
+              Update needed: {{ cilium_needs_update }}
 
     - name: Install Cilium
       ansible.builtin.command: >-
@@ -157,6 +164,7 @@
         cilium upgrade
         {% endif %}
         --version "{{ cilium_tag }}"
+        --helm-set operator.replicas="1"
         {{ '--helm-set devices=' + cilium_iface if cilium_iface != 'auto' else '' }}
         --helm-set ipam.operator.clusterPoolIPv4PodCIDRList={{ cluster_cidr }}
         {% if cilium_mode == "native" or (cilium_bgp and cilium_exportPodCIDR != 'false') %}
@@ -234,3 +242,12 @@
           ansible.builtin.debug:
             msg: "{{ apply_cr.stderr }}"
           when: "'is invalid' in apply_cr.stderr"
+
+        - name: Test for BGP config resources
+          ansible.builtin.command: "{{ item }}"
+          loop:
+            - k3s kubectl get CiliumBGPPeeringPolicy.cilium.io
+            - k3s kubectl get CiliumLoadBalancerIPPool.cilium.io
+          changed_when: false
+          loop_control:
+            label: "{{ item }}"
