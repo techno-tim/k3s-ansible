@@ -10,7 +10,7 @@ spec:
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
     - blockSize: {{ calico_blockSize | default('26') }}
-      cidr: {{ calico_cidr | default('10.52.0.0/16') }}
+      cidr: {{ cluster_cidr | default('10.52.0.0/16') }}
       encapsulation: {{ calico_encapsulation | default('VXLANCrossSubnet') }}
       natOutgoing: {{ calico_natOutgoing | default('Enabled') }}
       nodeSelector: {{ calico_nodeSelector | default('all()') }}

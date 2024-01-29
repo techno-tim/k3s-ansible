@@ -29,6 +29,7 @@
 - name: Deploy metallb manifest
   include_tasks: metallb.yml
   tags: metallb
+  when: not cilium_bgp or cilium_iface is not defined
 
 - name: Init cluster inside the transient k3s-init service
   command:
