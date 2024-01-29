@@ -51,6 +51,9 @@ extra_agent_args: ""
 
 kube_vip_tag_version: ""
 
+kube_vip_cloud_provider_tag_version: ""
+kube_vip_lb_ip_range: ""
+
 metal_lb_speaker_tag_version: ""
 metal_lb_controller_tag_version: ""
 
