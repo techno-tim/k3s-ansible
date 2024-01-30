@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: f71fa2c1f9cf5cb705f73dffe4b21f7c61470ba9  # frozen: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: requirements-txt-fixer
       - id: sort-simple-yaml
@@ -12,24 +12,24 @@ repos:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: b05e028c5881819161d11cb543fd96a30c06cceb  # frozen: v1.32.0
+    rev: v1.33.0
     hooks:
       - id: yamllint
         args: [-c=.yamllint]
   - repo: https://github.com/ansible-community/ansible-lint.git
-    rev: 3293b64b939c0de16ef8cb81dd49255e475bf89a  # frozen: v6.17.2
+    rev: v6.22.2
     hooks:
       - id: ansible-lint
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: 375289a39f5708101b1f916eb729e8d6da96993f  # frozen: v0.9.0.5
+    rev: v0.9.0.6
     hooks:
       - id: shellcheck
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: 12885e376b93dc4536ad68d156065601e4433665  # frozen: v1.5.1
+    rev: v1.5.4
     hooks:
       - id: remove-crlf
       - id: remove-tabs
   - repo: https://github.com/sirosen/texthooks
-    rev: c4ffd3e31669dd4fa4d31a23436cc13839730084  # frozen: 0.5.0
+    rev: 0.6.4
     hooks:
       - id: fix-smartquotes
