@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v3 4.1.1
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # 4.1.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
