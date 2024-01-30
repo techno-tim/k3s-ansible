@@ -1,0 +1,29 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumBGPPeeringPolicy
+metadata:
+ name: 01-bgp-peering-policy
+spec: # CiliumBGPPeeringPolicySpec
+ virtualRouters: # []CiliumBGPVirtualRouter
+ - localASN: {{ cilium_bgp_my_asn }}
+   exportPodCIDR: {{ cilium_exportPodCIDR | default('true') }}
+   neighbors: # []CiliumBGPNeighbor
+    - peerAddress: '{{ cilium_bgp_peer_address + "/32"}}'
+      peerASN: {{ cilium_bgp_peer_asn }}
+      eBGPMultihopTTL: 10
+      connectRetryTimeSeconds: 120
+      holdTimeSeconds: 90
+      keepAliveTimeSeconds: 30
+      gracefulRestart:
+        enabled: true
+        restartTimeSeconds: 120
+   serviceSelector:
+      matchExpressions:
+         - {key: somekey, operator: NotIn, values: ['never-used-value']}
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "01-lb-pool"
+spec:
+  cidrs:
+  - cidr: "{{ cilium_bgp_lb_cidr }}"

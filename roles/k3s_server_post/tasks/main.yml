@@ -2,12 +2,17 @@
 - name: Deploy calico
   include_tasks: calico.yml
   tags: calico
-  when: calico_iface is defined
+  when: calico_iface is defined and cilium_iface is not defined
+
+- name: Deploy cilium
+  include_tasks: cilium.yml
+  tags: cilium
+  when: cilium_iface is defined
 
 - name: Deploy metallb pool
   include_tasks: metallb.yml
   tags: metallb
-  when: kube_vip_lb_ip_range is not defined
+  when: kube_vip_lb_ip_range is not defined and (not cilium_bgp or cilium_iface is not defined)
 
 - name: Remove tmp directory used for manifests
   file:

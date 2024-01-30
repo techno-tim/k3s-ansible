@@ -13,6 +13,7 @@ jobs:
           - ipv6
           - single_node
           - calico
+          - cilium
           - kube-vip
       fail-fast: false
     env:

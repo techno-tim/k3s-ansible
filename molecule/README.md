@@ -15,6 +15,8 @@ We have these scenarios:
   Very similar to the default scenario, but uses only a single node for all cluster functionality.
 - **calico**:
   The same as single node, but uses calico cni instead of flannel.
+- **cilium**:
+  The same as single node, but uses cilium cni instead of flannel.
 - **kube-vip**
   The same as single node, but uses kube-vip as service loadbalancer instead of MetalLB
 
