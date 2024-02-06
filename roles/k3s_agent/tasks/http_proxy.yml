@@ -1,5 +1,4 @@
 ---
-
 - name: Create k3s-node.service.d directory
   file:
     path: '{{ systemd_dir }}/k3s-node.service.d'
@@ -7,7 +6,7 @@
     owner: root
     group: root
     mode: '0755'
-
+  when: proxy_env is defined
 
 - name: Copy K3s http_proxy conf file
   template:
@@ -16,3 +15,4 @@
     owner: root
     group: root
     mode: '0755'
+  when: proxy_env is defined

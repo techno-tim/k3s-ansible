@@ -7,11 +7,14 @@ After=network-online.target
 Type=notify
 ExecStartPre=-/sbin/modprobe br_netfilter
 ExecStartPre=-/sbin/modprobe overlay
-ExecStart=/usr/local/bin/k3s agent --server https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443 --token {{ hostvars[groups[group_name_master | default('master')][0]]['token'] | default(k3s_token) }} {{ extra_agent_args | default("") }}
+# Conditional snapshotter based on PXE boot status
+ExecStart=/usr/local/bin/k3s agent \
+  --server https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443 \
+  {% if is_pxe_booted | default(false) %}--snapshotter native \
+  {% endif %}--token {{ hostvars[groups[group_name_master | default('master')][0]]['token'] | default(k3s_token) }} \
+  {{ extra_agent_args | default("") }}
 KillMode=process
 Delegate=yes
-# Having non-zero Limit*s causes performance problems due to accounting overhead
-# in the kernel. We recommend using cgroups to do container-local accounting.
 LimitNOFILE=1048576
 LimitNPROC=infinity
 LimitCORE=infinity
