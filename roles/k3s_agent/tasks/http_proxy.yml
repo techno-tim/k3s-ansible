@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: '0755'
-
+  when: proxy_env is defined
 
 - name: Copy K3s http_proxy conf file
   template:
@@ -15,3 +15,4 @@
     owner: root
     group: root
     mode: '0755'
+  when: proxy_env is defined
