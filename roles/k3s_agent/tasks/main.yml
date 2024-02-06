@@ -1,19 +1,35 @@
 ---
+- name: Check for PXE-booted system
+  block:
+    - name: Check if system is PXE-booted
+      ansible.builtin.command:
+        cmd: cat /proc/cmdline
+      register: boot_cmdline
+      changed_when: false
+      check_mode: false
+
+    - name: Set fact for PXE-booted system
+      ansible.builtin.set_fact:
+        is_pxe_booted: "{{ 'root=/dev/nfs' in boot_cmdline.stdout }}"
+      when: boot_cmdline.stdout is defined
+
+    - name: Include http_proxy configuration tasks
+      ansible.builtin.include_tasks: http_proxy.yml
 
 - name: Deploy K3s http_proxy conf
   include_tasks: http_proxy.yml
   when: proxy_env is defined
 
-- name: Copy K3s service file
-  template:
+- name: Configure the k3s service
+  ansible.builtin.template:
     src: "k3s.service.j2"
     dest: "{{ systemd_dir }}/k3s-node.service"
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
 
-- name: Enable and check K3s service
-  systemd:
+- name: Manage k3s service
+  ansible.builtin.systemd:
     name: k3s-node
     daemon_reload: true
     state: restarted
