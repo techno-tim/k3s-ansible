@@ -78,9 +78,7 @@ molecule==6.0.3
     #   -r requirements.in
     #   molecule-plugins
 molecule-plugins[vagrant]==23.5.3
-    # via
-    #   -r requirements.in
-    #   molecule-plugins
+    # via -r requirements.in
 netaddr==0.10.1
     # via -r requirements.in
 nodeenv==1.8.0
@@ -98,7 +96,7 @@ platformdirs==4.1.0
     # via virtualenv
 pluggy==1.3.0
     # via molecule
-pre-commit==3.6.0
+pre-commit==3.6.1
     # via -r requirements.in
 pre-commit-hooks==4.5.0
     # via -r requirements.in
