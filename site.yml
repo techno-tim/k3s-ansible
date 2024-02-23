@@ -1,4 +1,12 @@
 ---
+- hosts: all
+  pre_tasks:
+    - name: Verify Ansible is version 2.11 or above.
+      assert:
+        that: "ansible_version.full is version_compare('2.11', '>=')"
+        msg: >
+          "Your version of Ansible is out of date. Please follow this link to install the latest version: https://docs.technotim.live/posts/ansible-automation/#installing-the-latest-version-of-ansible"
+
 - name: Prepare Proxmox cluster
   hosts: proxmox
   gather_facts: true
