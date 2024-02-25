@@ -1,7 +1,17 @@
 ---
+- name: Test for cmdline path
+  command: grep -E "console=|rootfstype" /boot/cmdline.txt
+  register: boot_cmdline_path
+  failed_when: false
+  changed_when: false
+
+- name: Set path to cmdline based on test
+  set_fact:
+    cmdline_path: "{{ (boot_cmdline_path.rc == 0) | ternary('/boot/cmdline.txt', '/boot/firmware/cmdline.txt') }}"
+
 - name: Activating cgroup support
   lineinfile:
-    path: /boot/firmware/cmdline.txt
+    path: "{{ cmdline_path }}"
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
