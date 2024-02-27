@@ -5,9 +5,18 @@
   failed_when: false
   changed_when: false
 
-- name: Set cmdline path based on Debian version and boot_cmdline_path result
+- name: Set cmdline path based on Debian version and command result
   set_fact:
-    cmdline_path: "{{ (boot_cmdline_path.rc == 0 and ansible_facts['distribution'] == 'Debian' and ansible_facts['distribution_version'] is version('bookworm', '<')) | ternary('/boot/cmdline.txt', '/boot/firmware/cmdline.txt') }}"
+    cmdline_path: >-
+      {{
+        (
+          boot_cmdline_path.rc == 0 and
+          ansible_facts.lsb.description | default('') is match('Debian.*(?!(bookworm|sid))')
+        ) | ternary(
+          '/boot/cmdline.txt',
+          '/boot/firmware/cmdline.txt'
+        )
+      }}
 
 - name: Activating cgroup support
   lineinfile:
