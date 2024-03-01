@@ -1,6 +1,7 @@
 ---
 - name: Test for cmdline path
-  command: grep -E "console=|rootfstype" /boot/cmdline.txt
+  stat:
+    path: /boot/firmware/cmdline.txt
   register: boot_cmdline_path
   failed_when: false
   changed_when: false
@@ -10,11 +11,11 @@
     cmdline_path: >-
       {{
         (
-          boot_cmdline_path.rc == 0 and
+          boot_cmdline_path.stat.exists and
           ansible_facts.lsb.description | default('') is match('Debian.*(?!(bookworm|sid))')
         ) | ternary(
-          '/boot/cmdline.txt',
-          '/boot/firmware/cmdline.txt'
+          '/boot/firmware/cmdline.txt',
+          '/boot/cmdline.txt'
         )
       }}
 
