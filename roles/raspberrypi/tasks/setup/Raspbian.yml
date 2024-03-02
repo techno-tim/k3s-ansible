@@ -1,7 +1,27 @@
 ---
+- name: Test for cmdline path
+  stat:
+    path: /boot/firmware/cmdline.txt
+  register: boot_cmdline_path
+  failed_when: false
+  changed_when: false
+
+- name: Set cmdline path based on Debian version and command result
+  set_fact:
+    cmdline_path: >-
+      {{
+        (
+          boot_cmdline_path.stat.exists and
+          ansible_facts.lsb.description | default('') is match('Debian.*(?!(bookworm|sid))')
+        ) | ternary(
+          '/boot/firmware/cmdline.txt',
+          '/boot/cmdline.txt'
+        )
+      }}
+
 - name: Activating cgroup support
   lineinfile:
-    path: /boot/cmdline.txt
+    path: "{{ cmdline_path }}"
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
     backrefs: true
