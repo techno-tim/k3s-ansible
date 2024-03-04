@@ -6,4 +6,5 @@
     - name: Reboot the nodes (and Wait upto 5 mins max)
       become: true
       reboot:
+        reboot_command: "{{ custom_reboot_command | default(omit) }}"
         reboot_timeout: 300
