@@ -185,7 +185,7 @@
         --helm-set bpf.loadBalancer.mode={{ bpf_lb_mode | default("hybrid") }}
         {% endif %}
       environment:
-        KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+        KUBECONFIG: "{{ ansible_user_dir }}/.kube/config"
       register: cilium_install_result
       changed_when: cilium_install_result.rc == 0
       when: cilium_installed.rc != 0 or cilium_needs_update
