@@ -10,7 +10,7 @@
 
 - name: Download vip rbac manifest to first master
   ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/kube-vip/kube-vip/{{ kube_vip_tag_version }}/docs/manifests/rbac.yaml"
+    url: "https://kube-vip.io/manifests/rbac.yaml"
     dest: "/var/lib/rancher/k3s/server/manifests/vip-rbac.yaml"
     owner: root
     group: root
