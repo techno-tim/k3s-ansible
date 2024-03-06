@@ -1,4 +1,5 @@
 ---
 - name: Reboot
   reboot:
+    reboot_command: "{{ custom_reboot_command | default(omit) }}"
   listen: reboot
