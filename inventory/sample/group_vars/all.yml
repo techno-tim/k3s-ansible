@@ -160,6 +160,10 @@ custom_registries_yaml: |
         username: yourusername
         password: yourpassword
 
+# On some distros like Diet Pi, there is no dbus installed. dbus required by the default reboot command.
+# Uncomment if you need a custom reboot command
+# custom_reboot_command: /usr/sbin/shutdown -r now
+
 # Only enable and configure these if you access the internet through a proxy
 # proxy_env:
 #   HTTP_PROXY: "http://proxy.domain.local:3128"
