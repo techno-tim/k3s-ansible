@@ -96,8 +96,22 @@ ansible-playbook reset.yml -i inventory/my-cluster/hosts.ini
 To copy your `kube config` locally so that you can access your **Kubernetes** cluster run:
 
 ```bash
-scp debian@master_ip:~/.kube/config ~/.kube/config
+scp debian@master_ip:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 ```
+If you get file Permission denied, go into the node and temporarly run:
+```bash
+sudo chmod 777 /etc/rancher/k3s/k3s.yaml
+```
+Then copy with the scp command and reset the permissions back to:
+```bash
+sudo chmod 600 /etc/rancher/k3s/k3s.yaml
+```
+
+You'll then want to modify the config to point to master IP by running:
+```bash
+sudo nano ~/.kube/config
+```
+Then change `server: https://127.0.0.1:6443` to match your master IP: `server: https://192.168.1.222:6443`
 
 ### 🔨 Testing your cluster
 
