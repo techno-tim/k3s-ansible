@@ -72,7 +72,7 @@ extra_agent_args: >-
   {{ extra_args }}
 
 # image tag for kube-vip
-kube_vip_tag_version: "v0.7.1"
+kube_vip_tag_version: "v0.7.2"
 
 # tag for kube-vip-cloud-provider manifest
 # kube_vip_cloud_provider_tag_version: "main"
