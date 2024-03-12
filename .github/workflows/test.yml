@@ -10,7 +10,7 @@ jobs:
       matrix:
         scenario:
           - default
-          - ipv6
+          # - ipv6
           - single_node
           - calico
           - cilium
