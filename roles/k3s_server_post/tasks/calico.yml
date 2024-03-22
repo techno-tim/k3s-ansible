@@ -48,7 +48,7 @@
         k3s kubectl wait {{ item.type }}/{{ item.name }}
         --namespace='tigera-operator'
         --for=condition=Available=True
-        --timeout=7s
+        --timeout=30s
       register: tigera_result
       changed_when: false
       until: tigera_result is succeeded
@@ -87,7 +87,7 @@
         --namespace='{{ item.namespace }}'
         --for=condition=Available
         {% endif %}
-        --timeout=7s
+        --timeout=30s
       register: cr_result
       changed_when: false
       until: cr_result is succeeded
