@@ -202,7 +202,7 @@
         --namespace=kube-system
         --for=condition=Available
         {% endif %}
-        --timeout=7s
+        --timeout=30s
       register: cr_result
       changed_when: false
       until: cr_result is succeeded
