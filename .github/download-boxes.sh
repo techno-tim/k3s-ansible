@@ -14,7 +14,7 @@ yq --version
 
 # Read all boxes for all platforms from the "molecule.yml" files
 all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
-    yq -r '.platforms[].box' |         # Read the "box" property of each node under "platforms"
+    yq r '.platforms[].box' |         # Read the "box" property of each node under "platforms"
     grep --invert-match --regexp=--- | # Filter out file separators
     sort |
     uniq)
