@@ -9,15 +9,17 @@ set -euo pipefail
 GIT_ROOT=$(git rev-parse --show-toplevel)
 PROVIDER=virtualbox
 
-# requires yq 3
 yq --version
 
-# Read all boxes for all platforms from the "molecule.yml" files
-all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
-    yq r '.platforms[].box' |         # Read the "box" property of each node under "platforms"
-    grep --invert-match --regexp=--- | # Filter out file separators
-    sort |
-    uniq)
+# Define the path to the molecule.yml files
+MOLECULE_YML_PATH="${GIT_ROOT}/molecule/*/molecule.yml"
+
+# Extract and sort unique boxes from all molecule.yml files
+all_boxes=$(for file in $MOLECULE_YML_PATH; do
+    yq eval '.platforms[].box' "$file"
+done | sort -u)
+
+echo all_boxes: "$all_boxes"
 
 # Read the boxes that are currently present on the system (for the current provider)
 present_boxes=$(
