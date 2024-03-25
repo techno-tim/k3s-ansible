@@ -10,11 +10,7 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 PROVIDER=virtualbox
 
 # Read all boxes for all platforms from the "molecule.yml" files
-all_boxes=$(cat "${GIT_ROOT}"/molecule/*/molecule.yml |
-    yq eval '.platforms[].box' |         # Read the "box" property of each node under "platforms"
-    grep --invert-match --regexp=--- | # Filter out file separators
-    sort |
-    uniq)
+all_boxes=$(yq e 'map(.platforms[].box) | select(type == "string") | unique | join("\n")' "${GIT_ROOT}"/molecule/*/molecule.yml)
 
 # Read the boxes that are currently present on the system (for the current provider)
 present_boxes=$(
