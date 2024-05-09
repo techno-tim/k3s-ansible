@@ -25,5 +25,10 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: "01-lb-pool"
 spec:
-  cidrs:
-  - cidr: "{{ cilium_bgp_lb_cidr }}"
+  blocks:
+{% if "/" in cilium_bgp_lb_cidr %}
+  - cidr: {{ cilium_bgp_lb_cidr }}
+{% else %}
+  - start: {{ cilium_bgp_lb_cidr.split('-')[0] }}
+    stop: {{ cilium_bgp_lb_cidr.split('-')[1] }}
+{% endif %}
