@@ -18,3 +18,5 @@ server_init_args: >-
     --token {{ k3s_token }}
   {% endif %}
   {{ extra_server_args | default('') }}
+
+systemd_dir: /etc/systemd/system
