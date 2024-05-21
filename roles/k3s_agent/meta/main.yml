@@ -1,0 +1,29 @@
+---
+argument_specs:
+  main:
+    short_description: Setup k3s agents
+    options:
+      apiserver_endpoint:
+        description: Virtual ip-address configured on each master
+        required: true
+
+      extra_agent_args:
+        description: Virtual ip-address configured on each master
+        default: Arguments passed to the systemd service
+
+      group_name_master:
+        description: Name of the master group
+        default: master
+
+      proxy_env:
+        type: dict
+        description: Internet proxy configurations
+        default: ~
+        options:
+          HTTP_PROXY:
+          HTTPS_PROXY:
+          NO_PROXY:
+
+      systemd_dir:
+        description: Path to systemd services
+        default: /etc/systemd/system

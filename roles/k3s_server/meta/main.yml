@@ -1,0 +1,25 @@
+---
+argument_specs:
+  main:
+    short_description: Setup k3s servers
+    options:
+      group_name_master:
+        description: Name of the master group
+        default: master
+
+      kube_vip_cloud_provider_tag_version:
+        description: Tag for kube-vip-cloud-provider manifest when enabled
+        default: main
+
+      kube_vip_lb_ip_range:
+        description: IP range for kube-vip load balancer
+        default: ~
+
+      proxy_env:
+        type: dict
+        description: Internet proxy configurations
+        default: ~
+        options:
+          HTTP_PROXY:
+          HTTPS_PROXY:
+          NO_PROXY:

@@ -1,2 +1,5 @@
 ---
+is_pxe_booted: false
+extra_agent_args: ""
+group_name_master: master
 systemd_dir: /etc/systemd/system
