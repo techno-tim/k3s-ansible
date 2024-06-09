@@ -17,3 +17,4 @@ argument_specs:
             If all you need is your own images and you don't care about
             caching the docker/quay/ghcr.io images, you can just remove
             those from the mirrors: section.
+        required: true
