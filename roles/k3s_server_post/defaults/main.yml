@@ -1,6 +1,20 @@
 ---
-# Timeout to wait for MetalLB services to come up
-metal_lb_available_timeout: 240s
+bpf_lb_algorithm: maglev
+bpf_lb_mode: hybrid
 
-# Name of the master group
+calico_ebpf: false
+calico_tag: v3.27.2
+
+cilium_bgp: false
+cilium_exportPodCIDR: true
+cilium_hubble: true
+cilium_mode: native
+
+cluster_cidr: 10.52.0.0/16
+enable_bpf_masquerade: true
+kube_proxy_replacement: true
 group_name_master: master
+
+metal_lb_mode: layer2
+metal_lb_available_timeout: 240s
+metal_lb_controller_tag_version: v0.14.3
