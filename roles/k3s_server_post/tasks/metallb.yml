@@ -89,7 +89,7 @@
       {{
         (
           (metal_lb_controller_tag_version | regex_replace('^v', ''))
-          is
+            is
           version('0.14.4', '<', version_type='semver')
         ) | ternary(
           'webhook-service',
