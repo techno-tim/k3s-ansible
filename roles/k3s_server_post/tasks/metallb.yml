@@ -83,9 +83,23 @@
   loop_control:
     label: "{{ item.description }}"
 
+- name: Set metallb webhook service name
+  set_fact:
+    metallb_webhook_service_name: >-
+      {{
+        (
+          (metal_lb_controller_tag_version | regex_replace('^v', ''))
+          is
+          version('0.14.4', '<', version_type='semver')
+        ) | ternary(
+          'webhook-service',
+          'metallb-webhook-service'
+        )
+      }}
+
 - name: Test metallb-system webhook-service endpoint
   command: >-
-    k3s kubectl -n metallb-system get endpoints webhook-service
+    k3s kubectl -n metallb-system get endpoints {{ metallb_webhook_service_name }}
   changed_when: false
   with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
