@@ -9,11 +9,11 @@ spec:
   calicoNetwork:
     # Note: The ipPools section cannot be modified post-install.
     ipPools:
-    - blockSize: {{ calico_blockSize | default('26') }}
-      cidr: {{ cluster_cidr | default('10.52.0.0/16') }}
-      encapsulation: {{ calico_encapsulation | default('VXLANCrossSubnet') }}
-      natOutgoing: {{ calico_natOutgoing | default('Enabled') }}
-      nodeSelector: {{ calico_nodeSelector | default('all()') }}
+    - blockSize: {{ calico_blockSize }}
+      cidr: {{ cluster_cidr }}
+      encapsulation: {{ calico_encapsulation }}
+      natOutgoing: {{ calico_natOutgoing }}
+      nodeSelector: {{ calico_nodeSelector }}
     nodeAddressAutodetectionV4:
       interface: {{ calico_iface  }}
     linuxDataplane: {{ 'BPF' if calico_ebpf else 'Iptables' }}

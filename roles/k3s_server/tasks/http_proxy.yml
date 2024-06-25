@@ -1,5 +1,4 @@
 ---
-
 - name: Create k3s.service.d directory
   file:
     path: '{{ systemd_dir }}/k3s.service.d'

@@ -12,7 +12,7 @@ ExecStart=/usr/local/bin/k3s agent \
   --server https://{{ apiserver_endpoint | ansible.utils.ipwrap }}:6443 \
   {% if is_pxe_booted | default(false) %}--snapshotter native \
   {% endif %}--token {{ hostvars[groups[group_name_master | default('master')][0]]['token'] | default(k3s_token) }} \
-  {{ extra_agent_args | default("") }}
+  {{ extra_agent_args }}
 KillMode=process
 Delegate=yes
 LimitNOFILE=1048576

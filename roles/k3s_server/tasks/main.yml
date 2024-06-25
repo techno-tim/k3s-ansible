@@ -1,5 +1,4 @@
 ---
-
 - name: Stop k3s-init
   systemd:
     name: k3s-init

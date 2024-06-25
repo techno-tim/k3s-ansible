@@ -1,0 +1,145 @@
+---
+argument_specs:
+  main:
+    short_description: Configure k3s cluster
+    options:
+      apiserver_endpoint:
+        description: Virtual ip-address configured on each master
+        required: true
+
+      bpf_lb_algorithm:
+        description: BPF lb algorithm
+        default: maglev
+
+      bpf_lb_mode:
+        description: BPF lb mode
+        default: hybrid
+
+      calico_blockSize:
+        description: IP pool block size
+        type: int
+        default: 26
+
+      calico_ebpf:
+        description: Use eBPF dataplane instead of iptables
+        type: bool
+        default: false
+
+      calico_encapsulation:
+        description: IP pool encapsulation
+        default: VXLANCrossSubnet
+
+      calico_natOutgoing:
+        description: IP pool NAT outgoing
+        default: Enabled
+
+      calico_nodeSelector:
+        description: IP pool node selector
+        default: all()
+
+      calico_iface:
+        description: The network interface used for when Calico is enabled
+        default: ~
+
+      calico_tag:
+        description: Calico version tag
+        default: v3.27.2
+
+      cilium_bgp:
+        description:
+          - Enable cilium BGP control plane for LB services and pod cidrs.
+          - Disables the use of MetalLB.
+        type: bool
+        default: false
+
+      cilium_bgp_my_asn:
+        description: Local ASN for BGP peer
+        type: int
+        default: 64513
+
+      cilium_bgp_peer_asn:
+        description: BGP peer ASN
+        type: int
+        default: 64512
+
+      cilium_bgp_peer_address:
+        description: BGP peer address
+        default: ~
+
+      cilium_bgp_lb_cidr:
+        description: BGP load balancer IP range
+        default: 192.168.31.0/24
+
+      cilium_exportPodCIDR:
+        description: Export pod CIDR
+        type: bool
+        default: true
+
+      cilium_hubble:
+        description: Enable Cilium Hubble
+        type: bool
+        default: true
+
+      cilium_iface:
+        description: The network interface used for when Cilium is enabled
+        default: ~
+
+      cilium_mode:
+        description: Inner-node communication mode
+        default: native
+        choices:
+          - native
+          - routed
+
+      cluster_cidr:
+        description: Inner-cluster IP range
+        default: 10.52.0.0/16
+
+      enable_bpf_masquerade:
+        description: Use IP masquerading
+        type: bool
+        default: true
+
+      group_name_master:
+        description: Name of the master group
+        default: master
+
+      kube_proxy_replacement:
+        description: Replace the native kube-proxy with Cilium
+        type: bool
+        default: true
+
+      kube_vip_lb_ip_range:
+        description: IP range for kube-vip load balancer
+        default: ~
+
+      metal_lb_available_timeout:
+        description: Wait for MetalLB resources
+        default: 240s
+
+      metal_lb_ip_range:
+        description: MetalLB ip range for load balancer
+        default: 192.168.30.80-192.168.30.90
+
+      metal_lb_controller_tag_version:
+        description: Image tag for MetalLB
+        default: v0.14.3
+
+      metal_lb_mode:
+        description: Metallb mode
+        default: layer2
+        choices:
+          - bgp
+          - layer2
+
+      metal_lb_bgp_my_asn:
+        description: BGP ASN configurations
+        default: ~
+
+      metal_lb_bgp_peer_asn:
+        description: BGP peer ASN configurations
+        default: ~
+
+      metal_lb_bgp_peer_address:
+        description: BGP peer address
+        default: ~
