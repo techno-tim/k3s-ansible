@@ -15,10 +15,27 @@ argument_specs:
         description: BPF lb mode
         default: hybrid
 
+      calico_blockSize:
+        description: IP pool block size
+        type: int
+        default: 26
+
       calico_ebpf:
         description: Use eBPF dataplane instead of iptables
         type: bool
         default: false
+
+      calico_encapsulation:
+        description: IP pool encapsulation
+        default: VXLANCrossSubnet
+
+      calico_natOutgoing:
+        description: IP pool NAT outgoing
+        default: Enabled
+
+      calico_nodeSelector:
+        description: IP pool node selector
+        default: all()
 
       calico_iface:
         description: The network interface used for when Calico is enabled
@@ -34,6 +51,24 @@ argument_specs:
           - Disables the use of MetalLB.
         type: bool
         default: false
+
+      cilium_bgp_my_asn:
+        description: Local ASN for BGP peer
+        type: int
+        default: 64513
+
+      cilium_bgp_peer_asn:
+        description: BGP peer ASN
+        type: int
+        default: 64512
+
+      cilium_bgp_peer_address:
+        description: BGP peer address
+        default: ~
+
+      cilium_bgp_lb_cidr:
+        description: BGP load balancer IP range
+        default: 192.168.31.0/24
 
       cilium_exportPodCIDR:
         description: Export pod CIDR
@@ -82,6 +117,10 @@ argument_specs:
         description: Wait for MetalLB resources
         default: 240s
 
+      metal_lb_ip_range:
+        description: MetalLB ip range for load balancer
+        default: 192.168.30.80-192.168.30.90
+
       metal_lb_controller_tag_version:
         description: Image tag for MetalLB
         default: v0.14.3
@@ -92,3 +131,15 @@ argument_specs:
         choices:
           - bgp
           - layer2
+
+      metal_lb_bgp_my_asn:
+        description: BGP ASN configurations
+        default: ~
+
+      metal_lb_bgp_peer_asn:
+        description: BGP peer ASN configurations
+        default: ~
+
+      metal_lb_bgp_peer_address:
+        description: BGP peer address
+        default: ~

@@ -1,0 +1,7 @@
+---
+argument_specs:
+  main:
+    short_description: Prerequisites
+    options:
+      system_timezone:
+        description: Timezone to be set on all nodes

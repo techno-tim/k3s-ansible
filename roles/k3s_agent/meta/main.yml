@@ -32,3 +32,4 @@ argument_specs:
       systemd_dir:
         description: Path to systemd services
         default: /etc/systemd/system
+        required: true
