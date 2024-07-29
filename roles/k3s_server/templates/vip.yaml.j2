@@ -27,7 +27,7 @@ spec:
         - manager
         env:
         - name: vip_arp
-          value: "true"
+          value: "{{ 'true' if kube_vip_arp | bool else 'false' }}"
         - name: port
           value: "6443"
 {% if kube_vip_iface %}
