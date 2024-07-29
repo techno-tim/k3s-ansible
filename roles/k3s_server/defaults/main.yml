@@ -4,6 +4,9 @@
 # will determine the right interface automatically at runtime.
 kube_vip_iface: null
 
+# Enables ARP broadcasts from Leader
+kube_vip_arp: true
+
 # Name of the master group
 group_name_master: master
 
