@@ -2,15 +2,15 @@
 bpf_lb_algorithm: maglev
 bpf_lb_mode: hybrid
 
-calico_blockSize: 26
+calico_blockSize: 26  # noqa var-naming
 calico_ebpf: false
 calico_encapsulation: VXLANCrossSubnet
-calico_natOutgoing: Enabled
-calico_nodeSelector: all()
+calico_natOutgoing: Enabled  # noqa var-naming
+calico_nodeSelector: all()  # noqa var-naming
 calico_tag: v3.27.2
 
 cilium_bgp: false
-cilium_exportPodCIDR: true
+cilium_exportPodCIDR: true  # noqa var-naming
 cilium_bgp_my_asn: 64513
 cilium_bgp_peer_asn: 64512
 cilium_bgp_lb_cidr: 192.168.31.0/24
