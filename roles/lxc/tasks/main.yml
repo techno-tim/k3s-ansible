@@ -1,20 +1,20 @@
 ---
 - name: Check for rc.local file
-  stat:
+  ansible.builtin.stat:
     path: /etc/rc.local
   register: rcfile
 
 - name: Create rc.local if needed
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/rc.local
     line: "#!/bin/sh -e"
     create: true
     insertbefore: BOF
-    mode: "u=rwx,g=rx,o=rx"
+    mode: u=rwx,g=rx,o=rx
   when: not rcfile.stat.exists
 
 - name: Write rc.local file
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/rc.local
     content: "{{ lookup('template', 'templates/rc.local.j2') }}"
     state: present

@@ -1,5 +1,5 @@
 ---
 - name: Remove linux-modules-extra-raspi
-  apt:
+  ansible.builtin.apt:
     name: linux-modules-extra-raspi
     state: absent

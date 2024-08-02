@@ -1,13 +1,13 @@
 ---
 - name: Test for cmdline path
-  stat:
+  ansible.builtin.stat:
     path: /boot/firmware/cmdline.txt
   register: boot_cmdline_path
   failed_when: false
   changed_when: false
 
 - name: Set cmdline path based on Debian version and command result
-  set_fact:
+  ansible.builtin.set_fact:
     cmdline_path: >-
       {{
         (
@@ -20,20 +20,20 @@
       }}
 
 - name: Activating cgroup support
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ cmdline_path }}"
-    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
-    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+    regexp: ^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$
+    line: \1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory
     backrefs: true
   notify: reboot
 
 - name: Install iptables
-  apt:
+  ansible.builtin.apt:
     name: iptables
     state: present
 
 - name: Flush iptables before changing to iptables-legacy
-  iptables:
+  ansible.builtin.iptables:
     flush: true
 
 - name: Changing to iptables-legacy
