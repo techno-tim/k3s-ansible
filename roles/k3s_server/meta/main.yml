@@ -26,6 +26,11 @@ argument_specs:
         description: Name of the master group
         default: master
 
+      kube_vip_arp:
+        description: Enables ARP broadcasts from Leader
+        default: true
+        type: bool
+
       kube_vip_iface:
         description:
           - Explicitly define an interface that ALL control nodes
