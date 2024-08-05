@@ -146,12 +146,14 @@
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/kubectl
     state: link
+  when: k3s_create_kubectl_symlink | default(true) | bool
 
 - name: Create crictl symlink
   file:
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/crictl
     state: link
+  when: k3s_create_crictl_symlink | default(true) | bool
 
 - name: Get contents of manifests folder
   find:
