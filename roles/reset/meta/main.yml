@@ -1,0 +1,8 @@
+---
+argument_specs:
+  main:
+    short_description: Reset all nodes
+    options:
+      systemd_dir:
+        description: Path to systemd services
+        default: /etc/systemd/system

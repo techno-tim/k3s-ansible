@@ -1,14 +1,18 @@
 ---
-# If you want to explicitly define an interface that ALL control nodes
-# should use to propagate the VIP, define it here. Otherwise, kube-vip
-# will determine the right interface automatically at runtime.
-kube_vip_iface: null
+extra_server_args: ""
 
-# Enables ARP broadcasts from Leader
-kube_vip_arp: true
-
-# Name of the master group
 group_name_master: master
+
+kube_vip_arp: true
+kube_vip_iface: ~
+kube_vip_cloud_provider_tag_version: main
+kube_vip_tag_version: v0.7.2
+
+metal_lb_controller_tag_version: v0.14.3
+metal_lb_speaker_tag_version: v0.14.3
+metal_lb_type: native
+
+retry_count: 20
 
 # yamllint disable rule:line-length
 server_init_args: >-
@@ -20,4 +24,6 @@ server_init_args: >-
     {% endif %}
     --token {{ k3s_token }}
   {% endif %}
-  {{ extra_server_args | default('') }}
+  {{ extra_server_args }}
+
+systemd_dir: /etc/systemd/system

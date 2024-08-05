@@ -1,0 +1,90 @@
+---
+argument_specs:
+  main:
+    short_description: Setup k3s servers
+    options:
+      apiserver_endpoint:
+        description: Virtual ip-address configured on each master
+        required: true
+
+      cilium_bgp:
+        description:
+          - Enable cilium BGP control plane for LB services and pod cidrs.
+          - Disables the use of MetalLB.
+        type: bool
+        default: ~
+
+      cilium_iface:
+        description: The network interface used for when Cilium is enabled
+        default: ~
+
+      extra_server_args:
+        description: Extra arguments for server nodes
+        default: ""
+
+      group_name_master:
+        description: Name of the master group
+        default: master
+
+      kube_vip_arp:
+        description: Enables ARP broadcasts from Leader
+        default: true
+        type: bool
+
+      kube_vip_iface:
+        description:
+          - Explicitly define an interface that ALL control nodes
+          - should use to propagate the VIP, define it here.
+          - Otherwise, kube-vip will determine the right interface
+          - automatically at runtime.
+        default: ~
+
+      kube_vip_tag_version:
+        description: Image tag for kube-vip
+        default: v0.7.2
+
+      kube_vip_cloud_provider_tag_version:
+        description: Tag for kube-vip-cloud-provider manifest when enabled
+        default: main
+
+      kube_vip_lb_ip_range:
+        description: IP range for kube-vip load balancer
+        default: ~
+
+      metal_lb_controller_tag_version:
+        description: Image tag for MetalLB
+        default: v0.14.3
+
+      metal_lb_speaker_tag_version:
+        description: Image tag for MetalLB
+        default: v0.14.3
+
+      metal_lb_type:
+        choices:
+          - frr
+          - native
+        default: native
+
+      proxy_env:
+        type: dict
+        description: Internet proxy configurations
+        default: ~
+        options:
+          HTTP_PROXY:
+            required: true
+          HTTPS_PROXY:
+            required: true
+          NO_PROXY:
+            required: true
+
+      retry_count:
+        description: Amount of retries when verifying that nodes joined
+        type: int
+        default: 20
+
+      server_init_args:
+        description: Arguments for server nodes
+
+      systemd_dir:
+        description: Path to systemd services
+        default: /etc/systemd/system
