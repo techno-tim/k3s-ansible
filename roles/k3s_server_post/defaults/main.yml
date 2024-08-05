@@ -1,6 +1,28 @@
 ---
-# Timeout to wait for MetalLB services to come up
-metal_lb_available_timeout: 240s
+bpf_lb_algorithm: maglev
+bpf_lb_mode: hybrid
 
-# Name of the master group
+calico_blockSize: 26  # noqa var-naming
+calico_ebpf: false
+calico_encapsulation: VXLANCrossSubnet
+calico_natOutgoing: Enabled  # noqa var-naming
+calico_nodeSelector: all()  # noqa var-naming
+calico_tag: v3.27.2
+
+cilium_bgp: false
+cilium_exportPodCIDR: true  # noqa var-naming
+cilium_bgp_my_asn: 64513
+cilium_bgp_peer_asn: 64512
+cilium_bgp_lb_cidr: 192.168.31.0/24
+cilium_hubble: true
+cilium_mode: native
+
+cluster_cidr: 10.52.0.0/16
+enable_bpf_masquerade: true
+kube_proxy_replacement: true
 group_name_master: master
+
+metal_lb_mode: layer2
+metal_lb_available_timeout: 240s
+metal_lb_controller_tag_version: v0.14.3
+metal_lb_ip_range: 192.168.30.80-192.168.30.90

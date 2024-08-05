@@ -1,0 +1,20 @@
+---
+argument_specs:
+  main:
+    short_description: Configure the use of a custom container registry
+    options:
+      custom_registries_yaml:
+        description:
+          - YAML block defining custom registries.
+          - >
+            The following is an example that pulls all images used in
+            this playbook through your private registries.
+          - >
+            It also allows you to pull your own images from your private
+            registry, without having to use imagePullSecrets in your
+            deployments.
+          - >
+            If all you need is your own images and you don't care about
+            caching the docker/quay/ghcr.io images, you can just remove
+            those from the mirrors: section.
+        required: true
