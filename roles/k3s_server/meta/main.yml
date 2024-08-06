@@ -26,6 +26,16 @@ argument_specs:
         description: Name of the master group
         default: master
 
+      k3s_create_kubectl_symlink:
+        description: Create the kubectl -> k3s symlink
+        default: false
+        type: bool
+
+      k3s_create_crictl_symlink:
+        description: Create the crictl -> k3s symlink
+        default: false
+        type: bool
+
       kube_vip_arp:
         description: Enables ARP broadcasts from Leader
         default: true
