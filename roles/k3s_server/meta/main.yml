@@ -27,9 +27,30 @@ argument_specs:
         default: master
 
       kube_vip_arp:
-        description: Enables ARP broadcasts from Leader
+        description: Enables kube-vip ARP broadcasts
         default: true
         type: bool
+
+      kube_vip_bgp:
+        description: Enables kube-vip BGP peering
+        default: false
+        type: bool
+
+      kube_vip_bgp_routerid:
+        description: Defines the router ID for the kube-vip BGP server
+        default: "127.0.0.1"
+
+      kube_vip_bgp_as:
+        description: Defines the AS for the kube-vip BGP server
+        default: "64513"
+
+      kube_vip_bgp_peeraddress:
+        description: Defines the address for the kube-vip BGP peer
+        default: "192.168.30.1"
+
+      kube_vip_bgp_peeras:
+        description: Defines the AS for the kube-vip BGP peer
+        default: "64512"
 
       kube_vip_iface:
         description:
