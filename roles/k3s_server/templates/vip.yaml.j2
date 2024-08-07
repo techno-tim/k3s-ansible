@@ -27,7 +27,9 @@ spec:
         - manager
         env:
         - name: vip_arp
-          value: "{{ 'true' if kube_vip_arp | bool else 'false' }}"
+          value: "{{ 'true' if kube_vip_arp | default(true) | bool else 'false' }}"
+        - name: bgp_enable
+          value: "{{ 'true' if kube_vip_bgp | default(false) | bool else 'false' }}"
         - name: port
           value: "6443"
 {% if kube_vip_iface %}
@@ -54,6 +56,24 @@ spec:
           value: "2"
         - name: address
           value: {{ apiserver_endpoint }}
+{% if kube_vip_bgp | default(false) | bool %}
+{% if kube_vip_bgp_routerid is defined %}
+        - name: bgp_routerid
+          value: "{{ kube_vip_bgp_routerid }}"
+{% endif %}
+{% if kube_vip_bgp_as is defined %}
+        - name: bgp_as
+          value: "{{ kube_vip_bgp_as }}"
+{% endif %}
+{% if kube_vip_bgp_peeraddress is defined %}
+        - name: bgp_peeraddress
+          value: "{{ kube_vip_bgp_peeraddress }}"
+{% endif %}
+{% if kube_vip_bgp_peeras is defined %}
+        - name: bgp_peeras
+          value: "{{ kube_vip_bgp_peeras }}"
+{% endif %}
+{% endif %}
         image: ghcr.io/kube-vip/kube-vip:{{ kube_vip_tag_version }}
         imagePullPolicy: Always
         name: kube-vip
