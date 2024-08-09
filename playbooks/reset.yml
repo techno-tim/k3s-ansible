@@ -1,0 +1,25 @@
+---
+- name: Reset k3s cluster
+  hosts: k3s_cluster
+  gather_facts: true
+  roles:
+    - role: reset
+      become: true
+    - role: raspberrypi
+      become: true
+      vars: {state: absent}
+  post_tasks:
+    - name: Reboot and wait for node to come back up
+      become: true
+      reboot:
+        reboot_command: "{{ custom_reboot_command | default(omit) }}"
+        reboot_timeout: 3600
+
+- name: Revert changes to Proxmox cluster
+  hosts: proxmox
+  gather_facts: true
+  become: true
+  remote_user: "{{ proxmox_lxc_ssh_user }}"
+  roles:
+    - role: reset_proxmox_lxc
+      when: proxmox_lxc_configure

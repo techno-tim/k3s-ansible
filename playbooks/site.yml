@@ -1,0 +1,68 @@
+---
+- name: Pre tasks
+  hosts: all
+  pre_tasks:
+    - name: Verify Ansible is version 2.11 or above. (If this fails you may need to update Ansible)
+      assert:
+        that: "ansible_version.full is version_compare('2.11', '>=')"
+        msg: >
+          "Ansible is out of date. See here for more info: https://docs.technotim.live/posts/ansible-automation/"
+
+- name: Prepare Proxmox cluster
+  hosts: proxmox
+  gather_facts: true
+  become: true
+  environment: "{{ proxy_env | default({}) }}"
+  roles:
+    - role: proxmox_lxc
+      when: proxmox_lxc_configure
+
+- name: Prepare k3s nodes
+  hosts: k3s_cluster
+  gather_facts: true
+  environment: "{{ proxy_env | default({}) }}"
+  roles:
+    - role: lxc
+      become: true
+      when: proxmox_lxc_configure
+    - role: prereq
+      become: true
+    - role: download
+      become: true
+    - role: raspberrypi
+      become: true
+    - role: k3s_custom_registries
+      become: true
+      when: custom_registries
+
+- name: Setup k3s servers
+  hosts: master
+  environment: "{{ proxy_env | default({}) }}"
+  roles:
+    - role: k3s_server
+      become: true
+
+- name: Setup k3s agents
+  hosts: node
+  environment: "{{ proxy_env | default({}) }}"
+  roles:
+    - role: k3s_agent
+      become: true
+
+- name: Configure k3s cluster
+  hosts: master
+  environment: "{{ proxy_env | default({}) }}"
+  roles:
+    - role: k3s_server_post
+      become: true
+
+- name: Storing kubeconfig in the playbook directory
+  hosts: master
+  environment: "{{ proxy_env | default({}) }}"
+  tasks:
+    - name: Copying kubeconfig from {{ hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname'] }}
+      ansible.builtin.fetch:
+        src: "{{ ansible_user_dir }}/.kube/config"
+        dest: ./kubeconfig
+        flat: true
+      when: ansible_hostname == hostvars[groups[group_name_master | default('master')][0]]['ansible_hostname']

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible-playbook site.yml
+ansible-playbook techno_tim.k3s_ansible.site.yml

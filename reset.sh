@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible-playbook reset.yml
+ansible-playbook techno_tim.k3s_ansible.reset.yml
