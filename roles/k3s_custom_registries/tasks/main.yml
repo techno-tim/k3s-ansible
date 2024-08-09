@@ -1,17 +1,16 @@
 ---
-
 - name: Create directory /etc/rancher/k3s
-  file:
-    path: "/etc/{{ item }}"
+  ansible.builtin.file:
+    path: /etc/{{ item }}
     state: directory
-    mode: '0755'
+    mode: "0755"
   loop:
     - rancher
     - rancher/k3s
 
 - name: Insert registries into /etc/rancher/k3s/registries.yaml
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/rancher/k3s/registries.yaml
     block: "{{ custom_registries_yaml }}"
-    mode: '0600'
+    mode: "0600"
     create: true

@@ -4,28 +4,28 @@
   run_once: true
   block:
     - name: Create manifests directory on first master
-      file:
+      ansible.builtin.file:
         path: /tmp/k3s
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: "Download to first master: manifest for Tigera Operator and Calico CRDs"
       ansible.builtin.get_url:
-        url: "https://raw.githubusercontent.com/projectcalico/calico/{{ calico_tag }}/manifests/tigera-operator.yaml"
-        dest: "/tmp/k3s/tigera-operator.yaml"
+        url: https://raw.githubusercontent.com/projectcalico/calico/{{ calico_tag }}/manifests/tigera-operator.yaml
+        dest: /tmp/k3s/tigera-operator.yaml
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: Copy Calico custom resources manifest to first master
       ansible.builtin.template:
-        src: "calico.crs.j2"
+        src: calico.crs.j2
         dest: /tmp/k3s/custom-resources.yaml
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: Deploy or replace Tigera Operator
       block:
@@ -44,7 +44,7 @@
           failed_when: "'Error' in replace_operator.stderr"
 
     - name: Wait for Tigera Operator resources
-      command: >-
+      ansible.builtin.command: >-
         k3s kubectl wait {{ item.type }}/{{ item.name }}
         --namespace='tigera-operator'
         --for=condition=Available=True
@@ -55,7 +55,7 @@
       retries: 7
       delay: 7
       with_items:
-        - {name: tigera-operator, type: deployment}
+        - { name: tigera-operator, type: deployment }
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
 
@@ -76,7 +76,7 @@
           failed_when: "'Error' in apply_cr.stderr"
 
     - name: Wait for Calico system resources to be available
-      command: >-
+      ansible.builtin.command: >-
         {% if item.type == 'daemonset' %}
         k3s kubectl wait pods
         --namespace='{{ item.namespace }}'
@@ -94,11 +94,17 @@
       retries: 30
       delay: 7
       with_items:
-        - {name: calico-typha, type: deployment, namespace: calico-system}
-        - {name: calico-kube-controllers, type: deployment, namespace: calico-system}
-        - {name: csi-node-driver, type: daemonset, selector: 'k8s-app=csi-node-driver', namespace: calico-system}
-        - {name: calico-node, type: daemonset, selector: 'k8s-app=calico-node', namespace: calico-system}
-        - {name: calico-apiserver, type: deployment, namespace: calico-apiserver}
+        - { name: calico-typha, type: deployment, namespace: calico-system }
+        - { name: calico-kube-controllers, type: deployment, namespace: calico-system }
+        - name: csi-node-driver
+          type: daemonset
+          selector: k8s-app=csi-node-driver
+          namespace: calico-system
+        - name: calico-node
+          type: daemonset
+          selector: k8s-app=calico-node
+          namespace: calico-system
+        - { name: calico-apiserver, type: deployment, namespace: calico-apiserver }
       loop_control:
         label: "{{ item.type }}/{{ item.name }}"
 

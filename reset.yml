@@ -7,11 +7,11 @@
       become: true
     - role: raspberrypi
       become: true
-      vars: {state: absent}
+      vars: { state: absent }
   post_tasks:
     - name: Reboot and wait for node to come back up
       become: true
-      reboot:
+      ansible.builtin.reboot:
         reboot_command: "{{ custom_reboot_command | default(omit) }}"
         reboot_timeout: 3600
 

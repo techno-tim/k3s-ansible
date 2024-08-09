@@ -1,20 +1,20 @@
 ---
 - name: Deploy calico
-  include_tasks: calico.yml
+  ansible.builtin.include_tasks: calico.yml
   tags: calico
   when: calico_iface is defined and cilium_iface is not defined
 
 - name: Deploy cilium
-  include_tasks: cilium.yml
+  ansible.builtin.include_tasks: cilium.yml
   tags: cilium
   when: cilium_iface is defined
 
 - name: Deploy metallb pool
-  include_tasks: metallb.yml
+  ansible.builtin.include_tasks: metallb.yml
   tags: metallb
   when: kube_vip_lb_ip_range is not defined and (not cilium_bgp or cilium_iface is not defined)
 
 - name: Remove tmp directory used for manifests
-  file:
+  ansible.builtin.file:
     path: /tmp/k3s
     state: absent

@@ -1,17 +1,16 @@
 ---
 - name: Create k3s.service.d directory
-  file:
-    path: '{{ systemd_dir }}/k3s.service.d'
+  ansible.builtin.file:
+    path: "{{ systemd_dir }}/k3s.service.d"
     state: directory
     owner: root
     group: root
-    mode: '0755'
-
+    mode: "0755"
 
 - name: Copy K3s http_proxy conf file
-  template:
-    src: "http_proxy.conf.j2"
+  ansible.builtin.template:
+    src: http_proxy.conf.j2
     dest: "{{ systemd_dir }}/k3s.service.d/http_proxy.conf"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"

@@ -4,7 +4,6 @@ dependency:
 driver:
   name: vagrant
 platforms:
-
   - name: control1
     box: generic/ubuntu2204
     memory: 1024
@@ -18,8 +17,8 @@ platforms:
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
-      ssh.username: "vagrant"
-      ssh.password: "vagrant"
+      ssh.username: vagrant
+      ssh.password: vagrant
 
   - name: control2
     box: generic/debian12
@@ -56,8 +55,8 @@ platforms:
     config_options:
       # We currently can not use public-key based authentication on Ubuntu 22.04,
       # see: https://github.com/chef/bento/issues/1405
-      ssh.username: "vagrant"
-      ssh.password: "vagrant"
+      ssh.username: vagrant
+      ssh.password: vagrant
 
   - name: node2
     box: generic/rocky9

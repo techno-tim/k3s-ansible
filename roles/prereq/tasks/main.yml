@@ -34,10 +34,10 @@
   tags: sysctl
 
 - name: Add br_netfilter to /etc/modules-load.d/
-  copy:
-    content: "br_netfilter"
+  ansible.builtin.copy:
+    content: br_netfilter
     dest: /etc/modules-load.d/br_netfilter.conf
-    mode: "u=rw,g=,o="
+    mode: u=rw,g=,o=
   when: ansible_os_family == "RedHat"
 
 - name: Load br_netfilter
@@ -59,11 +59,11 @@
   tags: sysctl
 
 - name: Add /usr/local/bin to sudo secure_path
-  lineinfile:
-    line: 'Defaults    secure_path = {{ secure_path[ansible_os_family] }}'
-    regexp: "Defaults(\\s)*secure_path(\\s)*="
+  ansible.builtin.lineinfile:
+    line: Defaults    secure_path = {{ secure_path[ansible_os_family] }}
+    regexp: Defaults(\s)*secure_path(\s)*=
     state: present
     insertafter: EOF
     path: /etc/sudoers
-    validate: 'visudo -cf %s'
+    validate: visudo -cf %s
   when: ansible_os_family in [ "RedHat", "Suse" ]
