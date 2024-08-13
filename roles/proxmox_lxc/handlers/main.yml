@@ -2,12 +2,12 @@
 - name: Reboot containers
   block:
     - name: Get container ids from filtered files
-      set_fact:
+      ansible.builtin.set_fact:
         proxmox_lxc_filtered_ids: >-
           {{ proxmox_lxc_filtered_files | map("split", "/") | map("last") | map("split", ".") | map("first") }}
       listen: reboot containers
     - name: Reboot container
-      command: "pct reboot {{ item }}"
+      ansible.builtin.command: pct reboot {{ item }}
       loop: "{{ proxmox_lxc_filtered_ids }}"
       changed_when: true
       listen: reboot containers

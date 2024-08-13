@@ -17,16 +17,16 @@
       ansible.builtin.include_tasks: http_proxy.yml
 
 - name: Deploy K3s http_proxy conf
-  include_tasks: http_proxy.yml
+  ansible.builtin.include_tasks: http_proxy.yml
   when: proxy_env is defined
 
 - name: Configure the k3s service
   ansible.builtin.template:
-    src: "k3s.service.j2"
+    src: k3s.service.j2
     dest: "{{ systemd_dir }}/k3s-node.service"
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
 
 - name: Manage k3s service
   ansible.builtin.systemd:

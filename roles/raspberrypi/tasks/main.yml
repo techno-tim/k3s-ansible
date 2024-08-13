@@ -1,38 +1,37 @@
 ---
 - name: Test for raspberry pi /proc/cpuinfo
-  command: grep -E "Raspberry Pi|BCM2708|BCM2709|BCM2835|BCM2836" /proc/cpuinfo
+  ansible.builtin.command: grep -E "Raspberry Pi|BCM2708|BCM2709|BCM2835|BCM2836" /proc/cpuinfo
   register: grep_cpuinfo_raspberrypi
   failed_when: false
   changed_when: false
 
 - name: Test for raspberry pi /proc/device-tree/model
-  command: grep -E "Raspberry Pi" /proc/device-tree/model
+  ansible.builtin.command: grep -E "Raspberry Pi" /proc/device-tree/model
   register: grep_device_tree_model_raspberrypi
   failed_when: false
   changed_when: false
 
 - name: Set raspberry_pi fact to true
-  set_fact:
+  ansible.builtin.set_fact:
     raspberry_pi: true
-  when:
-    grep_cpuinfo_raspberrypi.rc == 0 or grep_device_tree_model_raspberrypi.rc == 0
+  when: grep_cpuinfo_raspberrypi.rc == 0 or grep_device_tree_model_raspberrypi.rc == 0
 
 - name: Set detected_distribution to Raspbian (ARM64 on Raspbian, Debian Buster/Bullseye/Bookworm)
-  set_fact:
+  ansible.builtin.set_fact:
     detected_distribution: Raspbian
   vars:
     allowed_descriptions:
       - "[Rr]aspbian.*"
-      - "Debian.*buster"
-      - "Debian.*bullseye"
-      - "Debian.*bookworm"
+      - Debian.*buster
+      - Debian.*bullseye
+      - Debian.*bookworm
   when:
     - ansible_facts.architecture is search("aarch64")
     - raspberry_pi|default(false)
     - ansible_facts.lsb.description|default("") is match(allowed_descriptions | join('|'))
 
 - name: Set detected_distribution to Raspbian (ARM64 on Debian Bookworm)
-  set_fact:
+  ansible.builtin.set_fact:
     detected_distribution: Raspbian
   when:
     - ansible_facts.architecture is search("aarch64")
@@ -40,13 +39,13 @@
     - ansible_facts.lsb.description|default("") is match("Debian.*bookworm")
 
 - name: Set detected_distribution_major_version
-  set_fact:
+  ansible.builtin.set_fact:
     detected_distribution_major_version: "{{ ansible_facts.lsb.major_release }}"
   when:
     - detected_distribution | default("") == "Raspbian"
 
 - name: Execute OS related tasks on the Raspberry Pi - {{ action_ }}
-  include_tasks: "{{ item }}"
+  ansible.builtin.include_tasks: "{{ item }}"
   with_first_found:
     - "{{ action_ }}/{{ detected_distribution }}-{{ detected_distribution_major_version }}.yml"
     - "{{ action_ }}/{{ detected_distribution }}.yml"
