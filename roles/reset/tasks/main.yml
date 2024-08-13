@@ -1,6 +1,6 @@
 ---
 - name: Disable services
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
     enabled: false
@@ -12,12 +12,12 @@
 
 - name: RUN pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   register: pkill_containerd_shim_runc
-  command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
-  changed_when: "pkill_containerd_shim_runc.rc == 0"
+  ansible.builtin.command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+  changed_when: pkill_containerd_shim_runc.rc == 0
   failed_when: false
 
 - name: Umount k3s filesystems
-  include_tasks: umount_with_children.yml
+  ansible.builtin.include_tasks: umount_with_children.yml
   with_items:
     - /run/k3s
     - /var/lib/kubelet
@@ -30,7 +30,7 @@
     loop_var: mounted_fs
 
 - name: Remove service files, binaries and data
-  file:
+  ansible.builtin.file:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -48,7 +48,7 @@
     - /etc/cni/net.d
 
 - name: Remove K3s http_proxy files
-  file:
+  ansible.builtin.file:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -59,22 +59,22 @@
   when: proxy_env is defined
 
 - name: Reload daemon_reload
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
 
 - name: Remove tmp directory used for manifests
-  file:
+  ansible.builtin.file:
     path: /tmp/k3s
     state: absent
 
 - name: Check if rc.local exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/rc.local
   register: rcfile
 
 - name: Remove rc.local modifications for proxmox lxc containers
   become: true
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/rc.local
     content: "{{ lookup('template', 'templates/rc.local.j2') }}"
     create: false
@@ -83,14 +83,14 @@
 
 - name: Check rc.local for cleanup
   become: true
-  slurp:
+  ansible.builtin.slurp:
     src: /etc/rc.local
   register: rcslurp
   when: proxmox_lxc_configure and rcfile.stat.exists
 
 - name: Cleanup rc.local if we only have a Shebang line
   become: true
-  file:
+  ansible.builtin.file:
     path: /etc/rc.local
     state: absent
   when: proxmox_lxc_configure and rcfile.stat.exists and ((rcslurp.content | b64decode).splitlines() | length) <= 1

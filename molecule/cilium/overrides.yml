@@ -12,5 +12,5 @@
         retry_count: 45
 
         # Make sure that our IP ranges do not collide with those of the other scenarios
-        apiserver_endpoint: "192.168.30.225"
-        metal_lb_ip_range: "192.168.30.110-192.168.30.119"
+        apiserver_endpoint: 192.168.30.225
+        metal_lb_ip_range: 192.168.30.110-192.168.30.119

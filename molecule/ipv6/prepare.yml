@@ -38,7 +38,7 @@
         dest: /etc/netplan/55-flannel-ipv4.yaml
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       register: netplan_template
 
     - name: Apply netplan configuration
