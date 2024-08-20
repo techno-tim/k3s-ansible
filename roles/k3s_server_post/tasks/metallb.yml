@@ -12,14 +12,14 @@
   ansible.builtin.shell: |-
     set -o pipefail
 
-    REPLICAS=$(k3s kubectl --namespace='metallb-system' get replicasets \
+    REPLICAS=$({{ k3s_kubectl_binary | default('k3s kubectl') }} --namespace='metallb-system' get replicasets \
       -l 'component=controller,app=metallb' \
       -o jsonpath='{.items[0].spec.template.spec.containers[0].image}, {.items[0].metadata.name}' 2>/dev/null || true)
     REPLICAS_SETS=$(echo ${REPLICAS} | grep -v '{{ metal_lb_controller_tag_version }}' | sed -e "s/^.*\s//g")
     if [ -n "${REPLICAS_SETS}" ] ; then
       for REPLICAS in "${REPLICAS_SETS}"
       do
-        k3s kubectl --namespace='metallb-system' \
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} --namespace='metallb-system' \
           delete rs "${REPLICAS}"
       done
     fi
@@ -40,14 +40,14 @@
 
 - name: Test metallb-system namespace
   ansible.builtin.command: >-
-    k3s kubectl -n metallb-system
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} -n metallb-system
   changed_when: false
   with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Wait for MetalLB resources
   ansible.builtin.command: >-
-    k3s kubectl wait {{ item.resource }}
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} wait {{ item.resource }}
     --namespace='metallb-system'
     {% if item.name | default(False) -%}{{ item.name }}{%- endif %}
     {% if item.selector | default(False) -%}--selector='{{ item.selector }}'{%- endif %}
@@ -99,14 +99,14 @@
 
 - name: Test metallb-system webhook-service endpoint
   ansible.builtin.command: >-
-    k3s kubectl -n metallb-system get endpoints {{ metallb_webhook_service_name }}
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} -n metallb-system get endpoints {{ metallb_webhook_service_name }}
   changed_when: false
   with_items: "{{ groups[group_name_master | default('master')] }}"
   run_once: true
 
 - name: Apply metallb CRs
   ansible.builtin.command: >-
-    k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} apply -f /tmp/k3s/metallb-crs.yaml
     --timeout='{{ metal_lb_available_timeout }}'
   register: this
   changed_when: false
@@ -116,7 +116,7 @@
 
 - name: Test metallb-system resources for Layer 2 configuration
   ansible.builtin.command: >-
-    k3s kubectl -n metallb-system get {{ item }}
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} -n metallb-system get {{ item }}
   changed_when: false
   run_once: true
   when: metal_lb_mode == "layer2"
@@ -126,7 +126,7 @@
 
 - name: Test metallb-system resources for BGP configuration
   ansible.builtin.command: >-
-    k3s kubectl -n metallb-system get {{ item }}
+    {{ k3s_kubectl_binary | default('k3s kubectl') }} -n metallb-system get {{ item }}
   changed_when: false
   run_once: true
   when: metal_lb_mode == "bgp"

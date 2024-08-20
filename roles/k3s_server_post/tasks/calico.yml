@@ -31,21 +31,21 @@
       block:
         - name: Deploy Tigera Operator
           ansible.builtin.command:
-            cmd: kubectl create -f /tmp/k3s/tigera-operator.yaml
+            cmd: "{{ k3s_kubectl_binary | default('k3s kubectl') }} create -f /tmp/k3s/tigera-operator.yaml"
           register: create_operator
           changed_when: "'created' in create_operator.stdout"
           failed_when: "'Error' in create_operator.stderr and 'already exists' not in create_operator.stderr"
       rescue:
         - name: Replace existing Tigera Operator
           ansible.builtin.command:
-            cmd: kubectl replace -f /tmp/k3s/tigera-operator.yaml
+            cmd: "{{ k3s_kubectl_binary | default('k3s kubectl') }} replace -f /tmp/k3s/tigera-operator.yaml"
           register: replace_operator
           changed_when: "'replaced' in replace_operator.stdout"
           failed_when: "'Error' in replace_operator.stderr"
 
     - name: Wait for Tigera Operator resources
       ansible.builtin.command: >-
-        k3s kubectl wait {{ item.type }}/{{ item.name }}
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} wait {{ item.type }}/{{ item.name }}
         --namespace='tigera-operator'
         --for=condition=Available=True
         --timeout=30s
@@ -63,14 +63,14 @@
       block:
         - name: Deploy custom resources for Calico
           ansible.builtin.command:
-            cmd: kubectl create -f /tmp/k3s/custom-resources.yaml
+            cmd: "{{ k3s_kubectl_binary | default('k3s kubectl') }} create -f /tmp/k3s/custom-resources.yaml"
           register: create_cr
           changed_when: "'created' in create_cr.stdout"
           failed_when: "'Error' in create_cr.stderr and 'already exists' not in create_cr.stderr"
       rescue:
         - name: Apply new Calico custom resource manifest
           ansible.builtin.command:
-            cmd: kubectl apply -f /tmp/k3s/custom-resources.yaml
+            cmd: "{{ k3s_kubectl_binary | default('k3s kubectl') }} apply -f /tmp/k3s/custom-resources.yaml"
           register: apply_cr
           changed_when: "'configured' in apply_cr.stdout or 'created' in apply_cr.stdout"
           failed_when: "'Error' in apply_cr.stderr"
@@ -78,12 +78,12 @@
     - name: Wait for Calico system resources to be available
       ansible.builtin.command: >-
         {% if item.type == 'daemonset' %}
-        k3s kubectl wait pods
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} wait pods
         --namespace='{{ item.namespace }}'
         --selector={{ item.selector }}
         --for=condition=Ready
         {% else %}
-        k3s kubectl wait {{ item.type }}/{{ item.name }}
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} wait {{ item.type }}/{{ item.name }}
         --namespace='{{ item.namespace }}'
         --for=condition=Available
         {% endif %}
@@ -111,7 +111,7 @@
     - name: Patch Felix configuration for eBPF mode
       ansible.builtin.command:
         cmd: >
-          kubectl patch felixconfiguration default
+          {{ k3s_kubectl_binary | default('k3s kubectl') }} patch felixconfiguration default
           --type='merge'
           --patch='{"spec": {"bpfKubeProxyIptablesCleanupEnabled": false}}'
       register: patch_result

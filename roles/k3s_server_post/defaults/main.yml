@@ -1,4 +1,6 @@
 ---
+k3s_kubectl_binary: k3s kubectl
+
 bpf_lb_algorithm: maglev
 bpf_lb_mode: hybrid
 
