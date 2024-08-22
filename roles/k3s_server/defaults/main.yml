@@ -1,6 +1,8 @@
 ---
 extra_server_args: ""
 
+k3s_kubectl_binary: k3s kubectl
+
 group_name_master: master
 
 kube_vip_arp: true

@@ -116,7 +116,8 @@
       when: ping_result.rc != 0
 
     - name: Test for existing Cilium install
-      ansible.builtin.command: k3s kubectl -n kube-system get daemonsets cilium
+      ansible.builtin.command: |
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} -n kube-system get daemonsets cilium
       register: cilium_installed
       failed_when: false
       changed_when: false
@@ -192,12 +193,12 @@
     - name: Wait for Cilium resources
       ansible.builtin.command: >-
         {% if item.type == 'daemonset' %}
-        k3s kubectl wait pods
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} wait pods
         --namespace=kube-system
         --selector='k8s-app=cilium'
         --for=condition=Ready
         {% else %}
-        k3s kubectl wait {{ item.type }}/{{ item.name }}
+        {{ k3s_kubectl_binary | default('k3s kubectl') }} wait {{ item.type }}/{{ item.name }}
         --namespace=kube-system
         --for=condition=Available
         {% endif %}
@@ -230,7 +231,7 @@
 
         - name: Apply BGP manifests
           ansible.builtin.command:
-            cmd: kubectl apply -f /tmp/k3s/cilium-bgp.yaml
+            cmd: "{{ k3s_kubectl_binary | default('k3s kubectl') }} apply -f /tmp/k3s/cilium-bgp.yaml"
           register: apply_cr
           changed_when: "'configured' in apply_cr.stdout or 'created' in apply_cr.stdout"
           failed_when: "'is invalid' in apply_cr.stderr"
@@ -244,8 +245,8 @@
         - name: Test for BGP config resources
           ansible.builtin.command: "{{ item }}"
           loop:
-            - k3s kubectl get CiliumBGPPeeringPolicy.cilium.io
-            - k3s kubectl get CiliumLoadBalancerIPPool.cilium.io
+            - "{{ k3s_kubectl_binary | default('k3s kubectl') }} get CiliumBGPPeeringPolicy.cilium.io"
+            - "{{ k3s_kubectl_binary | default('k3s kubectl') }} get CiliumLoadBalancerIPPool.cilium.io"
           changed_when: false
           loop_control:
             label: "{{ item }}"
