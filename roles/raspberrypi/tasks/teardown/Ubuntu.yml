@@ -3,3 +3,4 @@
   ansible.builtin.apt:
     name: linux-modules-extra-raspi
     state: absent
+  when: ansible_distribution_version is version('24.04', '<')
