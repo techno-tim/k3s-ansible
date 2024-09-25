@@ -66,6 +66,14 @@ argument_specs:
         description: BGP peer address
         default: ~
 
+      cilium_bgp_neighbors:
+        description: List of BGP peer ASN & address pairs
+        default: []
+
+      cilium_bgp_neighbors_groups:
+        description: Inventory group in which to search for additional cilium_bgp_neighbors parameters to merge.
+        default: ['k3s_all']
+
       cilium_bgp_lb_cidr:
         description: BGP load balancer IP range
         default: 192.168.31.0/24
