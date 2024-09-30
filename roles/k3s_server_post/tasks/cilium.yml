@@ -221,6 +221,11 @@
     - name: Configure Cilium BGP
       when: cilium_bgp
       block:
+        - name: Set _cilium_bgp_neighbors fact
+          ansible.builtin.set_fact:
+            _cilium_bgp_neighbors: "{{ lookup('community.general.merge_variables', '^cilium_bgp_neighbors__.+$', initial_value=cilium_bgp_neighbors, groups=cilium_bgp_neighbors_groups) }}"  # yamllint disable-line rule:line-length
+          when: cilium_bgp_neighbors | length > 0
+
         - name: Copy BGP manifests to first master
           ansible.builtin.template:
             src: cilium.crs.j2
