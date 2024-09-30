@@ -15,6 +15,8 @@ cilium_bgp: false
 cilium_exportPodCIDR: true  # noqa var-naming
 cilium_bgp_my_asn: 64513
 cilium_bgp_peer_asn: 64512
+cilium_bgp_neighbors: []
+cilium_bgp_neighbors_groups: ['k3s_all']
 cilium_bgp_lb_cidr: 192.168.31.0/24
 cilium_hubble: true
 cilium_mode: native
