@@ -22,7 +22,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Restore Ansible cache
-        uses: actions/cache/restore@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # 4.0.2
+        uses: actions/cache/restore@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # 4.1.0
         with:
           path: ~/.ansible/collections
           key: ansible-${{ hashFiles('collections/requirements.yml') }}
