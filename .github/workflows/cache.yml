@@ -23,7 +23,7 @@ jobs:
 
       - name: Cache Vagrant boxes
         id: cache-vagrant
-        uses: actions/cache@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # 4.1.0
+        uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # 4.1.1
         with:
           lookup-only: true #if it exists, we don't need to restore and can skip the next step
           path: |
