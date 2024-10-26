@@ -22,7 +22,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Restore Ansible cache
-        uses: actions/cache/restore@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # 4.0.2
+        uses: actions/cache/restore@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # 4.1.0
         with:
           path: ~/.ansible/collections
           key: ansible-${{ hashFiles('collections/requirements.yml') }}
@@ -47,7 +47,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # 4.2.0
       - name: Ensure SHA pinned actions
-        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@0901cf7b71c7ea6261ec69a3dc2bd3f9264f893e # 3.0.12
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@40ba2d51b6b6d8695f2b6bd74e785172d4f8d00f # 3.0.14
         with:
           allowlist: |
             aws-actions/
