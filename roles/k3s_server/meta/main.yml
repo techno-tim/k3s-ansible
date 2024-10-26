@@ -62,6 +62,14 @@ argument_specs:
         description: Defines the AS for the kube-vip BGP peer
         default: "64512"
 
+      kube_vip_bgp_peers:
+        description: List of BGP peer ASN & address pairs
+        default: []
+
+      kube_vip_bgp_peers_groups:
+        description: Inventory group in which to search for additional kube_vip_bgp_peers parameters to merge.
+        default: ['k3s_master']
+
       kube_vip_iface:
         description:
           - Explicitly define an interface that ALL control nodes
