@@ -183,6 +183,8 @@ See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-y
 | `k3s_server_post` | `metal_lb_bgp_my_asn` | string | `~` | Not required | BGP ASN configurations |
 | `k3s_server_post` | `metal_lb_bgp_peer_asn` | string | `~` | Not required | BGP peer ASN configurations |
 | `k3s_server_post` | `metal_lb_bgp_peer_address` | string | `~` | Not required | BGP peer address |
+| `lxc` | `custom_reboot_command` | string | `~` | Not required | Command to run on reboot |
+| `prereq` | `system_timezone` | string | `null` | Not required | Timezone to be set on all nodes |
 
 
 ### Troubleshooting
