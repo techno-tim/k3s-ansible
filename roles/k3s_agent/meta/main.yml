@@ -19,7 +19,9 @@ argument_specs:
 
       proxy_env:
         type: dict
-        description: Internet proxy configurations. See https://docs.k3s.io/advanced#configuring-an-http-proxy for details
+        description:
+          - Internet proxy configurations.
+          - See https://docs.k3s.io/advanced#configuring-an-http-proxy for details
         default: ~
         options:
           HTTP_PROXY:
