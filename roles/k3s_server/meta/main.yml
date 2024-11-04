@@ -103,17 +103,21 @@ argument_specs:
           - frr
           - native
         default: native
+        description: Use FRR mode or native. Valid values are `frr` and `native`
 
       proxy_env:
         type: dict
-        description: Internet proxy configurations
+        description: Internet proxy configurations. See https://docs.k3s.io/advanced#configuring-an-http-proxy for details
         default: ~
         options:
           HTTP_PROXY:
+            description: HTTP internet proxy
             required: true
           HTTPS_PROXY:
+            description: HTTPS internet proxy
             required: true
           NO_PROXY:
+            description: Addresses that will not use the proxies
             required: true
 
       retry_count:

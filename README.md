@@ -117,6 +117,44 @@ Then change `server: https://127.0.0.1:6443` to match your master IP: `server: h
 
 See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-your-cluster).
 
+### Variables
+
+| Role(s) | Variable | Type | Default | Required | Description |
+|---|---|---|---|---|---|
+| `download` | `k3s_version` | string | ❌ | Required | K3s binaries version |
+| `k3s_agent`, `k3s_server` | `apiserver_endpoint` | string | ❌ | Required | Virtual ip-address configured on each master |
+| `k3s_agent` | `extra_agent_args` | string | `null` | Not required | Extra arguments for agents nodes |
+| `k3s_agent`, `k3s_server` | `group_name_master` | string | `null` | Not required | Name othe master group |
+| `k3s_agent` | `k3s_token` | string | `null` | Not required | Token used to communicate between masters |
+| `k3s_agent`, `k3s_server` | `proxy_env` | dict | `null` | Not required | Internet proxy configurations |
+| `k3s_agent`, `k3s_server` | `proxy_env.HTTP_PROXY` | string | ❌ | Required | HTTP internet proxy |
+| `k3s_agent`, `k3s_server` | `proxy_env.HTTPS_PROXY` | string | ❌ | Required | HTTP internet proxy |
+| `k3s_agent`, `k3s_server` | `proxy_env.NO_PROXY` | string | ❌ | Required | Addresses that will not use the proxies |
+| `k3s_agent`, `k3s_server` | `systemd_dir` | string | `/etc/systemd/system` | Not required | Path to systemd services |
+| `k3s_custom_registries` | `custom_registries_yaml` | string | ❌ | Required | YAML block defining custom registries. The following is an example that pulls all images used in this playbook through your private registries. It also allows you to pull your own images from your private registry, without having to use imagePullSecrets in your deployments. If all you need is your own images and you don't care about caching the docker/quay/ghcr.io images, you can just remove those from the mirrors: section. |
+| `k3s_server` | `cilium_bgp` | bool | `~` | Not required | Enable cilium BGP control plane for LB services and pod cidrs. Disables the use of MetalLB. |
+| `k3s_server` | `cilium_iface` | string | ❌ | Not required | The network interface used for when Cilium is enabled |
+| `k3s_server` | `extra_server_args` | string | `""` | Not required | Extra arguments for server nodes |
+| `k3s_server` | `k3s_create_kubectl_symlink` | bool | false | Not required | Create the kubectl -> k3s symlink |
+| `k3s_server` | `k3s_create_crictl_symlink` | bool | true | Not required | Create the crictl -> k3s symlink |
+| `k3s_server` | `kube_vip_arp` | bool | true | Not required | Enables kube-vip ARP broadcasts |
+| `k3s_server` | `kube_vip_bgp` | bool | false | Not required | Enables kube-vip BGP peering |
+| `k3s_server` | `kube_vip_bgp_routerid` | string | `"127.0.0.1"` | Not required | Defines the router ID for the kube-vip BGP server |
+| `k3s_server` | `kube_vip_bgp_as` | string | `"64513"` | Not required | Defines the AS for the kube-vip BGP server |
+| `k3s_server` | `kube_vip_bgp_peeraddress` | string | `"192.168.30.1"` | Not required | Defines the address for the kube-vip BGP peer |
+| `k3s_server` | `kube_vip_bgp_peeras` | string | `"64512"` | Not required | Defines the AS for the kube-vip BGP peer |
+| `k3s_server` | `kube_vip_bgp_peers` | list | `[]` | Not required | List of BGP peer ASN & address pairs |
+| `k3s_server` | `kube_vip_bgp_peers_groups` | list | `['k3s_master']` | Not required | Inventory group in which to search for additional `kube_vip_bgp_peers` parameters to merge. |
+| `k3s_server` | `kube_vip_iface` | string | `~` | Not required | Explicitly define an interface that ALL control nodes should use to propagate the VIP, define it here. Otherwise, kube-vip will determine the right interface automatically at runtime. |
+| `k3s_server` | `kube_vip_tag_version` | string | `v0.7.2` | Not required | Image tag for kube-vip |
+| `k3s_server` | `kube_vip_cloud_provider_tag_version` | string | `main` | Not required | Tag for kube-vip-cloud-provider manifest when enable |
+| `k3s_server` | `kube_vip_lb_ip_range` | string | `~` | Not required | IP range for kube-vip load balancer |
+| `k3s_server` | `metal_lb_controller_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
+| `k3s_server` | `metal_lb_speaker_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
+| `k3s_server` | `metal_lb_type` | string | `native` | Not required | Use FRR mode or native. Valid values are `frr` and `native` |
+| `k3s_server` | `retry_count` | int | `20` | Not required | Amount of retries when verifying that nodes joined |
+| `k3s_server` | `server_init_args` | string | ❌ | Not required | Arguments for server nodes |
+
 ### Troubleshooting
 
 Be sure to see [this post](https://github.com/techno-tim/k3s-ansible/discussions/20) on how to troubleshoot common problems
