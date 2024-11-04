@@ -122,7 +122,7 @@ See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-y
 | Role(s) | Variable | Type | Default | Required | Description |
 |---|---|---|---|---|---|
 | `download` | `k3s_version` | string | ❌ | Required | K3s binaries version |
-| `k3s_agent`, `k3s_server` | `apiserver_endpoint` | string | ❌ | Required | Virtual ip-address configured on each master |
+| `k3s_agent`, `k3s_server`, `k3s_server_post` | `apiserver_endpoint` | string | ❌ | Required | Virtual ip-address configured on each master |
 | `k3s_agent` | `extra_agent_args` | string | `null` | Not required | Extra arguments for agents nodes |
 | `k3s_agent`, `k3s_server` | `group_name_master` | string | `null` | Not required | Name othe master group |
 | `k3s_agent` | `k3s_token` | string | `null` | Not required | Token used to communicate between masters |
@@ -132,13 +132,13 @@ See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-y
 | `k3s_agent`, `k3s_server` | `proxy_env.NO_PROXY` | string | ❌ | Required | Addresses that will not use the proxies |
 | `k3s_agent`, `k3s_server` | `systemd_dir` | string | `/etc/systemd/system` | Not required | Path to systemd services |
 | `k3s_custom_registries` | `custom_registries_yaml` | string | ❌ | Required | YAML block defining custom registries. The following is an example that pulls all images used in this playbook through your private registries. It also allows you to pull your own images from your private registry, without having to use imagePullSecrets in your deployments. If all you need is your own images and you don't care about caching the docker/quay/ghcr.io images, you can just remove those from the mirrors: section. |
-| `k3s_server` | `cilium_bgp` | bool | `~` | Not required | Enable cilium BGP control plane for LB services and pod cidrs. Disables the use of MetalLB. |
-| `k3s_server` | `cilium_iface` | string | ❌ | Not required | The network interface used for when Cilium is enabled |
+| `k3s_server`, `k3s_server_post` | `cilium_bgp` | bool | `~` | Not required | Enable cilium BGP control plane for LB services and pod cidrs. Disables the use of MetalLB. |
+| `k3s_server`, `k3s_server_post` | `cilium_iface` | string | ❌ | Not required | The network interface used for when Cilium is enabled |
 | `k3s_server` | `extra_server_args` | string | `""` | Not required | Extra arguments for server nodes |
-| `k3s_server` | `k3s_create_kubectl_symlink` | bool | false | Not required | Create the kubectl -> k3s symlink |
-| `k3s_server` | `k3s_create_crictl_symlink` | bool | true | Not required | Create the crictl -> k3s symlink |
-| `k3s_server` | `kube_vip_arp` | bool | true | Not required | Enables kube-vip ARP broadcasts |
-| `k3s_server` | `kube_vip_bgp` | bool | false | Not required | Enables kube-vip BGP peering |
+| `k3s_server` | `k3s_create_kubectl_symlink` | bool | `false` | Not required | Create the kubectl -> k3s symlink |
+| `k3s_server` | `k3s_create_crictl_symlink` | bool | `true` | Not required | Create the crictl -> k3s symlink |
+| `k3s_server` | `kube_vip_arp` | bool | `true` | Not required | Enables kube-vip ARP broadcasts |
+| `k3s_server` | `kube_vip_bgp` | bool | `false` | Not required | Enables kube-vip BGP peering |
 | `k3s_server` | `kube_vip_bgp_routerid` | string | `"127.0.0.1"` | Not required | Defines the router ID for the kube-vip BGP server |
 | `k3s_server` | `kube_vip_bgp_as` | string | `"64513"` | Not required | Defines the AS for the kube-vip BGP server |
 | `k3s_server` | `kube_vip_bgp_peeraddress` | string | `"192.168.30.1"` | Not required | Defines the address for the kube-vip BGP peer |
@@ -148,12 +148,42 @@ See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-y
 | `k3s_server` | `kube_vip_iface` | string | `~` | Not required | Explicitly define an interface that ALL control nodes should use to propagate the VIP, define it here. Otherwise, kube-vip will determine the right interface automatically at runtime. |
 | `k3s_server` | `kube_vip_tag_version` | string | `v0.7.2` | Not required | Image tag for kube-vip |
 | `k3s_server` | `kube_vip_cloud_provider_tag_version` | string | `main` | Not required | Tag for kube-vip-cloud-provider manifest when enable |
-| `k3s_server` | `kube_vip_lb_ip_range` | string | `~` | Not required | IP range for kube-vip load balancer |
-| `k3s_server` | `metal_lb_controller_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
+| `k3s_server`, `k3_server_post` | `kube_vip_lb_ip_range` | string | `~` | Not required | IP range for kube-vip load balancer |
+| `k3s_server`, `k3s_server_post` | `metal_lb_controller_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
 | `k3s_server` | `metal_lb_speaker_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
 | `k3s_server` | `metal_lb_type` | string | `native` | Not required | Use FRR mode or native. Valid values are `frr` and `native` |
 | `k3s_server` | `retry_count` | int | `20` | Not required | Amount of retries when verifying that nodes joined |
 | `k3s_server` | `server_init_args` | string | ❌ | Not required | Arguments for server nodes |
+| `k3s_server_post` | `bpf_lb_algorithm` | string | `maglev` | Not required | BPF lb algorithm |
+| `k3s_server_post` | `bpf_lb_mode` | string | `hybrid` | Not required | BPF lb mode |
+| `k3s_server_post` | `calico_blocksize` | int | `26` | Not required | IP pool block size |
+| `k3s_server_post` | `calico_ebpf` | bool | `false` | Not required | Use eBPF dataplane instead of iptables |
+| `k3s_server_post` | `calico_encapsulation` | string | `VXLANCrossSubnet` | Not required | IP pool encapsulation |
+| `k3s_server_post` | `calico_natOutgoing` | string | `Enabled` | Not required | IP pool NAT outgoing |
+| `k3s_server_post` | `calico_nodeSelector` | string | `all()` | Not required | IP pool node selector |
+| `k3s_server_post` | `calico_iface` | string | `~` | Not required | The network interface used for when Calico is enabled |
+| `k3s_server_post` | `calico_tag` | string | `v3.27.2` | Not required | Calico version tag |
+| `k3s_server_post` | `cilium_bgp_my_asn` | int | `64513` | Not required | Local ASN for BGP peer |
+| `k3s_server_post` | `cilium_bgp_peer_asn` | int | `64512` | Not required | BGP peer ASN |
+| `k3s_server_post` | `cilium_bgp_peer_address` | string | `~` | Not required | BGP peer address |
+| `k3s_server_post` | `cilium_bgp_neighbors` | list | `[]` | Not required | List of BGP peer ASN & address pairs |
+| `k3s_server_post` | `cilium_bgp_neighbors_groups` | list | `['k3s_all']` | Not required | Inventory group in which to search for additional `cilium_bgp_neighbors` parameters to merge. |
+| `k3s_server_post` | `cilium_bgp_lb_cidr` | string | `192.168.31.0/24` | Not required | BGP load balancer IP range |
+| `k3s_server_post` | `cilium_exportPodCIDR` | bool | `true` | Not required | Export pod CIDR |
+| `k3s_server_post` | `cilium_hubble` | bool | `true` | Not required | Enable Cilium Hubble |
+| `k3s_server_post` | `cilium_hubble` | bool | `true` | Not required | Enable Cilium Hubble |
+| `k3s_server_post` | `cilium_mode` | string | `native` | Not required | Inner-node communication mode (choices are `native` and `routed`) |
+| `k3s_server_post` | `cluster_cidr` | string | `10.52.0.0/16` | Not required | Inner-cluster IP range |
+| `k3s_server_post` | `enable_bpf_masquerade` | bool | `true` | Not required | Use IP masquerading |
+| `k3s_server_post` | `kube_proxy_replacement` | bool | `true` | Not required | Replace the native kube-proxy with Cilium |
+| `k3s_server_post` | `metal_lb_available_timeout` | string | `240s` | Not required | Wait for MetalLB resources |
+| `k3s_server_post` | `metal_lb_ip_range` | string | `192.168.30.80-192.168.30.90` | Not required | MetalLB ip range for load balancer |
+| `k3s_server_post` | `metal_lb_controller_tag_version` | string | `v0.14.3` | Not required | Image tag for MetalLB |
+| `k3s_server_post` | `metal_lb_mode` | string | `layer2` | Not required | Metallb mode (choices are `bgp` and `layer2`) |
+| `k3s_server_post` | `metal_lb_bgp_my_asn` | string | `~` | Not required | BGP ASN configurations |
+| `k3s_server_post` | `metal_lb_bgp_peer_asn` | string | `~` | Not required | BGP peer ASN configurations |
+| `k3s_server_post` | `metal_lb_bgp_peer_address` | string | `~` | Not required | BGP peer address |
+
 
 ### Troubleshooting
 
