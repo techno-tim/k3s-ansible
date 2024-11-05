@@ -185,6 +185,7 @@ See the commands [here](https://technotim.live/posts/k3s-etcd-ansible/#testing-y
 | `k3s_server_post` | `metal_lb_bgp_peer_address` | string | `~` | Not required | BGP peer address |
 | `lxc` | `custom_reboot_command` | string | `~` | Not required | Command to run on reboot |
 | `prereq` | `system_timezone` | string | `null` | Not required | Timezone to be set on all nodes |
+| `proxmox_lxc` | `proxmox_lxc_ct_ids` | list | ❌ | Required | Proxmox container ID list |
 
 
 ### Troubleshooting
