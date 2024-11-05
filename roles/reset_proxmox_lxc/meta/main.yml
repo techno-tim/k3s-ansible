@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    short_description: Proxmox LXC settings
+    options:
+      proxmox_lxc_ct_ids:
+        description: Proxmox container ID list
+        type: list
+        required: true
