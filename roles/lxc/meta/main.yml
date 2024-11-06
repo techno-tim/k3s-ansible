@@ -5,3 +5,4 @@ argument_specs:
     options:
       custom_reboot_command:
         default: ~
+        description: Command to run on reboot
