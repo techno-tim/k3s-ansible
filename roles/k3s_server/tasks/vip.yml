@@ -1,4 +1,8 @@
 ---
+- name: Set _kube_vip_bgp_peers fact
+  ansible.builtin.set_fact:
+    _kube_vip_bgp_peers: "{{ lookup('community.general.merge_variables', '^kube_vip_bgp_peers__.+$', initial_value=kube_vip_bgp_peers, groups=kube_vip_bgp_peers_groups) }}"  # yamllint disable-line rule:line-length
+
 - name: Create manifests directory on first master
   ansible.builtin.file:
     path: /var/lib/rancher/k3s/server/manifests

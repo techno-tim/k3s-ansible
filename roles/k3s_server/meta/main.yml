@@ -62,6 +62,14 @@ argument_specs:
         description: Defines the AS for the kube-vip BGP peer
         default: "64512"
 
+      kube_vip_bgp_peers:
+        description: List of BGP peer ASN & address pairs
+        default: []
+
+      kube_vip_bgp_peers_groups:
+        description: Inventory group in which to search for additional kube_vip_bgp_peers parameters to merge.
+        default: ['k3s_master']
+
       kube_vip_iface:
         description:
           - Explicitly define an interface that ALL control nodes
@@ -95,17 +103,23 @@ argument_specs:
           - frr
           - native
         default: native
+        description: Use FRR mode or native. Valid values are `frr` and `native`
 
       proxy_env:
         type: dict
-        description: Internet proxy configurations
+        description:
+          - Internet proxy configurations.
+          - See https://docs.k3s.io/advanced#configuring-an-http-proxy for details
         default: ~
         options:
           HTTP_PROXY:
+            description: HTTP internet proxy
             required: true
           HTTPS_PROXY:
+            description: HTTPS internet proxy
             required: true
           NO_PROXY:
+            description: Addresses that will not use the proxies
             required: true
 
       retry_count:

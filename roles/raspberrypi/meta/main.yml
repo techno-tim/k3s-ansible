@@ -1,0 +1,10 @@
+---
+argument_specs:
+  main:
+    short_description: Adjust some Raspberry Pi specific requisites
+    options:
+      state:
+        default: present
+        description:
+          - Indicates whether the k3s prerequisites for Raspberry Pi should be
+          - set up (possible values are `present` and `absent`)
