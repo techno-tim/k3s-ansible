@@ -77,7 +77,7 @@ molecule==6.0.3
     # via
     #   -r requirements.in
     #   molecule-plugins
-molecule-plugins[vagrant]==23.5.3
+molecule-plugins[vagrant]==23.6.0
     # via -r requirements.in
 netaddr==0.10.1
     # via -r requirements.in
